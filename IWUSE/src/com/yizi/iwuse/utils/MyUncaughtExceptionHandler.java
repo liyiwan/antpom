@@ -3,7 +3,6 @@ package com.yizi.iwuse.utils;
 /**
  * 
  * 捕获异常信息类，处理一些没有处理的异常
- * @author wKF25648
  */
 import java.lang.Thread.UncaughtExceptionHandler;
 
@@ -30,7 +29,7 @@ public class MyUncaughtExceptionHandler implements UncaughtExceptionHandler
     @Override
     public void uncaughtException(Thread arg0, Throwable arg1)
     {
-        ILog.e(TAG, "uncaughtException hid restart.");
+        ILog.e(TAG, "uncaughtException iwuse restart.");
         ILog.e(TAG, arg1);
         IWuseUtil.restartIWuse(AppContext.instance().globalContext);
     }

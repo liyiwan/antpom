@@ -7,12 +7,18 @@ import android.app.Application;
 
 
 
+
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import com.yizi.iwuse.comm.service.impl.HttpCommMgr;
+import com.yizi.iwuse.customer.service.CustomerService;
 import com.yizi.iwuse.framework.AppParams;
+import com.yizi.iwuse.order.service.OrderService;
+import com.yizi.iwuse.product.service.ProductService;
 import com.yizi.iwuse.utils.ILog;
 
 import android.app.Activity;
@@ -43,9 +49,16 @@ public class AppContext
     public final static String iwuseReleaseDate = "  Release 1.0.0.0 2015.5.8";
 
     /** ===================================== Warning：全局控制区 end ===================================== **/
-
-    /** 所有Event的集合 */
-    public List<ICoreEvent> eventList = new ArrayList<ICoreEvent>();
+    
+    /**用户信息服务**/
+    public CustomerService customerService ;
+    
+    public OrderService orderService ;
+    
+    public ProductService productService;
+    
+    /** 所有service的集合 */
+    public List<ICoreService> serviceList = new ArrayList<ICoreService>();
 
 
     /** 帮助模式 */
@@ -121,7 +134,7 @@ public class AppContext
     private void init()
     {
         // 注册event层的类
-        registEvent();
+        registService();
 
         // 初始化连接管理器
         connMgr = new HttpCommMgr();
@@ -135,13 +148,19 @@ public class AppContext
     /**
      * 注册service层的各个类
      */
-    private void registEvent()
+    private void registService()
     {
-
-        // 设置事件类
-//        settingEvent = new SettingEvent();
-//        eventList.add(settingEvent);
-
+        // 用户管理类
+    	customerService = new CustomerService();
+    	serviceList.add(customerService);
+    	
+    	//订单管理
+    	orderService = new OrderService();
+    	serviceList.add(orderService);
+    	
+    	//商品管理
+    	productService = new ProductService();
+    	serviceList.add(productService);
     }
 
     /**
@@ -161,8 +180,6 @@ public class AppContext
         // 初始化参数文件
         appParams = new AppParams(globalContext);
         appParams.initFileData();
-
-
 
         try
         {
@@ -198,15 +215,15 @@ public class AppContext
     public boolean initServiceState()
     {
 
-        for (ICoreEvent event : eventList)
+        for (ICoreService service : serviceList)
         {
-            if (!event.initState())
+            if (!service.initState())
             {
-                ILog.e(TAG, "init event [" + event.toString() + "]'s state failed.");
+                ILog.e(TAG, "init service [" + service.toString() + "]'s state failed.");
                 // return false;
             }
         }
-        ILog.d(TAG, "init event's state.");
+        ILog.d(TAG, "init service's state.");
         return true;
     }
 

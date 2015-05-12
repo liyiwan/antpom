@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 
 import com.yizi.iwuse.comm.service.MsgInterface;
 import com.yizi.iwuse.comm.service.MsgInterface.CmdInterface;
+import com.yizi.iwuse.customer.service.CustomerMsgHandler;
+import com.yizi.iwuse.order.service.OrderMsgHandler;
+import com.yizi.iwuse.product.service.ProductMsgHandler;
 import com.yizi.iwuse.utils.ILog;
 
 /**
@@ -130,8 +133,12 @@ public class HandlerFactory
     {
         switch (cmd)
         {
-            case GetMail_BoxData:
-                return handlerMap.get(CmdInterface.GetMail_BoxData);
+            case CUSTOMER_DetailInfo:
+                return handlerMap.get(CmdInterface.CUSTOMER_DetailInfo);
+            case PRODUCT_ProductInfo:
+            	return handlerMap.get(CmdInterface.PRODUCT_ProductInfo);
+            case ORDER_OrderInfo:
+            	return handlerMap.get(CmdInterface.ORDER_OrderInfo);
         }
         return null;
     }
@@ -146,8 +153,12 @@ public class HandlerFactory
 
         // TODO 对session的处理
         // 开始注册handler
-        // 设置与显示类
-//        handlerMap.put(CmdInterface.SET_GetConferCodeInfo, new HostSettingCmdMsgHandler());
+        //用户信息
+        handlerMap.put(CmdInterface.CUSTOMER_DetailInfo, new CustomerMsgHandler());
+        //商品相关
+        handlerMap.put(CmdInterface.PRODUCT_ProductInfo, new ProductMsgHandler());
+        //订单相关
+        handlerMap.put(CmdInterface.ORDER_OrderInfo, new OrderMsgHandler());
     }
 
     /**

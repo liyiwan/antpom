@@ -1,10 +1,12 @@
 package com.yizi.iwuse.activity;
 
 import com.yizi.iwuse.AppContext;
+import com.yizi.iwuse.ICoreService;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.utils.ILog;
 import com.yizi.iwuse.utils.MyUncaughtExceptionHandler;
 
+import de.greenrobot.event.EventBus;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -39,7 +41,26 @@ public class WelcomeActivity extends Activity {
         AppContext.instance().initDisplay(this);
         
 		setContentView(R.layout.layout_welcome);
+		EventBus.getDefault().register(this);
+	}
+
+	/****
+	 * 根据结果更新界面信息
+	 * 
+	 * @param event
+	 */
+	public void onEventMainThread(ICoreService event) {
+		// 更新界面信息
 		
+	}
+	
+	
+	
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		EventBus.getDefault().unregister(this);
 	}
 
 }

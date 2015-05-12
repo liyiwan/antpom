@@ -20,18 +20,31 @@ public class MsgInterface
     public enum CmdInterface {
     	/** 请求邮箱消息的命令字 */
         GetMail_BoxData,
-        // ------------------登陆相关----------------------------
+        // ------------------用户登陆相关----------begin------------------
+        CUSTOMER_DetailInfo,
+        
         /** 身份验证 */
         LOGIN_Authentication,
         /** 获取对接子设备类型 */
         LOGIN_GetSubDevice,
         /** 获取对接终端的lisence */
         LOGIN_GetLicenseInfo,
+        
         /** 订阅邮箱 */
         LOGIN_subscribeMailData, LOGIN_subscribeMailMsg,
+        // ------------------用户登陆相关-----------end------------------
+        
         // ------------------公共模块----------------------------
         /** 发送日志的命令 */
         PUBLIC_SendLogCmd,
+        
+        //----------------------商品-------------begin---------------------/
+        PRODUCT_ProductInfo,
+        //----------------------商品-------------end-----------------------/
+        
+        //----------------------订单-------------begin---------------------/
+        ORDER_OrderInfo, 
+        //----------------------订单-------------end-----------------------/
         
         unknown;
         
@@ -80,6 +93,9 @@ public class MsgInterface
 		public String[] getCmds(CmdInterface cmd) {
 			switch (cmd) {
 			// ~~~~~~~~~~~~~~~~~登录相关~~~~~~~~~~~~~~~~~~~~
+			case CUSTOMER_DetailInfo:
+				return new String[]
+						{"customer_detailinfo"};
 			case LOGIN_Authentication:
 				return new String[] 
 						{ "Web_RequestCertificate" };
@@ -88,6 +104,16 @@ public class MsgInterface
 						{ "ConfGetTh1000Version" };
 			case LOGIN_subscribeMailData:
 				return new String[] {}; // 无
+				
+			//~~~~~~~~~~~~~~~~~~商品相关~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			case PRODUCT_ProductInfo:
+				return new String[]
+						{"PRODUCT_ProductInfo"};
+				
+			//~~~~~~~~~~~~~~~~~~~订单~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			case ORDER_OrderInfo:
+				return new String[]
+						{"order_orderinfo"};
 				/** 发送日志的命令 */
 			case PUBLIC_SendLogCmd:
 				return new String[] 
