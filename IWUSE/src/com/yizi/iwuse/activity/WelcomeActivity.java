@@ -3,6 +3,7 @@ package com.yizi.iwuse.activity;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.ICoreService;
 import com.yizi.iwuse.R;
+import com.yizi.iwuse.product.view.event.IProductEvent;
 import com.yizi.iwuse.utils.ILog;
 import com.yizi.iwuse.utils.MyUncaughtExceptionHandler;
 
@@ -49,7 +50,7 @@ public class WelcomeActivity extends Activity {
 	 * 
 	 * @param event
 	 */
-	public void onEventMainThread(ICoreService event) {
+	public void onEventMainThread(IProductEvent event) {
 		// 更新界面信息
 		
 	}

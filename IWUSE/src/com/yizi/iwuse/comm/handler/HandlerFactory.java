@@ -97,31 +97,6 @@ public class HandlerFactory
         return mailMsgs;
     }
 
-    /**
-     * 获取对应的消息id的处理器
-     * 
-     * @param msgId 中控主机的邮箱消息id
-     * @return 能够处理该邮箱消息的处理器
-     */
-    public AbsCmdMsgHandler getHostCmdMsgHandlerByMailId(int msgId)
-    {
-        switch (msgId)
-        {
-        
-        }
-        return null;
-    }
-
-    /**
-     * 获取对应的消息id的处理器
-     * @param msgId 终端邮箱消息id
-     * @return 能够处理该邮箱消息的处理器
-     */
-    public AbsCmdMsgHandler getVCTCmdMsgHandlerByMailId(String msgId)
-    {
-        
-        return null;
-    }
 
     /**
      * 获取命令对应的消息处理器

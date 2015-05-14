@@ -58,9 +58,6 @@ public class HttpCommMgr extends AbsConnMgr
     /** 解析响应消息，组装为CmdResultInfo */
     private CmdRspParser cmdRspParser;
    
-    /**volley框架类 ，请求句柄**/
-    public RequestQueue requestQueue ;
-    
     private JsonObjectRequest jsonObjectRequest;
     
     
@@ -80,8 +77,6 @@ public class HttpCommMgr extends AbsConnMgr
         // 放一个默认ip防止出错
         mconnInfo = new HttpConnInfo("", "", "127.0.0.1", HttpConnInfo.HTTP_PROL);
         setConnInfo(mconnInfo);
-        requestQueue =  Volley.newRequestQueue(AppContext.instance().globalContext);  
-        
         try
         {
             initHttpsSSL();
@@ -260,7 +255,7 @@ public class HttpCommMgr extends AbsConnMgr
         		}
         		
         	});
-        	requestQueue.add(jsonObjectRequest);
+        	AppContext.instance().requestQueue.add(jsonObjectRequest);
 		} catch (Exception e) {
 			if (e instanceof SocketTimeoutException)
             {

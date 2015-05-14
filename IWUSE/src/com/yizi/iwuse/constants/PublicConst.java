@@ -56,4 +56,8 @@ public class PublicConst
 
     /** 用户自定义的网络超时错误ID */
     public static final int RSP_NET_TIMEOUT_CODE = 0x10002;
+    
+    /***图片的缓存大小***/
+    public static final int IMAGE_MAXCACHE_SIZE = 10 * 1024 * 1024;
+    
 }

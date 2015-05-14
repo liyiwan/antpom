@@ -1,25 +1,18 @@
 package com.yizi.iwuse;
 
-import android.app.Application;
-
-
-
-
-
-
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.yizi.iwuse.comm.service.impl.HttpCommMgr;
 import com.yizi.iwuse.customer.service.CustomerService;
 import com.yizi.iwuse.framework.AppParams;
 import com.yizi.iwuse.order.service.OrderService;
 import com.yizi.iwuse.product.service.ProductService;
 import com.yizi.iwuse.utils.ILog;
+import com.yizi.iwuse.view.ViewFactory;
 
 import android.app.Activity;
 import android.content.Context;
@@ -79,6 +72,8 @@ public class AppContext
     /** 应用程序的全局上下文 */
     public Context globalContext;
 
+    /**volley框架类 ，请求句柄**/
+    public RequestQueue requestQueue ;
     /** 应用程序的全局参数 */
     public AppParams appParams;
 
@@ -135,10 +130,10 @@ public class AppContext
     {
         // 注册event层的类
         registService();
-
         // 初始化连接管理器
         connMgr = new HttpCommMgr();
 
+        
         // for 自动化测试
         if (isTestMode)
         {
@@ -176,7 +171,8 @@ public class AppContext
         ILog.v(TAG, "initUiRes ...");
         // 记录一个全局上下文
         globalContext = context;
-
+        //初始化请求volley队列
+        requestQueue =  Volley.newRequestQueue(globalContext);
         // 初始化参数文件
         appParams = new AppParams(globalContext);
         appParams.initFileData();
@@ -246,7 +242,7 @@ public class AppContext
         	
         }
         // 销毁view 工厂
-        //ViewFactory.destory();
+        ViewFactory.destory();
     }
 
 
