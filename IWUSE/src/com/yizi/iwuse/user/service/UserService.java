@@ -1,29 +1,27 @@
-package com.yizi.iwuse.product.service;
+package com.yizi.iwuse.user.service;
 
 import com.yizi.iwuse.common.base.ICoreService;
 import com.yizi.iwuse.framework.model.CmdResultInfo;
 import com.yizi.iwuse.framework.service.CmdSendAdapter;
 import com.yizi.iwuse.framework.service.MsgInterface.CmdInterface;
 
-import de.greenrobot.event.EventBus;
-
-public class ProductService implements ICoreService{
+public class UserService implements ICoreService {
 
 	@Override
 	public boolean initState() {
 		return true;
 	}
-	
+
 	/****
-	 * ex. 获取商品信息
+	 * ex. 获取用户信息
 	 * 
 	 * @return
 	 */
-	public CmdResultInfo getProductInfo(){
+	public CmdResultInfo getCustomerInfo(){
 	    
-		 EventBus.getDefault().post(null);
+		// EventBus.getDefault().post(null);
 		
-		return CmdSendAdapter.sendCmd(CmdInterface.PRODUCT_ProductInfo, null);
+		return CmdSendAdapter.sendCmd(CmdInterface.CUSTOMER_DetailInfo, null);
 	}
-
+	
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lay_mainhome"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/lay_frame_mainhome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" >
+
+        <!-- 主内容窗体 -->
+        <FrameLayout
+            android:id="@+id/frame_mainhomecontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:scrollbars="vertical" >
+        </FrameLayout>
+    </RelativeLayout>
+    <!-- 左侧滑动栏 -->
+
+    <ScrollView
+        android:id="@+id/layout_mainhome_usercenter"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/transparent"
+        >
+    </ScrollView>
+    <!-- 右侧滑动栏 -->
+
+    <LinearLayout
+        android:id="@+id/layout_mainhome_productsearch"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+         >
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

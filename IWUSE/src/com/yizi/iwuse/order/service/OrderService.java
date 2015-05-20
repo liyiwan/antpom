@@ -1,9 +1,9 @@
 package com.yizi.iwuse.order.service;
 
-import com.yizi.iwuse.ICoreService;
-import com.yizi.iwuse.comm.model.CmdResultInfo;
-import com.yizi.iwuse.comm.service.CmdSendAdapter;
-import com.yizi.iwuse.comm.service.MsgInterface.CmdInterface;
+import com.yizi.iwuse.common.base.ICoreService;
+import com.yizi.iwuse.framework.model.CmdResultInfo;
+import com.yizi.iwuse.framework.service.CmdSendAdapter;
+import com.yizi.iwuse.framework.service.MsgInterface.CmdInterface;
 
 public class OrderService implements ICoreService{
 
