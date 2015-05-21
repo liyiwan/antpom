@@ -597,6 +597,10 @@ int style Base_ThemeOverlay_AppCompat_Dark_ActionBar 0x7f0b010e
 int style Base_ThemeOverlay_AppCompat_Light 0x7f0b010b
 int style Base_V11_Theme_AppCompat_Dialog 0x7f0b0111
 int style Base_V11_Theme_AppCompat_Light_Dialog 0x7f0b0112
+int style Base_V21_Theme_AppCompat 0x7f0b0117
+int style Base_V21_Theme_AppCompat_Dialog 0x7f0b0119
+int style Base_V21_Theme_AppCompat_Light 0x7f0b0118
+int style Base_V21_Theme_AppCompat_Light_Dialog 0x7f0b011a
 int style Base_V7_Theme_AppCompat 0x7f0b00f6
 int style Base_V7_Theme_AppCompat_Dialog 0x7f0b00fc
 int style Base_V7_Theme_AppCompat_Light 0x7f0b00f7
