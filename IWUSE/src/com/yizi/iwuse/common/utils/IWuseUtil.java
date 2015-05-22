@@ -20,14 +20,19 @@ import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 /**
  * 静态方法集成类 有转换MD5密码，解析成16进制，
@@ -1027,5 +1032,27 @@ public class IWuseUtil {
 		}
 		return context;
 	}
+	
+	/***
+	 * 测试用，获取测试引导图片
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static View getImageView(Context context,int id) {  
+        ImageView imgView = new ImageView(context);  
+        imgView.setId(id);  
+        imgView.setImageResource(id); 
+        imgView.setScaleType(ScaleType.FIT_XY);
+        int bmpW = BitmapFactory.decodeResource(context.getResources(), id).getWidth();// 获取图片宽度
+        int[] display = AppContext.instance().disPlay;
+        int screenW = display[0];// 获取分辨率宽度
+        float offset = (screenW / 3 - bmpW) / 2;// 计算偏移量
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(offset, 0);
+        imgView.setImageMatrix(matrix);
+        
+        return imgView;  
+    }
 
 }
