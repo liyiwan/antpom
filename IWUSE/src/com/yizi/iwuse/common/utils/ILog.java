@@ -39,11 +39,11 @@ public final class ILog {
 	/** 当前的使用的级别 */
 	private static int logLevel = Log.VERBOSE;
 
-	private static final String LOG_PATH_PRE = "/sdcard/iwuse_log";
+	private static final String LOG_PATH_PRE = "/sdcard/iwuse/iwuse_log";
 
 	private static final String LOG_PATH_SUF = ".txt";
 
-	private static final String SYS_LOG_PATH = "/sdcard/iwuse_sys.txt";
+	private static final String SYS_LOG_PATH = "/sdcard/iwuse/iwuse_sys.txt";
 
 	private static final String LogPath = "/sdcard/log";
 
