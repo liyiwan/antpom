@@ -5,48 +5,53 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/lay_head"
-        android:layout_width="fill_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:padding="5dip" >
+        android:layout_centerInParent="true"
+        android:orientation="horizontal" >
+        
+	    <ImageButton
+	        android:id="@+id/img_usercenter"
+	        android:layout_width="50sp"
+	        android:layout_height="50sp"
+	        android:layout_alignParentLeft="true"
+	        android:src="@drawable/info"
+	        android:background="@null" />
 
-        <ImageButton
-            android:id="@+id/img_usercenter"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/head_default" />
+        <TextView
+            android:id="@+id/txt_mainhome_iwusetheme"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/title_iwusetheme" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:weightSum="2" >
+        <TextView
+            android:id="@+id/txt_mainhome_productlist"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/title_productlist" />
+        
+	    <ImageButton
+	        android:id="@+id/img_productsearch"
+	        android:layout_width="50sp"
+	        android:layout_height="50sp"
+	        android:layout_alignParentRight="true"
+	        android:src="@drawable/btn_choose"
+	        android:background="@null" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/txt_mainhome_iwusetheme"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/title_iwusetheme" />
-
-            <TextView
-                android:id="@+id/txt_mainhome_productlist"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/title_productlist" />
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/img_productsearch"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/search_menu" />
-    </RelativeLayout>
+    
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" />
 
 </LinearLayout>

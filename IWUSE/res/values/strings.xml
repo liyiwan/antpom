@@ -17,8 +17,8 @@
 	<string name="usercenter_iwallet">钱包</string>
 	<string name="usercenter_iorderlist">我的订单</string>
 	<string name="usercenter_callservice">物色客服</string>
-	<string name="usercenter_isubmission">上传稿件</string>
-	<string name="usercenter_setting">软件设置</string>
+	<string name="usercenter_isubmission">上传投稿</string>
+	<string name="usercenter_setting">软件菜单</string>
 	<string name="usercenter_about">关于</string>
 	<!--                用户                                       end-->
 	

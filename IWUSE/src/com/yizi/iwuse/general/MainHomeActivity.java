@@ -13,14 +13,19 @@ import android.widget.ScrollView;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.IActivity;
 import com.yizi.iwuse.general.view.MainHomeFragment;
+import com.yizi.iwuse.product.view.ProductSearchFragment;
+import com.yizi.iwuse.user.view.UserFragment;
 
 public class MainHomeActivity extends FragmentActivity implements IActivity {
 	
-    private DrawerLayout mainDraLayout;
+//    private DrawerLayout mainDraLayout;
 	private ActionBarDrawerToggle drawerbar;
 	private MainHomeFragment mainHomeFragment;
 	private ScrollView layout_mainhome_usercenter;
 	private LinearLayout layout_mainhome_productsearch;
+	private FragmentManager mFragmentManager;
+	private UserFragment userFragment;
+	private ProductSearchFragment productFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +39,19 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 * 初始化控件
 	 */
 	private void initView(){
-		mainDraLayout = (DrawerLayout)findViewById(R.id.lay_mainhome);
+//		mainDraLayout = (DrawerLayout)findViewById(R.id.lay_mainhome);
 		//设置透明
-		mainDraLayout.setScrimColor(0x00000000);
-		
+//		mainDraLayout.setScrimColor(0x00000000);
 		mainHomeFragment = new MainHomeFragment();
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction f_transaction = fragmentManager.beginTransaction();
-		f_transaction.replace(R.id.lay_frame_mainhome, mainHomeFragment);
+		mFragmentManager = getSupportFragmentManager();
+		FragmentTransaction f_transaction = mFragmentManager.beginTransaction();
+		f_transaction.replace(R.id.center_layout, mainHomeFragment);
 		f_transaction.commitAllowingStateLoss();
-		initLeftLayout();
-		initRightLayout();
+//		initLeftLayout();
+//		initRightLayout();
 	}
 	
-	public void initLeftLayout(){
+	/*public void initLeftLayout(){
 		//左边菜单
 		layout_mainhome_usercenter = (ScrollView) findViewById(R.id.layout_mainhome_usercenter);
 		View view2 = getLayoutInflater().inflate(R.layout.frg_usercenter, null);
@@ -59,13 +63,14 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 		layout_mainhome_productsearch = (LinearLayout) findViewById(R.id.layout_mainhome_productsearch);
 		View view = getLayoutInflater().inflate(R.layout.frg_productsearch, null);
 		layout_mainhome_productsearch.addView(view);
-	}
+	}*/
+	
 	/***
 	 * 控件绑定事件
 	 * 
 	 */
 	private void initListener(){
-		drawerbar = new ActionBarDrawerToggle(this, mainDraLayout, R.drawable.ic_launcher, R.drawable.head_default) {
+		/*drawerbar = new ActionBarDrawerToggle(this, mainDraLayout, R.drawable.ic_launcher, R.drawable.head_default) {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				
@@ -78,7 +83,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 				super.onDrawerClosed(drawerView);
 			}
 		};
-		mainDraLayout.setDrawerListener(drawerbar);
+		mainDraLayout.setDrawerListener(drawerbar);*/
 	}
 	
 	/***
@@ -86,12 +91,44 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 */
 	public void openUserCenterLayout() {
 		
-		if (mainDraLayout.isDrawerOpen(layout_mainhome_usercenter)) {
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		hideFragments(transaction);
+		if (null == userFragment) {
+			userFragment = new UserFragment();
+			transaction.add(R.id.center_layout, userFragment);
+		} else {
+			transaction.show(userFragment);
+		}
+		transaction.commitAllowingStateLoss();
+		/*if (mainDraLayout.isDrawerOpen(layout_mainhome_usercenter)) {
 			mainDraLayout.closeDrawer(layout_mainhome_usercenter);
 		} else {
 			mainDraLayout.openDrawer(layout_mainhome_usercenter);
 			//设置透明
 			mainDraLayout.setScrimColor(R.color.bg_color_deep);
+		}*/
+	}
+	
+	public void closeUserCenter(){
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		if (null != userFragment) {
+			transaction.hide(userFragment);
+			if (null == mainHomeFragment) {
+				mainHomeFragment = new MainHomeFragment();
+				transaction.add(R.id.center_layout, mainHomeFragment);
+			} else {
+				transaction.show(mainHomeFragment);
+			}
+			transaction.commitAllowingStateLoss();
+		}
+	}
+	
+	private void hideFragments(FragmentTransaction transaction) {
+		if (null != mainHomeFragment) {
+			transaction.hide(mainHomeFragment);
+		}
+		if (null != userFragment) {
+			transaction.hide(userFragment);
 		}
 	}
 
@@ -100,12 +137,36 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 */
 	public void openProductSearchLayout() {
 		
-		if (mainDraLayout.isDrawerOpen(layout_mainhome_productsearch)) {
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		hideFragments(transaction);
+		if (null == productFragment) {
+			productFragment = new ProductSearchFragment();
+			transaction.add(R.id.center_layout, productFragment);
+		} else {
+			transaction.show(productFragment);
+		}
+		transaction.commitAllowingStateLoss();
+		
+		/*if (mainDraLayout.isDrawerOpen(layout_mainhome_productsearch)) {
 			mainDraLayout.closeDrawer(layout_mainhome_productsearch);
 		} else {
 			mainDraLayout.openDrawer(layout_mainhome_productsearch);
 			//设置透明
 			mainDraLayout.setScrimColor(R.color.bg_color_deep);
+		}*/
+	}
+	
+	public void closeProductSearch(){
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		if (null != productFragment) {
+			transaction.hide(productFragment);
+			if (null == mainHomeFragment) {
+				mainHomeFragment = new MainHomeFragment();
+				transaction.add(R.id.center_layout, mainHomeFragment);
+			} else {
+				transaction.show(mainHomeFragment);
+			}
+			transaction.commitAllowingStateLoss();
 		}
 	}
 
