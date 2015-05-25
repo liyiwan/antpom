@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lay_mainhome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
     <LinearLayout
+        android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:orientation="horizontal" >
         
 	    <ImageButton
 	        android:id="@+id/img_usercenter"
-	        android:layout_width="50sp"
-	        android:layout_height="50sp"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
 	        android:layout_alignParentLeft="true"
 	        android:src="@drawable/info"
 	        android:background="@null" />
-
-        <TextView
-            android:id="@+id/txt_mainhome_iwusetheme"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:text="@string/title_iwusetheme" />
-
-        <TextView
-            android:id="@+id/txt_mainhome_productlist"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:text="@string/title_productlist" />
+		<RelativeLayout
+		    android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:gravity="center" >
+	        <TextView
+	            android:id="@+id/txt_mainhome_iwusetheme"
+	            android:layout_width="70dp"
+	            android:layout_height="match_parent"
+	            android:layout_marginTop="10dp"
+	            android:gravity="center"
+	            android:text="@string/title_iwusetheme"
+	            android:textSize="17sp"
+	            android:textColor="@color/light_grey" />
+	
+	        <TextView
+	            android:id="@+id/txt_mainhome_productlist"
+	            android:layout_width="70dp"
+	            android:layout_height="match_parent"
+	            android:layout_toRightOf="@id/txt_mainhome_iwusetheme"
+	            android:layout_marginTop="10dp"
+	            android:gravity="center"
+	            android:text="@string/title_productlist"
+	            android:textSize="17sp"
+	            android:textColor="@color/light_grey" />
+	        
+        </RelativeLayout>
         
 	    <ImageButton
 	        android:id="@+id/img_productsearch"
-	        android:layout_width="50sp"
-	        android:layout_height="50sp"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
 	        android:layout_alignParentRight="true"
 	        android:src="@drawable/btn_choose"
 	        android:background="@null" />
@@ -51,7 +59,52 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.0" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_title" />
+    
+    <LinearLayout
+        android:id="@+id/ll_top_menu"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_title"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@color/grey"
+        android:visibility="gone" >
+        <TextView
+            android:layout_width="fill_parent"
+        	android:layout_height="45dp"
+        	android:gravity="center"
+        	android:text="@string/main_wuse_approve"
+        	android:textSize="16sp"
+        	android:textColor="@color/black" />
+        <View
+            android:layout_width="fill_parent"
+        	android:layout_height="1dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:background="@color/white" />
+        <TextView
+            android:layout_width="fill_parent"
+        	android:layout_height="45dp"
+        	android:gravity="center"
+        	android:text="@string/main_movie"
+        	android:textSize="16sp"
+        	android:textColor="@color/black" />
+        <View
+            android:layout_width="fill_parent"
+        	android:layout_height="1dp"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+        	android:background="@color/white" />
+        <TextView
+            android:layout_width="fill_parent"
+        	android:layout_height="45dp"
+        	android:gravity="center"
+        	android:text="@string/main_user_upload"
+        	android:textSize="16sp"
+        	android:textColor="@color/black" />
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

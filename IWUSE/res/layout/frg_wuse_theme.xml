@@ -4,10 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-    	android:gravity="center_vertical"
-    	android:text="物色物色物色物色物色物色物色物色物色物色物色物色物色" />
+    <com.yizi.iwuse.general.view.FirstItemMaxListView
+            android:id="@+id/firstItemMaxListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     
 </LinearLayout>

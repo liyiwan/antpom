@@ -9,6 +9,9 @@
     <string name="product_search">筛选</string>
 	<string name="title_iwusetheme">物色</string>
 	<string name="title_productlist">物件</string>
+	<string name="main_wuse_approve">物色推荐</string>
+	<string name="main_movie">视频</string>
+	<string name="main_user_upload">用户上传</string>
     <!--                 综合                           end     -->
     
 	<!--               用户                                        begin-->
@@ -23,6 +26,16 @@
 	<string name="usercenter_setting">软件菜单</string>
 	<string name="usercenter_about">关于</string>
 	<!--                用户                                       end-->
+	
+	<!--  				筛选			 begin-->
+	
+	<!--  				筛选			 end-->
+	<string name="kitchen">厨房</string>
+	<string name="bathroom">卫浴间</string>
+	<string name="bedroom">卧房</string>
+	<string name="hall">大厅</string>
+	<string name="outdoor">户外</string>
+	<string name="accessories">饰品</string>
 	
 	<!--               商品                                        begin-->
 	

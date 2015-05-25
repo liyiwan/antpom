@@ -109,6 +109,9 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 		}*/
 	}
 	
+	/**
+	 * 		关闭用户中心菜单
+	 */
 	public void closeUserCenter(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
 		if (null != userFragment) {
@@ -123,6 +126,9 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 		}
 	}
 	
+	/**		关闭所有fragment
+	 * @param transaction
+	 */
 	private void hideFragments(FragmentTransaction transaction) {
 		if (null != mainHomeFragment) {
 			transaction.hide(mainHomeFragment);
@@ -156,6 +162,9 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 		}*/
 	}
 	
+	/**
+	 * 		关闭产品筛选
+	 */
 	public void closeProductSearch(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
 		if (null != productFragment) {

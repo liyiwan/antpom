@@ -468,8 +468,10 @@ public final class ILog {
 		File file = null;
 		try {
 			file = new File(getLogFile());
-			fw = new FileWriter(file, true);
-			fw.append(fmsg);
+			if(file.exists()){
+				fw = new FileWriter(file, true);
+				fw.append(fmsg);
+			}
 		} catch (IOException e) {
 			Log.e(I_LOG_TAG, "Write log into file falied.", e);
 		} finally {

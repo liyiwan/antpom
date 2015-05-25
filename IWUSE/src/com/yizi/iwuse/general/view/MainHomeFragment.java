@@ -1,14 +1,9 @@
 package com.yizi.iwuse.general.view;
 
-import java.util.ArrayList;
-
-import com.yizi.iwuse.R;
-import com.yizi.iwuse.general.MainHomeActivity;
-
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.yizi.iwuse.R;
+import com.yizi.iwuse.general.MainHomeActivity;
 
 public class MainHomeFragment extends Fragment {
 
@@ -23,7 +23,10 @@ public class MainHomeFragment extends Fragment {
 	private ImageButton img_productsearch;
 	private ViewPager mViewPager;
 	private TabPagerAdapter mPagerAdapter;
-	private int currIndex = 0;// 当前页卡编号  
+	private int currIndex = 0;// 当前页卡编号 
+	private TextView txt_mainhome_iwusetheme;
+	private TextView txt_mainhome_productlist;
+	private LinearLayout ll_top_menu;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -31,6 +34,11 @@ public class MainHomeFragment extends Fragment {
 		
 		img_usercenter = (ImageButton) mView.findViewById(R.id.img_usercenter);
 		img_productsearch = (ImageButton) mView.findViewById(R.id.img_productsearch);
+		ll_top_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
+		txt_mainhome_iwusetheme = (TextView) mView.findViewById(R.id.txt_mainhome_iwusetheme);
+		txt_mainhome_productlist = (TextView) mView.findViewById(R.id.txt_mainhome_productlist);
+		txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
+		txt_mainhome_iwusetheme.setSelected(true);
 		
 		mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
 		mPagerAdapter = new TabPagerAdapter(getFragmentManager());
@@ -60,6 +68,47 @@ public class MainHomeFragment extends Fragment {
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		
+		txt_mainhome_iwusetheme.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(txt_mainhome_iwusetheme.isSelected()){
+					if(ll_top_menu.getVisibility() == View.VISIBLE){
+						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#00000000"));
+						ll_top_menu.setVisibility(View.GONE);
+					}else{
+						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#C0C0C0"));;
+						ll_top_menu.setVisibility(View.VISIBLE);
+					}
+				}else{
+					ll_top_menu.setVisibility(View.GONE);
+					mViewPager.setCurrentItem(0);
+				}
+			}
+		
+		});
+		txt_mainhome_productlist.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(txt_mainhome_productlist.isSelected()){
+					if(ll_top_menu.getVisibility() == View.VISIBLE){
+						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#00000000"));
+						ll_top_menu.setVisibility(View.GONE);
+					}else{
+						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#C0C0C0"));
+						ll_top_menu.setVisibility(View.VISIBLE);
+					}
+				}else{
+					ll_top_menu.setVisibility(View.GONE);
+					mViewPager.setCurrentItem(1);
+				}
+			}
+		
+		});
 	}
 	
 	private class TabPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
@@ -105,6 +154,10 @@ public class MainHomeFragment extends Fragment {
 //            int two = one * 2;// 页卡1 -> 页卡3 偏移量
 			switch (position) {
 			case 0:
+				txt_mainhome_iwusetheme.setSelected(true);
+				txt_mainhome_productlist.setSelected(false);
+				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
+				txt_mainhome_productlist.setTextColor(Color.parseColor("#A8A8A8"));
 				mViewPager.setCurrentItem(0);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_color));
@@ -116,6 +169,10 @@ public class MainHomeFragment extends Fragment {
 //                }
 				break;
 			case 1:
+				txt_mainhome_iwusetheme.setSelected(false);
+				txt_mainhome_productlist.setSelected(true);
+				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#A8A8A8"));
+				txt_mainhome_productlist.setTextColor(Color.parseColor("#000000"));
 				mViewPager.setCurrentItem(1);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));
@@ -124,17 +181,6 @@ public class MainHomeFragment extends Fragment {
 //                    animation = new TranslateAnimation(offset, one, 0, 0);
 //                } else if (currIndex == 2) {
 //                    animation = new TranslateAnimation(two, one, 0, 0);
-//                }
-				break;
-			case 2:
-				mViewPager.setCurrentItem(2);
-//				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_color));
-//				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_color));
-//				tvHomeTab3.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));
-//				if (currIndex == 0) {
-//                    animation = new TranslateAnimation(offset, two, 0, 0);
-//                } else if (currIndex == 1) {
-//                    animation = new TranslateAnimation(one, two, 0, 0);
 //                }
 				break;
 			}
