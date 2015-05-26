@@ -15,6 +15,7 @@ import com.yizi.iwuse.R;
 import com.yizi.iwuse.constants.PublicConst;
 import com.yizi.iwuse.general.WelcomeActivity;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.content.ComponentName;
@@ -935,7 +936,7 @@ public class IWuseUtil {
 	 * @param activity
 	 */
 	public static synchronized void restartIWuse(Context activity) {
-		ILog.i(TAG, "hid restarted.");
+		ILog.i(TAG, "iwuse restarted.");
 		if (null != activity) {
 			AlarmManager mgr = (AlarmManager) activity
 					.getSystemService(Context.ALARM_SERVICE);
@@ -1039,7 +1040,7 @@ public class IWuseUtil {
 	 * @param id
 	 * @return
 	 */
-	public static View getImageView(Context context,int id) {  
+	public static View getImageView(Activity context,int id) {  
         ImageView imgView = new ImageView(context);  
         imgView.setId(id);  
         imgView.setImageResource(id); 
@@ -1054,5 +1055,24 @@ public class IWuseUtil {
         
         return imgView;  
     }
+	
+	/**
+	 * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
+	 * 
+	 * @param input
+	 * @return boolean
+	 */
+	public static boolean isEmpty(String input) {
+		if (input == null || "".equals(input))
+			return true;
+
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
+				return false;
+			}
+		}
+		return true;
+	}
 
 }
