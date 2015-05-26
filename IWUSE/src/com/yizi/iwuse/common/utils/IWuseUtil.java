@@ -1,5 +1,6 @@
 package com.yizi.iwuse.common.utils;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -1055,4 +1056,21 @@ public class IWuseUtil {
         return imgView;  
     }
 
+	public static int getStatusBarHeight(Context context) {
+		Class c = null;
+		Object bj = null;
+		Field field = null;
+		int x = 0, statusBarHeight = 0;
+		try {
+			c = Class.forName("com.android.internal.R$dimen");
+			bj = c.newInstance();
+			field = c.getField("status_bar_height");
+			x = Integer.parseInt(field.get(bj).toString());
+			statusBarHeight = context.getResources().getDimensionPixelSize(x);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return statusBarHeight;
+	}
+	
 }

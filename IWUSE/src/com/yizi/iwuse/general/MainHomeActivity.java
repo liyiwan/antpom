@@ -92,6 +92,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	public void openUserCenterLayout() {
 		
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
 		hideFragments(transaction);
 		if (null == userFragment) {
 			userFragment = new UserFragment();
@@ -114,6 +115,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 */
 	public void closeUserCenter(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
 		if (null != userFragment) {
 			transaction.hide(userFragment);
 			if (null == mainHomeFragment) {
@@ -144,6 +146,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	public void openProductSearchLayout() {
 		
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
 		hideFragments(transaction);
 		if (null == productFragment) {
 			productFragment = new ProductSearchFragment();
@@ -167,6 +170,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 */
 	public void closeProductSearch(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
 		if (null != productFragment) {
 			transaction.hide(productFragment);
 			if (null == mainHomeFragment) {

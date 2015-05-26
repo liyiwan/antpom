@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -26,7 +28,9 @@ public class MainHomeFragment extends Fragment {
 	private int currIndex = 0;// 当前页卡编号 
 	private TextView txt_mainhome_iwusetheme;
 	private TextView txt_mainhome_productlist;
-	private LinearLayout ll_top_menu;
+	private LinearLayout ll_top_left_menu;
+	private LinearLayout ll_title;
+	public static int titleHeight = 0;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -34,13 +38,27 @@ public class MainHomeFragment extends Fragment {
 		
 		img_usercenter = (ImageButton) mView.findViewById(R.id.img_usercenter);
 		img_productsearch = (ImageButton) mView.findViewById(R.id.img_productsearch);
-		ll_top_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
+		ll_top_left_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
 		txt_mainhome_iwusetheme = (TextView) mView.findViewById(R.id.txt_mainhome_iwusetheme);
 		txt_mainhome_productlist = (TextView) mView.findViewById(R.id.txt_mainhome_productlist);
 		txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
 		txt_mainhome_iwusetheme.setSelected(true);
-		
+		ll_title = (LinearLayout) mView.findViewById(R.id.ll_title);
 		mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
+		
+		return mView;
+	}
+
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		int w = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        ll_title.measure(w, h);
+        titleHeight = ll_title.getMeasuredHeight();
+		
 		mPagerAdapter = new TabPagerAdapter(getFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.invalidate();
@@ -63,11 +81,6 @@ public class MainHomeFragment extends Fragment {
 				((MainHomeActivity) getActivity()).openProductSearchLayout();
 			}
 		});
-		return mView;
-	}
-
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
 		
 		txt_mainhome_iwusetheme.setOnClickListener(new View.OnClickListener() {
 
@@ -75,15 +88,15 @@ public class MainHomeFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(txt_mainhome_iwusetheme.isSelected()){
-					if(ll_top_menu.getVisibility() == View.VISIBLE){
+					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
 						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#00000000"));
-						ll_top_menu.setVisibility(View.GONE);
+						ll_top_left_menu.setVisibility(View.GONE);
 					}else{
 						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#C0C0C0"));;
-						ll_top_menu.setVisibility(View.VISIBLE);
+						ll_top_left_menu.setVisibility(View.VISIBLE);
 					}
 				}else{
-					ll_top_menu.setVisibility(View.GONE);
+					ll_top_left_menu.setVisibility(View.GONE);
 					mViewPager.setCurrentItem(0);
 				}
 			}
@@ -95,15 +108,15 @@ public class MainHomeFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if(txt_mainhome_productlist.isSelected()){
-					if(ll_top_menu.getVisibility() == View.VISIBLE){
+					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
 						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#00000000"));
-						ll_top_menu.setVisibility(View.GONE);
+						ll_top_left_menu.setVisibility(View.GONE);
 					}else{
 						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#C0C0C0"));
-						ll_top_menu.setVisibility(View.VISIBLE);
+						ll_top_left_menu.setVisibility(View.VISIBLE);
 					}
 				}else{
-					ll_top_menu.setVisibility(View.GONE);
+					ll_top_left_menu.setVisibility(View.GONE);
 					mViewPager.setCurrentItem(1);
 				}
 			}

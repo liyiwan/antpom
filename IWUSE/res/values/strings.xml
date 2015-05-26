@@ -36,7 +36,12 @@
 	<string name="hall">大厅</string>
 	<string name="outdoor">户外</string>
 	<string name="accessories">饰品</string>
-	
+	<string name="usa_city">美欧城市</string>
+	<string name="nordic_simply">北欧简约</string>
+	<string name="jap_elegant">日式淡雅</string>
+	<string name="asia_holiday">东南亚度假</string>
+	<string name="ornate_palace">华丽宫廷</string>
+	<string name="modern_luxury">奢华现代</string>
 	<!--               商品                                        begin-->
 	
 	<!--               商品                                        end-->
