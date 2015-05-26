@@ -10,6 +10,8 @@ import com.yizi.iwuse.common.base.IEvent;
 import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.utils.MyUncaughtExceptionHandler;
+import com.yizi.iwuse.common.widget.VideoWidget;
+import com.yizi.iwuse.constants.GeneralConst;
 import com.yizi.iwuse.general.adapter.ViewPagerAdapter;
 
 import de.greenrobot.event.EventBus;
@@ -18,18 +20,26 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.VideoView;
 import android.widget.ViewFlipper;
 
 /***
@@ -43,6 +53,7 @@ import android.widget.ViewFlipper;
  *
  */
 public class WelcomeActivity extends BaseActivity {
+	
 	private static final String TAG = "WelcomeActivity";
 	
 	/** 用来自动重启用 */
@@ -52,16 +63,26 @@ public class WelcomeActivity extends BaseActivity {
     /**跳转到主页**/
     private Button btn_skip,btn_enterwuse;
     
-    ViewPagerAdapter viewPagerAdapter = null;
+    private ViewPagerAdapter viewPagerAdapter = null;
 	
+    private  List<View> viewList= new ArrayList<View>();
+    /**显示类型   0-首页引导，1-广告   ***/
+    private int firstshow = GeneralConst.FIRSTSHOW_GUIDE;
+    
+    private ViewGroup mView  = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		ILog.v(TAG, "~~~~~~ WelcomeActivity onCreate ~~~~~~");
         ILog.d(TAG, "savedInstanceState");
+        getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.layout_welcome);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_welcome, null);
+        setContentView(mView);
         Intent newIntent = new Intent(WelcomeActivity.this, WelcomeActivity.class);
         pdIntent = PendingIntent.getActivity(getApplication().getBaseContext(), 0, newIntent
                 							 	,PendingIntent.FLAG_CANCEL_CURRENT);
@@ -77,8 +98,22 @@ public class WelcomeActivity extends BaseActivity {
         AppContext.instance().initDisplay(this);
         
 		EventBus.getDefault().register(this);
-		//首页引导
-		this.loadFirstGuide();
+		new Thread(){
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(3000);
+					Message msg = mHandler.obtainMessage();
+					msg.what = GeneralConst.STARTGUIDE;
+					mHandler.sendMessage(msg);
+				} catch (InterruptedException e) {
+				}
+				
+				super.run();
+			}
+			
+		}.start();
 		
 	}
 
@@ -108,17 +143,16 @@ public class WelcomeActivity extends BaseActivity {
 	
 	/***
 	 * 载入首页引导
-	 *  
-	 * 
 	 */
 	public void loadFirstGuide(){
 		String showGuide = AppContext.instance().appParams.getParamStringByKey("showguide");
-		if(showGuide==null || "".equals(showGuide)||"0".equals(showGuide)){
-			vPager_firstguide = (ViewPager)findViewById(R.id.vflp_firstguide);
+		vPager_firstguide = (ViewPager)findViewById(R.id.vflp_firstguide);
+		vPager_firstguide.setVisibility(View.VISIBLE);
+		if(showGuide!=null && "".equals(showGuide)&&"0".equals(showGuide)){
 			btn_skip = (Button) findViewById(R.id.btn_skip);
 			btn_enterwuse = (Button) findViewById(R.id.btn_enterwuse);
+			firstshow = GeneralConst.FIRSTSHOW_GUIDE;
 			btn_skip.setVisibility(View.VISIBLE);
-			final List<View> viewList= new ArrayList<View>();
 			//应该从服务器获取
 			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_1));
 			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_2));
@@ -129,40 +163,25 @@ public class WelcomeActivity extends BaseActivity {
 			
 			vPager_firstguide.setAdapter(viewPagerAdapter);
 			//vPager_firstguide.setAnimation(AnimationUtils.loadAnimation(WelcomeActivity.this,R.anim.push_left_in));
-			
-			vPager_firstguide.setOnPageChangeListener(new OnPageChangeListener() {
-				
-				@Override
-				public void onPageSelected(int position) {
-					if(position==viewList.size()-1){
-						btn_enterwuse.setVisibility(View.VISIBLE);
-						btn_skip.setVisibility(View.GONE);
-					}else{
-						btn_enterwuse.setVisibility(View.GONE);
-						btn_skip.setVisibility(View.VISIBLE);
-					}
-				}
-				
-				@Override
-				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				}
-				
-				/****
-				 * @param state
-				 *    SCROLL_STATE_IDLE
-				 *	  SCROLL_STATE_DRAGGING
-				 *	  SCROLL_STATE_SETTLING
-				 */
-				@Override
-				public void onPageScrollStateChanged(int state) {
-				}
-			});
-			
 			btn_skip.setOnClickListener(btnOnClickListener);
 			btn_enterwuse.setOnClickListener(btnOnClickListener);
+		}else{
+			firstshow = GeneralConst.FIRSTSHOW_GUIDE;
 			
+			String vdoPath = "android.resource://"+getPackageName()+"/"+R.raw.demo;
+			VideoWidget wideoWidget = new VideoWidget(this,mView, vdoPath);
+			viewList.clear();
+			viewList.add(wideoWidget);
+			viewPagerAdapter = new ViewPagerAdapter(this, viewList);
+			vPager_firstguide.setAdapter(viewPagerAdapter);
 		}
+		vPager_firstguide.setOnPageChangeListener(pageChangeListener);
+		
+		
 	}
+	
+	
+	
 	
 	/**欢迎界面跳转到主界面**/
 	private OnClickListener btnOnClickListener = new OnClickListener() {
@@ -175,5 +194,44 @@ public class WelcomeActivity extends BaseActivity {
 		}
 	};
 	
+	private OnPageChangeListener pageChangeListener = new OnPageChangeListener() {
+		
+		@Override
+		public void onPageSelected(int position) {
+			if(position==viewList.size()-1){
+				btn_enterwuse.setVisibility(View.VISIBLE);
+				btn_skip.setVisibility(View.GONE);
+			}else{
+				btn_enterwuse.setVisibility(View.GONE);
+				if (firstshow==GeneralConst.FIRSTSHOW_GUIDE) {
+					btn_skip.setVisibility(View.VISIBLE);
+				}
+			}
+		}
+		
+		@Override
+		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+		}
+		
+		@Override
+		public void onPageScrollStateChanged(int state) {
+		}
+	};
+	
+	Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case GeneralConst.STARTGUIDE:
+				//首页引导
+				loadFirstGuide();
+				break;
+			default:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+		
+	};
 
 }

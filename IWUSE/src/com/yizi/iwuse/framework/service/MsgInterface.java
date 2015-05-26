@@ -31,7 +31,13 @@ public class MsgInterface {
 		LOGIN_subscribeMailData, LOGIN_subscribeMailMsg,
 		// ------------------用户登陆相关-----------end------------------
 
-		// ------------------公共模块----------------------------
+		// ------------------公共模块--------------begin--------------
+		/**首页广告**/
+		General_AdvertGuide,
+		
+		
+		
+		// ------------------公共模块---------------end-------------
 		/** 发送日志的命令 */
 		PUBLIC_SendLogCmd,
 
@@ -55,18 +61,6 @@ public class MsgInterface {
 		/** 对应的邮箱消息 */
 		private String waitMailId;
 
-		/**
-		 * true@WEB_GetMailBoxData|WEB_GetMailBoxData@null 是否为同步@具体的命令
-		 * 
-		 * @param fisSync
-		 *            是同步消息还是异步命令
-		 * @param fwaitMailId
-		 *            如果是异步，则对应的的邮箱的id
-		 * @param fcmdHost
-		 *            主机对应的命令
-		 * @param fcmdVct
-		 *            终端对应的命令
-		 */
 
 		/**
 		 * 从命令字符串转为命令枚举
@@ -92,7 +86,7 @@ public class MsgInterface {
 		 */
 		public String[] getCmds(CmdInterface cmd) {
 			switch (cmd) {
-			// ~~~~~~~~~~~~~~~~~登录相关~~~~~~~~~~~~~~~~~~~~
+			// ~~~~~~~~~~~~~~~~~用户相关~~~~~~~~~~~~~~~~~~~~
 			case CUSTOMER_DetailInfo:
 				return new String[] { "customer_detailinfo" };
 			case LOGIN_Authentication:
@@ -101,8 +95,12 @@ public class MsgInterface {
 				return new String[] { "ConfGetTh1000Version" };
 			case LOGIN_subscribeMailData:
 				return new String[] {}; // 无
-
-				// ~~~~~~~~~~~~~~~~~~商品相关~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			//~~~~~~~~~~~~~~~~~~公共/综合~~~~~~~~~~~~~~begin~~~~~~~~~~~~~~	
+			case General_AdvertGuide:
+				return new String[]{"advertGuide"};
+			//~~~~~~~~~~~~~~~~~~公共/综合~~~~~~~~~~~~~~end~~~~~~~~~~~~~~	
+				
+			// ~~~~~~~~~~~~~~~~~~商品相关~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			case PRODUCT_ProductInfo:
 				return new String[] { "PRODUCT_ProductInfo" };
 

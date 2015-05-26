@@ -19,6 +19,7 @@ public abstract class BaseView {
 	public BaseView(Context mContext) {
 		this.mContext = mContext;
 	}
+	
 
 	/**
 	 * 更新上下文

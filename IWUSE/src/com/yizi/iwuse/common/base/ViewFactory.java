@@ -151,7 +151,7 @@ public final class ViewFactory {
 			views.remove(viewName);
 
 			// 遍历view，释放资源引用,此处不能使用改方法，否则会造成同一个activity的多界面直接切换时，公共界面哦丢失
-			// HIDUtil.unbindDrawables(baseView.getLayoutView());
+			// IWuseUtil.unbindDrawables(baseView.getLayoutView());
 		}
 	}
 
