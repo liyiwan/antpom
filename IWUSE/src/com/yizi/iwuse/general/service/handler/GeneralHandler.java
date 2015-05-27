@@ -13,6 +13,10 @@ public class GeneralHandler extends AbsCmdMsgHandler {
 	@Override
 	public String getSendMsdDetail(CmdInterface absCmd, String cmdStr,
 			Object bean) throws JSONException {
+		switch(absCmd){
+			
+		}
+		
 		return null;
 	}
 

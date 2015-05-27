@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -23,14 +21,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.RelativeLayout;
-import android.widget.VideoView;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.general.MainHomeActivity;
-import com.yizi.iwuse.general.WelcomeActivity;
 
 /*****
  * 视频播放控件
@@ -98,6 +93,7 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 			
 			@Override
 			public void onClick(View v) {
+				player.release();
 				Intent mIntent = new Intent(mContext, MainHomeActivity.class);
 				mContext.startActivity(mIntent);
 			}
