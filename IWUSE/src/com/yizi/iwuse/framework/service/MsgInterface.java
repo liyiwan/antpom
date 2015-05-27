@@ -90,7 +90,7 @@ public class MsgInterface {
 			case CUSTOMER_DetailInfo:
 				return new String[] { "customer_detailinfo" };
 			case LOGIN_Authentication:
-				return new String[] { "Web_RequestCertificate" };
+				return new String[] { "login" };
 			case LOGIN_GetSubDevice:
 				return new String[] { "ConfGetTh1000Version" };
 			case LOGIN_subscribeMailData:

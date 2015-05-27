@@ -3,6 +3,7 @@ package com.yizi.iwuse.general.view;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.widget.VideoWidget;
@@ -52,7 +53,6 @@ public class WuseThemeFragment extends Fragment {
 
 		WindowManager wm = (WindowManager) getActivity().getSystemService(
 				Context.WINDOW_SERVICE);
-
 		int mScreenHeight = wm.getDefaultDisplay().getHeight();
 		System.out.println("MainHomeFragment.titleHeight"
 				+ String.valueOf(MainHomeFragment.titleHeight));
@@ -70,7 +70,7 @@ public class WuseThemeFragment extends Fragment {
 
 	private class FirstItemMaxAdapter extends BaseAdapter {
 		private ArrayList<Item> mDataSources;
-
+		
 		public FirstItemMaxAdapter() {
 			mDataSources = new ArrayList<Item>();
 			Item item0 = new Item("张一", R.drawable.image1, null);

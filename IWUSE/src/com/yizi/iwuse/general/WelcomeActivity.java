@@ -180,9 +180,6 @@ public class WelcomeActivity extends BaseActivity {
 		
 	}
 	
-	
-	
-	
 	/**欢迎界面跳转到主界面**/
 	private OnClickListener btnOnClickListener = new OnClickListener() {
 		
