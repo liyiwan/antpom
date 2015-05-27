@@ -5,6 +5,13 @@
     android:layout_height="@dimen/item_height"
     android:orientation="vertical">
 
+    <SurfaceView
+        android:id="@+id/vdovi_videotools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        android:visibility="gone" />
+    
     <ImageView
         android:id="@+id/cover"
         android:layout_width="match_parent"

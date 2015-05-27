@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.IWuseUtil;
+import com.yizi.iwuse.common.widget.VideoWidget;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -31,9 +33,11 @@ public class WuseThemeFragment extends Fragment {
 	private int maxHeight = 0;
 	private int firstHeight = 0;
 	private boolean isFisrt = true;
+	private ViewGroup container;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		this.container = container;
 		View mView = inflater
 				.inflate(R.layout.frg_wuse_theme, container, false);
 		mListView = (FirstItemMaxListView) mView
@@ -192,16 +196,25 @@ public class WuseThemeFragment extends Fragment {
 				view.setLayoutParams(new AbsListView.LayoutParams(
 						AbsListView.LayoutParams.MATCH_PARENT, firstHeight));
 			}
-			viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
-
-			viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			viewHolder.cover.setImageResource(mDataSources.get(position).imgId);
+//			if(mDataSources.get(position).videoUrl != null){
+//				String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo;
+//				view = new VideoWidget(getActivity(),view, vdoPath);
+//				
+//			}else{
+				viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
+//				if(viewHolder.cover == null){
+//					return view;
+//				}
+				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				viewHolder.cover.setImageResource(mDataSources.get(position).imgId);
+//			}
 			return view;
 		}
 
 		class ViewHolder {
 			TextView name;
 			ImageView cover;
+			SurfaceView surface;
 		}
 	}
 

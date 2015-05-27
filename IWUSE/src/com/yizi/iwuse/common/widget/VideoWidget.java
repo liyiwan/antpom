@@ -103,6 +103,48 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 			}
 		});
 	}
+	
+	public VideoWidget(final Activity mContext, View view, final String videoPath) {
+		super(mContext);
+		surfaceView = (SurfaceView) view
+				.findViewById(R.id.vdovi_videotools);
+		
+//		btn_vdowidget_enterwuse = (Button) view.findViewById(R.id.btn_vdowidget_enterwuse);
+		if(surfaceView == null){
+			return;
+		}
+		holder = surfaceView.getHolder();
+		holder.addCallback(this);    
+		
+        //下面开始实例化MediaPlayer对象    
+        player = new MediaPlayer();    
+        player.setOnCompletionListener(this);    
+        player.setOnErrorListener(this);    
+        player.setOnInfoListener(this);    
+        player.setOnPreparedListener(this);    
+        player.setOnSeekCompleteListener(this);    
+        player.setOnVideoSizeChangedListener(this);    
+        try {    
+        	player.setDataSource(mContext, Uri.parse(videoPath));
+            //然后，我们取得当前Display对象    
+            currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+        } catch (IllegalArgumentException e) {    
+            ILog.e(TAG, e);
+        } catch (IllegalStateException e) {    
+        	ILog.e(TAG, e);
+        } catch (IOException e) {    
+        	ILog.e(TAG, e);
+        } 
+        
+        /*btn_vdowidget_enterwuse.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent mIntent = new Intent(mContext, MainHomeActivity.class);
+				mContext.startActivity(mIntent);
+			}
+		});*/
+	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -157,10 +199,10 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
             //如果video的宽或者高超出了当前屏幕的大小，则要进行缩放    
             float wRatio = (float)vWidth/(float)size.x;    
             float hRatio = (float)vHeight/(float)size.y;    
-                
-            //选择大的一个进行缩放    
-            float ratio = Math.max(wRatio, hRatio);    
-                
+            
+            //选择大的一个进行缩放 
+            float ratio = Math.max(wRatio, hRatio);
+            
             vWidth = (int)Math.ceil((float)vWidth/ratio);    
             vHeight = (int)Math.ceil((float)vHeight/ratio);    
                 
