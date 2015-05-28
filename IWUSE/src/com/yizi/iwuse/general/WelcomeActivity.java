@@ -3,6 +3,9 @@ package com.yizi.iwuse.general;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
@@ -59,9 +62,12 @@ public class WelcomeActivity extends BaseActivity {
 	/** 用来自动重启用 */
     public static PendingIntent pdIntent;
     /***引导页图片切换工具**/
-    private ViewPager vPager_firstguide;
+    @ViewInject(R.id.vflp_firstguide) private ViewPager vPager_firstguide;
     /**跳转到主页**/
-    private Button btn_skip,btn_enterwuse;
+    @ViewInject(R.id.btn_skip) 
+    private Button btn_skip;
+    @ViewInject(R.id.btn_enterwuse) 
+    private Button btn_enterwuse;
     
     private ViewPagerAdapter viewPagerAdapter = null;
 	
@@ -97,6 +103,7 @@ public class WelcomeActivity extends BaseActivity {
         AppContext.instance().initUiRes(this.getApplicationContext());
         AppContext.instance().initDisplay(this);
         
+        ViewUtils.inject(this);
 		EventBus.getDefault().register(this);
 		new Thread(){
 
@@ -109,8 +116,6 @@ public class WelcomeActivity extends BaseActivity {
 					mHandler.sendMessage(msg);
 				} catch (InterruptedException e) {
 				}
-				
-				super.run();
 			}
 			
 		}.start();
@@ -146,11 +151,8 @@ public class WelcomeActivity extends BaseActivity {
 	 */
 	public void loadFirstGuide(){
 		String showGuide = AppContext.instance().appParams.getParamStringByKey("showguide");
-		vPager_firstguide = (ViewPager)findViewById(R.id.vflp_firstguide);
 		vPager_firstguide.setVisibility(View.VISIBLE);
 		if(showGuide!=null && "".equals(showGuide)&&"0".equals(showGuide)){
-			btn_skip = (Button) findViewById(R.id.btn_skip);
-			btn_enterwuse = (Button) findViewById(R.id.btn_enterwuse);
 			firstshow = GeneralConst.FIRSTSHOW_GUIDE;
 			btn_skip.setVisibility(View.VISIBLE);
 			//应该从服务器获取
@@ -172,12 +174,26 @@ public class WelcomeActivity extends BaseActivity {
 			VideoWidget wideoWidget = new VideoWidget(this,mView, vdoPath);
 			viewList.clear();
 			viewList.add(wideoWidget);
+			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_4));
+			
 			viewPagerAdapter = new ViewPagerAdapter(this, viewList);
 			vPager_firstguide.setAdapter(viewPagerAdapter);
 		}
 		vPager_firstguide.setOnPageChangeListener(pageChangeListener);
 		
 		
+	}
+	
+	@OnClick({R.id.btn_skip,R.id.btn_enterwuse}) 
+	public void btnOnClick(View view){
+		switch(view.getId()){
+			case R.id.btn_skip:
+			case R.id.btn_enterwuse:
+				Intent mIntent = new Intent(WelcomeActivity.this, MainHomeActivity.class);
+				WelcomeActivity.this.startActivity(mIntent);
+				break;
+		
+		}
 	}
 	
 	/**欢迎界面跳转到主界面**/
