@@ -17,7 +17,7 @@
 	        android:layout_height="50dp"
 	        android:layout_alignParentLeft="true"
 	        android:src="@drawable/info"
-	        android:background="@null" />
+	        android:background="@null"/>
 		<RelativeLayout
 		    android:layout_width="0dp"
 	        android:layout_height="match_parent"

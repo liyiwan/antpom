@@ -7,5 +7,7 @@ public class GeneralConst {
 	/**首页引导***/
 	public static final int FIRSTSHOW_GUIDE = 1;
 	/**首页广告***/
-	public static final int FIRSTSHOW_ADVERT = 1;
+	public static final int FIRSTSHOW_ADVERT = 0;
+	
+	public static final String FIRSTSHOW_EXISTADVERT = "1";
 }

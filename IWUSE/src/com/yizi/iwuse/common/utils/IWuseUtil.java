@@ -199,6 +199,33 @@ public class IWuseUtil {
 		String number = ver + "." + formatter.format(version);
 		return number.toLowerCase();
 	}
+	
+	/*****
+	 * 格式化时间
+	 * 
+	 * @param confTime
+	 * @param template
+	 * @return
+	 */
+	public static Date dateFormat(String confTime,String template){
+		// 构造时间格式器
+		if (confTime == null || confTime.length() < 14) {
+			return null;
+		} else {
+			DateFormat format1 = new SimpleDateFormat(template);
+			//DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+			// 定义时间对象
+			Date confDate = null;
+			try {
+				// 格式化时间
+
+				confDate = format1.parse(confTime);
+			} catch (ParseException e) {
+				ILog.e(TAG, e);
+			}
+			return confDate;
+		}
+	}
 
 	/**
 	 * 格式化时间变量
@@ -214,14 +241,14 @@ public class IWuseUtil {
 		if (confTime == null || confTime.length() < 14) {
 			return "";
 		} else {
-			DateFormat format1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+			//DateFormat format1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
 			// 定义时间对象
 			Date confDate = null;
 			try {
 				// 格式化时间
 
-				confDate = format1.parse(confTime);
+				confDate = format2.parse(confTime);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -1041,7 +1068,7 @@ public class IWuseUtil {
 	 * @param id
 	 * @return
 	 */
-	public static View getImageView(Activity context,int id) {  
+	public static View getImageView(Context context,int id) {  
         ImageView imgView = new ImageView(context);  
         imgView.setId(id);  
         imgView.setImageResource(id); 

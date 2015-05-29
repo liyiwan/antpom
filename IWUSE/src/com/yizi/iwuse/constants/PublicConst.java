@@ -57,5 +57,8 @@ public class PublicConst {
 
 	/*** 图片的缓存大小 ***/
 	public static final int IMAGE_MAXCACHE_SIZE = 10 * 1024 * 1024;
+	
+	/**大版本号***/
+	public static final String VERSION = "V1.0.0";
 
 }

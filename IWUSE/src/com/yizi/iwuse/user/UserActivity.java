@@ -7,7 +7,7 @@ public class UserActivity extends BaseActivity {
 	@Override
 	public void removeAllView() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }
