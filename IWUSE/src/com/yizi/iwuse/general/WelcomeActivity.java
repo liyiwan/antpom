@@ -163,8 +163,8 @@ public class WelcomeActivity extends BaseActivity {
 		String advertshow = AppContext.instance().appParams.getParamStringByKey("advertshow");
 		vPager_firstguide.setVisibility(View.VISIBLE);
 		String versionStr = SHOW+PublicConst.VERSION;
-		//if(firstShow!=null && !"".equals(firstShow) && versionStr.equals(firstShow)){
-		if(true){	
+		if(firstShow!=null && !"".equals(firstShow) && versionStr.equals(firstShow)){
+		//if(true){	
 		firstshow = GeneralConst.FIRSTSHOW_GUIDE;
 			btn_skip.setVisibility(View.VISIBLE);
 			//引导页面的图片一般从本地获取
