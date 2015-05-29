@@ -259,7 +259,7 @@ public class HttpCommMgr extends AbsConnMgr {
 			conn.setRequestProperty("padtype", "android");
 			conn.setDefaultUseCaches(true);
 			conn.setUseCaches(true);
-
+			conn.setRequestMethod("POST");
 			// 当发送的命令不是取session id的命令时，需要在header中添加session
 			if (CmdSendAdapter.SESSION_CMD.equals(method)) {
 				conn.setRequestProperty("Cookie", "SessionID=");
