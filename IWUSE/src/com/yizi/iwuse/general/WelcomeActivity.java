@@ -24,30 +24,18 @@ import com.yizi.iwuse.general.adapter.ViewPagerAdapter;
 import de.greenrobot.event.EventBus;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.DisplayMetrics;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.VideoView;
-import android.widget.ViewFlipper;
 
 /***
  * 启动欢迎页面，整个APP的入口
@@ -158,7 +146,6 @@ public class WelcomeActivity extends BaseActivity {
 	 * 2.未存在首页引导，则看是否有广告，广告分为图片和视频，只会有一种格式，同时广告有时效性即广告在某一时间段显示
 	 */
 	public void loadFirstGuide(){
-		//
 		String firstShow = AppContext.instance().appParams.getParamStringByKey("firstshow");
 		String advertshow = AppContext.instance().appParams.getParamStringByKey("advertshow");
 		vPager_firstguide.setVisibility(View.VISIBLE);
@@ -228,6 +215,7 @@ public class WelcomeActivity extends BaseActivity {
 		public void onClick(View v) {
 			Intent mIntent = new Intent(WelcomeActivity.this, MainHomeActivity.class);
 			WelcomeActivity.this.startActivity(mIntent);
+			finish();
 		}
 	};
 	

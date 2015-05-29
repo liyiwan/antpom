@@ -248,7 +248,8 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 	            break;    
 	        default:    
 	            break;    
-        }    
+        }
+		mp.release();
         return false;   
 	}
 
