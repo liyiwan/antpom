@@ -7,7 +7,11 @@ import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.widget.VideoWidget;
+import com.yizi.iwuse.general.model.ThemeItem;
+import com.yizi.iwuse.general.service.GeneralService;
+import com.yizi.iwuse.general.service.events.ThemeEvent;
 
+import de.greenrobot.event.EventBus;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +22,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -35,6 +41,8 @@ public class WuseThemeFragment extends Fragment {
 	private int firstHeight = 0;
 	private boolean isFisrt = true;
 	private ViewGroup container;
+	/***主题数据***/
+	private ArrayList<ThemeItem> themeArray;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -51,6 +59,7 @@ public class WuseThemeFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 
+		EventBus.getDefault().register(this);
 		WindowManager wm = (WindowManager) getActivity().getSystemService(
 				Context.WINDOW_SERVICE);
 		int mScreenHeight = wm.getDefaultDisplay().getHeight();
@@ -65,129 +74,87 @@ public class WuseThemeFragment extends Fragment {
 		mListView.setAdapter(mAdapter);
 		mListView.setItemHeight(firstHeight);
 		mListView.setItemMaxHeight(maxHeight);
-
+		GeneralService server = new GeneralService();
+		server.doNetWork();
 	}
 
 	private class FirstItemMaxAdapter extends BaseAdapter {
-		private ArrayList<Item> mDataSources;
-		
-		public FirstItemMaxAdapter() {
-			mDataSources = new ArrayList<Item>();
-			Item item0 = new Item("张一", R.drawable.image1, null);
-			Item item1 = new Item("李二", R.drawable.image2, null);
-			Item item2 = new Item("张三", R.drawable.image3, null);
-			Item item3 = new Item("李四", R.drawable.image4, null);
-			Item item4 = new Item("张五", R.drawable.image5, null);
-			Item item5 = new Item("李六", R.drawable.image6, null);
-			Item item7 = new Item("李八", R.drawable.image1, null);
-			Item item8 = new Item("张九", R.drawable.image2, null);
-			Item item9 = new Item("李十", R.drawable.image3, null);
-			Item item10 = new Item("张十一", R.drawable.image4, null);
-			Item item11 = new Item("李十二", R.drawable.image5, null);
-			Item item12 = new Item("张十三", R.drawable.image6, null);
-			Item item14 = new Item("张十五", R.drawable.image1, null);
-			Item item15 = new Item("李十六", R.drawable.image2, null);
-			Item item16 = new Item("张十七", R.drawable.image3, null);
-			Item item17 = new Item("李十八", R.drawable.image4, null);
-			Item item18 = new Item("张十九", R.drawable.image5, null);
-			Item item19 = new Item("李二十", R.drawable.image6, null);
-			Item item20 = new Item("张十一", R.drawable.image4, null);
-			Item item21 = new Item("李十二", R.drawable.image5, null);
-			Item item22 = new Item("张十三", R.drawable.image6, null);
-			Item item24 = new Item("张十五", R.drawable.image1, null);
-			Item item25 = new Item("李十六", R.drawable.image2, null);
-			Item item26 = new Item("张十七", R.drawable.image3, null);
-			Item item27 = new Item("李十八", R.drawable.image4, null);
-			Item item28 = new Item("张十九", R.drawable.image5, null);
-			Item item29 = new Item("李二十", R.drawable.image6, null);
-			Item item30 = new Item("张十一", R.drawable.image4, null);
-			Item item31 = new Item("李十二", R.drawable.image5, null);
-			Item item32 = new Item("张十三", R.drawable.image6, null);
-			Item item34 = new Item("张十五", R.drawable.image1, null);
-			Item item35 = new Item("李十六", R.drawable.image2, null);
-			Item item36 = new Item("张十七", R.drawable.image3, null);
-			Item item37 = new Item("李十八", R.drawable.image4, null);
-			Item item38 = new Item("张十九", R.drawable.image5, null);
-			Item item39 = new Item("李二十", R.drawable.image6, null);
-			Item item40 = new Item("张十一", R.drawable.image4, null);
-			Item item41 = new Item("李十二", R.drawable.image5, null);
-			Item item42 = new Item("张十三", R.drawable.image6, null);
-			Item item44 = new Item("张十五", R.drawable.image1, null);
-			Item item45 = new Item("李十六", R.drawable.image2, null);
-			Item item46 = new Item("张十七", R.drawable.image3, null);
-			Item item47 = new Item("李十八", R.drawable.image4, null);
-			Item item48 = new Item("张十九", R.drawable.image5, null);
-			Item item49 = new Item("李二十", R.drawable.image6, null);
-			mDataSources.add(item0);
-			mDataSources.add(item1);
-			mDataSources.add(item2);
-			mDataSources.add(item3);
-			mDataSources.add(item4);
-			mDataSources.add(item5);
-			mDataSources.add(item7);
-			mDataSources.add(item8);
-			mDataSources.add(item9);
-			mDataSources.add(item10);
-			mDataSources.add(item11);
-			mDataSources.add(item12);
-			mDataSources.add(item14);
-			mDataSources.add(item15);
-			mDataSources.add(item16);
-			mDataSources.add(item17);
-			mDataSources.add(item18);
-			mDataSources.add(item19);
-			mDataSources.add(item20);
-			mDataSources.add(item21);
-			mDataSources.add(item22);
-			mDataSources.add(item24);
-			mDataSources.add(item25);
-			mDataSources.add(item26);
-			mDataSources.add(item27);
-			mDataSources.add(item28);
-			mDataSources.add(item29);
-			mDataSources.add(item30);
-			mDataSources.add(item31);
-			mDataSources.add(item32);
-			mDataSources.add(item34);
-			mDataSources.add(item35);
-			mDataSources.add(item36);
-			mDataSources.add(item37);
-			mDataSources.add(item38);
-			mDataSources.add(item39);
-			mDataSources.add(item40);
-			mDataSources.add(item41);
-			mDataSources.add(item42);
-			mDataSources.add(item44);
-			mDataSources.add(item45);
-			mDataSources.add(item46);
-			mDataSources.add(item47);
-			mDataSources.add(item48);
-			mDataSources.add(item49);
-		}
 
 		@Override
 		public int getCount() {
-			return mDataSources.size();
+			return (themeArray == null)?0:themeArray.size();
 		}
 
 		@Override
 		public Object getItem(int i) {
-			return mDataSources.get(i);
+			return themeArray.get(i);
 		}
 
 		@Override
 		public long getItemId(int i) {
-			return 0;
+			return i;
 		}
 
 		@Override
 		public View getView(int position, View view, ViewGroup viewGroup) {
-			if (view == null) {
+			/*if (view == null) {
 				view = LayoutInflater.from(getActivity()).inflate(
 						R.layout.first_item_max_item, null);
+				if(mDataSources.get(position).videoUrl != null && position == 0){
+					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo2;
+					view = new VideoWidget(getActivity(),view, vdoPath);
+				}
+			}*/
+			
+			ViewHolder viewHolder = new ViewHolder();
+			ThemeItem item = themeArray.get(position);
+			System.out.println("！！！！！！！！！！position = " +String.valueOf(position));
+			
+//			if (view == null) {
+				view = LayoutInflater.from(getActivity()).inflate(
+						R.layout.first_item_max_item, null);
+//			}
+			LinearLayout ll_video = (LinearLayout)view.findViewById(R.id.ll_video);
+			if("视频".equals(item.property)){
+				System.out.println("url不为空");
+			}else{
+				System.out.println("url为空！！！！！");
 			}
-			ViewHolder viewHolder;
-			viewHolder = new ViewHolder();
+			if("视频".equals(item.property)){
+				if(view.getTag() != null){
+					System.out.println("tag不为空");
+					View videoView = (View)view.getTag();
+					ll_video.removeAllViews();
+					ll_video.addView(videoView);
+					return view;
+				}else{
+					System.out.println("tag为空");
+					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo3;
+					View videoView = new VideoWidget(getActivity(),view, vdoPath);
+					ll_video.removeAllViews();
+					ll_video.addView(videoView);
+					view.setTag(videoView);
+				}
+				viewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
+				viewHolder.tv_title.setText("标题标题标题标题");
+				viewHolder.tv_kind = (TextView) view.findViewById(R.id.tv_kind);
+				viewHolder.tv_kind.setText("分类类型");
+				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
+				viewHolder.tv_property.setText("视频");
+			}else{
+				ll_video.setVisibility(View.GONE);
+				viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
+				viewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
+				viewHolder.tv_title.setText("标题标题标题标题");
+				viewHolder.tv_kind = (TextView) view.findViewById(R.id.tv_kind);
+				viewHolder.tv_kind.setText("分类类型");
+				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
+				viewHolder.tv_property.setText("图片");
+				viewHolder.cover.setVisibility(View.VISIBLE);
+				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				viewHolder.cover.setImageResource(item.themeUrl);
+			}
+			
 			if (position == 0 && isFisrt) {
 				isFisrt = false;
 				view.setLayoutParams(new AbsListView.LayoutParams(
@@ -201,33 +168,35 @@ public class WuseThemeFragment extends Fragment {
 //				view = new VideoWidget(getActivity(),view, vdoPath);
 //				
 //			}else{
+			/*if(mDataSources.get(position).videoUrl == null){
 				viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
-//				if(viewHolder.cover == null){
-//					return view;
-//				}
 				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				viewHolder.cover.setImageResource(mDataSources.get(position).imgId);
+			}*/
 //			}
 			return view;
 		}
 
-		class ViewHolder {
-			TextView name;
-			ImageView cover;
-			SurfaceView surface;
+		private class ViewHolder {
+			private ImageView cover;
+			private SurfaceView surface;
+			private TextView tv_title;
+			private TextView tv_kind;
+			private TextView tv_favor;
+			private TextView tv_property;
 		}
 	}
+	
+	public void onEventMainThread(ThemeEvent event) {
+		themeArray = event.getThemeArray();
+		mAdapter.notifyDataSetChanged();
+	}
 
-	class Item {
-		String name;
-		int imgId;
-		String videoUrl;
-
-		Item(String name, int imgId, String videoUrl) {
-			this.name = name;
-			this.imgId = imgId;
-			this.videoUrl = videoUrl;
-		}
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		EventBus.getDefault().unregister(this);
+		super.onDestroy();
 	}
 
 }

@@ -169,9 +169,11 @@ public class WelcomeActivity extends BaseActivity {
 			firstshow = GeneralConst.FIRSTSHOW_GUIDE;
 			
 			String vdoPath = "android.resource://"+getPackageName()+"/"+R.raw.demo;
+//			String vdoPath = "android.resource://"+getPackageName()+"/raw/demo2.mp4";
 			VideoWidget wideoWidget = new VideoWidget(this,mView, vdoPath);
 			viewList.clear();
 			viewList.add(wideoWidget);
+//			wideoWidget.getPlayer().start();
 			viewPagerAdapter = new ViewPagerAdapter(this, viewList);
 			vPager_firstguide.setAdapter(viewPagerAdapter);
 		}

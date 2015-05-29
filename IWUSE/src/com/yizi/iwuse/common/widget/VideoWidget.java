@@ -33,6 +33,7 @@ import com.yizi.iwuse.general.MainHomeActivity;
  * @author zhangxiying
  *
  */
+@SuppressLint("NewApi")
 public class VideoWidget extends View implements OnCompletionListener,OnErrorListener,OnInfoListener,    
 OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHolder.Callback {
 
@@ -70,24 +71,31 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 		holder.addCallback(this);    
 		
         //下面开始实例化MediaPlayer对象    
-        player = new MediaPlayer();    
-        player.setOnCompletionListener(this);    
-        player.setOnErrorListener(this);    
-        player.setOnInfoListener(this);    
-        player.setOnPreparedListener(this);    
-        player.setOnSeekCompleteListener(this);    
-        player.setOnVideoSizeChangedListener(this);    
-        try {    
-        	player.setDataSource(mContext, Uri.parse(videoPath));
+//        player = new MediaPlayer();
+        try {   
+        	if(player == null){
+        		currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+        		player = MediaPlayer.create(mContext, Uri.parse(videoPath));
+        		player.setOnCompletionListener(this);    
+        		player.setOnErrorListener(this);    
+        		player.setOnInfoListener(this);    
+        		player.setOnPreparedListener(this);    
+        		player.setOnSeekCompleteListener(this);    
+        		player.setOnVideoSizeChangedListener(this);
+        		
+        	}else{
+        		
+        	}
+        	
+//        	player.setDataSource(mContext, Uri.parse(videoPath));
             //然后，我们取得当前Display对象    
-            currDisplay = mContext.getWindowManager().getDefaultDisplay();  
         } catch (IllegalArgumentException e) {    
             ILog.e(TAG, e);
         } catch (IllegalStateException e) {    
         	ILog.e(TAG, e);
-        } catch (IOException e) {    
+        }/* catch (IOException e) {    
         	ILog.e(TAG, e);
-        } 
+        } */
         
         btn_vdowidget_enterwuse.setOnClickListener(new OnClickListener() {
 			
@@ -98,39 +106,39 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 				mContext.startActivity(mIntent);
 			}
 		});
+        
 	}
 	
 	public VideoWidget(final Activity mContext, View view, final String videoPath) {
 		super(mContext);
+		try {    
 		surfaceView = (SurfaceView) view
 				.findViewById(R.id.vdovi_videotools);
 		
 //		btn_vdowidget_enterwuse = (Button) view.findViewById(R.id.btn_vdowidget_enterwuse);
-		if(surfaceView == null){
-			return;
-		}
+//		if(surfaceView == null){
+//			return;
+//		}
 		holder = surfaceView.getHolder();
 		holder.addCallback(this);    
 		
-        //下面开始实例化MediaPlayer对象    
-        player = new MediaPlayer();    
-        player.setOnCompletionListener(this);    
-        player.setOnErrorListener(this);    
-        player.setOnInfoListener(this);    
-        player.setOnPreparedListener(this);    
-        player.setOnSeekCompleteListener(this);    
-        player.setOnVideoSizeChangedListener(this);    
-        try {    
-        	player.setDataSource(mContext, Uri.parse(videoPath));
-            //然后，我们取得当前Display对象    
-            currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+        //下面开始实例化MediaPlayer对象  
+		if(player == null){
+			//然后，我们取得当前Display对象   
+			currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+			player = MediaPlayer.create(mContext, Uri.parse(videoPath));
+	        player.setOnCompletionListener(this);    
+	        player.setOnErrorListener(this);    
+	        player.setOnInfoListener(this);    
+	        player.setOnPreparedListener(this);    
+	        player.setOnSeekCompleteListener(this);    
+	        player.setOnVideoSizeChangedListener(this);    
+		}
         } catch (IllegalArgumentException e) {    
             ILog.e(TAG, e);
         } catch (IllegalStateException e) {    
         	ILog.e(TAG, e);
-        } catch (IOException e) {    
-        	ILog.e(TAG, e);
-        } 
+        }
         
         /*btn_vdowidget_enterwuse.setOnClickListener(new OnClickListener() {
 			
@@ -150,12 +158,13 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
         	player.setDisplay(holder);    
         	//在指定了MediaPlayer播放的容器后，我们就可以使用prepare或者prepareAsync来准备播放了    
         	//player.prepareAsync();
-			player.prepare();
+//			player.prepare();
+//        	player.start();
 		} catch (IllegalStateException e) {
 			 ILog.e(TAG, e);
-		} catch (IOException e) {
+		}/* catch (IOException e) {
 			 ILog.e(TAG, e);
-		}
+		}*/
 	}
 
 	@Override
@@ -184,8 +193,8 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// 当prepare完成后，该方法触发，在这里我们播放视频    
-        
-        //首先取得video的宽和高    
+
+		//首先取得video的宽和高    
         vWidth = mp.getVideoWidth();    
         vHeight = mp.getVideoHeight();    
         Point size = new Point();
@@ -209,7 +218,7 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
         //设置surfaceView的布局参数    
         surfaceView.setLayoutParams(new RelativeLayout.LayoutParams(vWidth, vHeight));    
         //然后开始播放视频    
-        mp.start();    
+        player.start();    
 	}
 
 	@Override
@@ -249,4 +258,12 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 		mp.start();   
 	}
 
+	public MediaPlayer getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(MediaPlayer player) {
+		this.player = player;
+	}
+	
 }

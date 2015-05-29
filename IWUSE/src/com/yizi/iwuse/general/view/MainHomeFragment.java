@@ -19,14 +19,23 @@ import android.widget.TextView;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.MainHomeActivity;
 
+/**		主页
+ * @author hehaodong
+ *
+ */
 public class MainHomeFragment extends Fragment {
 
+	/***个人中心选择按钮***/
 	private ImageButton img_usercenter;
+	/***筛选选择按钮***/
 	private ImageButton img_productsearch;
 	private ViewPager mViewPager;
 	private TabPagerAdapter mPagerAdapter;
-	private int currIndex = 0;// 当前页卡编号 
+	/***当前页卡编号***/
+	private int currIndex = 0;
+	/***主题选择按钮***/
 	private TextView txt_mainhome_iwusetheme;
+	/***单品选择按钮***/
 	private TextView txt_mainhome_productlist;
 	private LinearLayout ll_top_left_menu;
 	private LinearLayout ll_title;
@@ -42,7 +51,7 @@ public class MainHomeFragment extends Fragment {
 		txt_mainhome_iwusetheme = (TextView) mView.findViewById(R.id.txt_mainhome_iwusetheme);
 		txt_mainhome_productlist = (TextView) mView.findViewById(R.id.txt_mainhome_productlist);
 		txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
-		txt_mainhome_iwusetheme.setSelected(true);
+//		txt_mainhome_iwusetheme.setSelected(true);
 		ll_title = (LinearLayout) mView.findViewById(R.id.ll_title);
 		mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
 		
@@ -87,18 +96,18 @@ public class MainHomeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(txt_mainhome_iwusetheme.isSelected()){
-					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
-						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#00000000"));
-						ll_top_left_menu.setVisibility(View.GONE);
-					}else{
-						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#C0C0C0"));;
-						ll_top_left_menu.setVisibility(View.VISIBLE);
-					}
-				}else{
-					ll_top_left_menu.setVisibility(View.GONE);
+//				if(txt_mainhome_iwusetheme.isSelected()){
+//					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
+//						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#00000000"));
+//						ll_top_left_menu.setVisibility(View.GONE);
+//					}else{
+//						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#C0C0C0"));;
+//						ll_top_left_menu.setVisibility(View.VISIBLE);
+//					}
+//				}else{
+//					ll_top_left_menu.setVisibility(View.GONE);
 					mViewPager.setCurrentItem(0);
-				}
+//				}
 			}
 		
 		});
@@ -107,23 +116,27 @@ public class MainHomeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(txt_mainhome_productlist.isSelected()){
-					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
-						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#00000000"));
-						ll_top_left_menu.setVisibility(View.GONE);
-					}else{
-						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#C0C0C0"));
-						ll_top_left_menu.setVisibility(View.VISIBLE);
-					}
-				}else{
-					ll_top_left_menu.setVisibility(View.GONE);
+//				if(txt_mainhome_productlist.isSelected()){
+//					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
+//						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#00000000"));
+//						ll_top_left_menu.setVisibility(View.GONE);
+//					}else{
+//						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#C0C0C0"));
+//						ll_top_left_menu.setVisibility(View.VISIBLE);
+//					}
+//				}else{
+//					ll_top_left_menu.setVisibility(View.GONE);
 					mViewPager.setCurrentItem(1);
-				}
+//				}
 			}
 		
 		});
 	}
 	
+	/**		主页切换适配器
+	 * @author hehaodong
+	 *
+	 */
 	private class TabPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
 
 		public TabPagerAdapter(FragmentManager fm) {

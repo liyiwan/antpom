@@ -16,6 +16,9 @@
 
 package com.yizi.iwuse.general.view;
 
+import com.yizi.iwuse.R;
+import com.yizi.iwuse.common.widget.VideoWidget;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -25,16 +28,17 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 /**
- * 通过手势滑动控制Listview的滚动
- * write by wufenglong.
+ * 通过手势滑动控制Listview放大缩小
+ * 
  */
 public class FirstItemMaxListView extends ListView {
+	private Context context;
     private int ITEM_HEIGHT;//标准item高,
     private int mITEM_MAX_HEIGHT = 0;
     private int mLastFirstVisiblePosition = 0;
     private int distanceOneItem;//记录滚动距离，向上滚动时-ITEM_HEIGHT到0，向下滚动是0到ITEM_HEIGHT,当listview FirstVisiblePosition 设置为0
     private int mLastDistanceOneItem = 1;
-    private GestureDetector mGestureDetector = new GestureDetector(new GestureDetector.OnGestureListener() {
+    private GestureDetector mGestureDetector = new GestureDetector(context,new GestureDetector.OnGestureListener() {
         @Override
         public boolean onDown(MotionEvent e) {
             return false;
@@ -99,6 +103,7 @@ public class FirstItemMaxListView extends ListView {
 
     public FirstItemMaxListView(Context context) {
         super(context);
+        this.context = context;
         init();
     }
 
@@ -141,6 +146,27 @@ public class FirstItemMaxListView extends ListView {
             if (changeHeight <= ITEM_HEIGHT) {
                 changeHeight = ITEM_HEIGHT;
             }
+            System.out.println("放大过程changeHeight = " + changeHeight);
+            if(changeHeight == ITEM_HEIGHT){
+            	VideoWidget videoWidget = (VideoWidget)item0.getTag();
+            	if(videoWidget != null){
+            		System.out.println("放大过程，高度等于0，释放视频！！！");
+            		if(videoWidget.getPlayer() != null){
+            			item0.setTag(null);
+	            		videoWidget.getPlayer().stop();
+	            		videoWidget.getPlayer().release();
+	            		videoWidget.setPlayer(null);
+            		}
+            	}
+            }/*else if(changeHeight == mITEM_MAX_HEIGHT){
+            	VideoWidget videoWidget = (VideoWidget)item0.getTag();
+            	if(videoWidget != null){
+            		System.out.println("放大过程，高度到最大值，播放视频！！！");
+            		if(videoWidget.getPlayer() != null){
+            			videoWidget.getPlayer().start();
+            		}
+            	}
+            }*/
             item0.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
             item1.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
         } else {
@@ -159,6 +185,29 @@ public class FirstItemMaxListView extends ListView {
             if (changeHeight <= ITEM_HEIGHT) {
                 changeHeight = ITEM_HEIGHT;
             }
+            System.out.println("缩小过程changeHeight = " + changeHeight);
+            if(changeHeight == ITEM_HEIGHT){
+            	VideoWidget videoWidget = (VideoWidget)item0.getTag();
+            	if(videoWidget != null){
+            		System.out.println("缩小过程，高度等于0，释放视频！！！");
+            		if(videoWidget.getPlayer() != null){
+            			item0.setTag(null);
+            			item0.setBackgroundResource(R.drawable.image1);
+	            		videoWidget.getPlayer().stop();
+	            		videoWidget.getPlayer().release();
+	            		videoWidget.setPlayer(null);
+            		}
+            	}
+            }/*else if(changeHeight == mITEM_MAX_HEIGHT){
+            	VideoWidget videoWidget = (VideoWidget)item0.getTag();
+            	if(videoWidget != null){
+            		System.out.println("缩小过程，高度到最大值，播放视频！！！");
+            		if(videoWidget.getPlayer() != null){
+            			item0.setBackgroundDrawable(null);
+            			videoWidget.getPlayer().start();
+            		}
+            	}
+            }*/
             item0.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
             item1.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
         }
