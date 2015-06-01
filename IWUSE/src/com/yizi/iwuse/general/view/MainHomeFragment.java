@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.MainHomeActivity;
 
@@ -25,35 +27,29 @@ import com.yizi.iwuse.general.MainHomeActivity;
  */
 public class MainHomeFragment extends Fragment {
 
+	@ViewInject(R.id.view_pager) private ViewPager mViewPager;
 	/***个人中心选择按钮***/
-	private ImageButton img_usercenter;
+	@ViewInject(R.id.img_usercenter) private ImageButton img_usercenter;
 	/***筛选选择按钮***/
-	private ImageButton img_productsearch;
-	private ViewPager mViewPager;
+	@ViewInject(R.id.img_productsearch) private ImageButton img_productsearch;
 	private TabPagerAdapter mPagerAdapter;
 	/***当前页卡编号***/
 	private int currIndex = 0;
 	/***主题选择按钮***/
-	private TextView txt_mainhome_iwusetheme;
+	@ViewInject(R.id.txt_mainhome_iwusetheme) private TextView txt_mainhome_iwusetheme;
 	/***单品选择按钮***/
-	private TextView txt_mainhome_productlist;
-	private LinearLayout ll_top_left_menu;
-	private LinearLayout ll_title;
+	@ViewInject(R.id.txt_mainhome_productlist) private TextView txt_mainhome_productlist;
+//	private LinearLayout ll_top_left_menu;
+	@ViewInject(R.id.ll_title) private LinearLayout ll_title;
 	public static int titleHeight = 0;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View mView = inflater.inflate(R.layout.frg_mainhome, null);
-		
-		img_usercenter = (ImageButton) mView.findViewById(R.id.img_usercenter);
-		img_productsearch = (ImageButton) mView.findViewById(R.id.img_productsearch);
-		ll_top_left_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
-		txt_mainhome_iwusetheme = (TextView) mView.findViewById(R.id.txt_mainhome_iwusetheme);
-		txt_mainhome_productlist = (TextView) mView.findViewById(R.id.txt_mainhome_productlist);
+		ViewUtils.inject(this,mView);
+//		ll_top_left_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
 		txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
 //		txt_mainhome_iwusetheme.setSelected(true);
-		ll_title = (LinearLayout) mView.findViewById(R.id.ll_title);
-		mViewPager = (ViewPager) mView.findViewById(R.id.view_pager);
 		
 		return mView;
 	}
@@ -91,6 +87,7 @@ public class MainHomeFragment extends Fragment {
 			}
 		});
 		
+		/***切换到主题页卡***/
 		txt_mainhome_iwusetheme.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -111,6 +108,8 @@ public class MainHomeFragment extends Fragment {
 			}
 		
 		});
+		
+		/***切换到单品页卡***/
 		txt_mainhome_productlist.setOnClickListener(new View.OnClickListener() {
 
 			@Override

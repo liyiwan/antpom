@@ -5,7 +5,10 @@ import java.io.IOException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -34,7 +37,7 @@ import com.yizi.iwuse.general.MainHomeActivity;
  *
  */
 @SuppressLint("NewApi")
-public class VideoWidget extends View implements OnCompletionListener,OnErrorListener,OnInfoListener,    
+public class ThemeVideoWidget extends View implements OnCompletionListener,OnErrorListener,OnInfoListener,    
 OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHolder.Callback {
 
 	private static final String TAG = "VideoWidget";
@@ -50,72 +53,45 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 	private MediaPlayer player;    
     /**最终使用的宽高***/
 	private int vWidth,vHeight;
+	private Activity mContext;
+	private String videoPath;
 	
-	/****
-	 * 
-	 * 
-	 * @param mContext
-	 * @param parentView
-	 * @param videoPath
-	 */
-	public VideoWidget(final Activity mContext, ViewGroup parentView, final String videoPath) {
+	
+	public ThemeVideoWidget(final Activity mContext, SurfaceView view, final String videoPath) {
 		super(mContext);
-		View view = LayoutInflater.from(mContext).inflate(
-				R.layout.widget_video, parentView);
-		surfaceView = (SurfaceView) view
-				.findViewById(R.id.vdovi_videotools);
-		
-		btn_vdowidget_enterwuse = (Button) view.findViewById(R.id.btn_vdowidget_enterwuse);
-		
-		holder = surfaceView.getHolder();
-		holder.addCallback(this);    
-		
-        //下面开始实例化MediaPlayer对象    
-//        player = new MediaPlayer();
-        try {   
-        	if(player == null){
-        		currDisplay = mContext.getWindowManager().getDefaultDisplay();  
-        		player = MediaPlayer.create(mContext, Uri.parse(videoPath));
-        		player.setOnCompletionListener(this);    
-        		player.setOnErrorListener(this);    
-        		player.setOnInfoListener(this);    
-        		player.setOnPreparedListener(this);    
-        		player.setOnSeekCompleteListener(this);    
-        		player.setOnVideoSizeChangedListener(this);
-        		
-        	}else{
-        		
-        	}
-        	
-//        	player.setDataSource(mContext, Uri.parse(videoPath));
-            //然后，我们取得当前Display对象    
+		try {    
+			this.mContext = mContext;
+			this.videoPath = videoPath;
+			surfaceView = view;
+	        holder = surfaceView.getHolder();
+	        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+	        holder.addCallback(this);
         } catch (IllegalArgumentException e) {    
             ILog.e(TAG, e);
         } catch (IllegalStateException e) {    
         	ILog.e(TAG, e);
-        }/* catch (IOException e) {    
-        	ILog.e(TAG, e);
-        } */
-        
-        btn_vdowidget_enterwuse.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				player.release();
-				Intent mIntent = new Intent(mContext, MainHomeActivity.class);
-				mContext.startActivity(mIntent);
-			}
-		});
+        }
         
 	}
-	
-	
+
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
         try {
         	// 当SurfaceView中的Surface被创建的时候被调用    
-        	//在这里我们指定MediaPlayer在当前的Surface中进行播放    
-        	player.setDisplay(holder);    
+        	//在这里我们指定MediaPlayer在当前的Surface中进行播放
+        	if(player == null){
+				//然后，我们取得当前Display对象   
+				currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+				player = MediaPlayer.create(mContext, Uri.parse(videoPath));
+				player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		        player.setOnCompletionListener(this);    
+		        player.setOnErrorListener(this);    
+		        player.setOnInfoListener(this);    
+		        player.setOnPreparedListener(this);    
+		        player.setOnSeekCompleteListener(this);    
+		        player.setOnVideoSizeChangedListener(this);
+		        player.setDisplay(holder);    
+			}
         	//在指定了MediaPlayer播放的容器后，我们就可以使用prepare或者prepareAsync来准备播放了    
         	//player.prepareAsync();
 //			player.prepare();
