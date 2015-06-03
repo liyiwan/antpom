@@ -1,24 +1,84 @@
 package com.yizi.iwuse.user.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.umeng.analytics.MobclickAgent;
+import com.yizi.iwuse.AppContext;
+import com.yizi.iwuse.AppParams;
 import com.yizi.iwuse.R;
+import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.general.MainHomeActivity;
+import com.yizi.iwuse.user.LoginActivity;
 
+/****
+ * 用户管理中心
+ * 
+ * @author zhangxiying
+ *
+ */
 public class UserFragment extends Fragment {
 
+	private static final String TAG = "UserFragment";
+	/***关闭**/
+	@ViewInject(R.id.tv_close)
 	private ImageView tv_close;
+	/***用户信息，头像，昵称，积分**/
+	@ViewInject(R.id.lay_userinfo)
+	private RelativeLayout lay_userinfo;
+	/**用户头像***/
+	@ViewInject(R.id.img_usercenter_headimg)
+	private ImageView img_usercenter_headimg;
+	/**用户昵称**/
+	@ViewInject(R.id.txt_usercenter_username)
+	private TextView txt_usercenter_username;
+	/**积分**/
+	@ViewInject(R.id.text_usercenter_totalintegral)
+	private TextView  text_usercenter_totalintegral;
+	/**收藏**/
+	@ViewInject(R.id.lay_usercollection)
+	private LinearLayout lay_usercollection;
+	/**购物车**/
+	@ViewInject(R.id.lay_shopcart)
+	private  LinearLayout lay_shopcart;
+	/**钱包**/
+	@ViewInject(R.id.lay_iwallet)
+	private LinearLayout lay_iwallet;
+	/**我的订单**/
+	@ViewInject(R.id.txt_usercenter_iorderlist)
+	private TextView txt_usercenter_iorderlist;
+	/**客服**/
+	@ViewInject(R.id.txt_usercenter_callservice)
+	private TextView txt_usercenter_callservice;
+	/**上传稿件**/
+	@ViewInject(R.id.txt_usercenter_isubmission)
+	private TextView txt_usercenter_isubmission;
+	/**设置**/
+	@ViewInject(R.id.txt_usercenter_setting)
+	private TextView txt_usercenter_setting;
+	/**关于**/
+	@ViewInject(R.id.txt_usercenter_about)
+	private TextView txt_usercenter_about;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_usercenter, null);
+		ILog.i(TAG, "init onCreateView ");
+		ViewUtils.inject(UserFragment.this, view);
+		
 		return view;
 	}
 
@@ -41,5 +101,32 @@ public class UserFragment extends Fragment {
 		});
 	}
 	
-	
+	@OnClick({R.id.lay_userinfo,R.id.lay_usercollection,R.id.lay_shopcart,R.id.lay_iwallet})
+	public void onUserCenterClick(View view){
+		ILog.i(TAG, "check login ");
+		if(!AppParams.isLogin){
+			Intent mIntent = new Intent(AppContext.instance().globalContext,LoginActivity.class);
+			this.startActivity(mIntent);
+		}
+		
+		switch(view.getId()){
+			case R.id.lay_userinfo:
+				
+			break;
+			
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPageStart(TAG);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onPageEnd(TAG); 
+	}
+
 }

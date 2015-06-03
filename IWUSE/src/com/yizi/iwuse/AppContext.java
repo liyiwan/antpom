@@ -40,7 +40,7 @@ public class AppContext {
 
 	/** hid的版本日期 */
 	public final static String iwuseReleaseDate = "  Release 1.0.0.0 2015.5.8";
-
+	
 	/**
 	 * ===================================== Warning：全局控制区 end
 	 * =====================================

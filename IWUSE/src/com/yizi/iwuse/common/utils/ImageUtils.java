@@ -162,8 +162,10 @@ public class ImageUtils {
 		FileInputStream fis = null;
 		Bitmap bitmap = null;
 		try {
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			opts.inSampleSize = 8;
 			fis = context.openFileInput(fileName);
-			bitmap = BitmapFactory.decodeStream(fis);
+			bitmap = BitmapFactory.decodeStream(fis, null, opts);
 		} catch (FileNotFoundException e) {
 			ILog.e(TAG, e);
 		} catch (OutOfMemoryError e) {
@@ -184,7 +186,9 @@ public class ImageUtils {
 	 * @return
 	 */
 	public static Bitmap getBitmapByPath(String filePath) {
-		return getBitmapByPath(filePath, null);
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inSampleSize = 8;
+		return getBitmapByPath(filePath, opts);
 	}
 
 	public static Bitmap getBitmapByPath(String filePath,
@@ -218,8 +222,10 @@ public class ImageUtils {
 		FileInputStream fis = null;
 		Bitmap bitmap = null;
 		try {
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			opts.inSampleSize = 8;
 			fis = new FileInputStream(file);
-			bitmap = BitmapFactory.decodeStream(fis);
+			bitmap = BitmapFactory.decodeStream(fis, null, opts);
 		} catch (FileNotFoundException e) {
 			ILog.e(TAG, e);
 		} catch (OutOfMemoryError e) {

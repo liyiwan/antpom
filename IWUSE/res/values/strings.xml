@@ -21,6 +21,8 @@
     <string name="regist"><u>用户注册</u></string>
     <string name="forgetuserinfo"><u>忘记密码?</u></string>
     <string name="oauth_weichat">微信</string>
+    <string name="prompt_uninstallweichat">您未安装微信</string>
+    <string name="prompt_oauth_weichat_exception">微信授权异常，请重试</string>
     <string name="oauth_qq">QQ</string>
     <string name="oauth_paybao">支付宝</string>
     <string name="oauth_weibo">微博</string>
@@ -34,6 +36,11 @@
 	<string name="usercenter_isubmission">上传投稿</string>
 	<string name="usercenter_setting">软件菜单</string>
 	<string name="usercenter_about">关于</string>
+	 <string name="umeng_socialize_text_sina_key">微博</string>
+    <string name="umeng_socialize_text_qq_key">QQ</string>
+    <string name="umeng_socialize_text_weixin_key">微信</string>
+     <string name="umeng_socialize_text_waitting_weixin">跳转微信中，请稍候...</string>
+    <string name="umeng_socialize_text_waitting_qq">跳转QQ中，请稍候...</string>
 	<!--                用户                                       end-->
 	
 	<!--  				筛选			 begin-->

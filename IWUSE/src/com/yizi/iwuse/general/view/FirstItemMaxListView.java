@@ -18,7 +18,7 @@ package com.yizi.iwuse.general.view;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.widget.VideoWidget;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -31,6 +31,7 @@ import android.widget.ListView;
  * 通过手势滑动控制Listview放大缩小
  * 
  */
+@SuppressLint("NewApi")
 public class FirstItemMaxListView extends ListView {
 	private Context context;
     private int ITEM_HEIGHT;//标准item高,

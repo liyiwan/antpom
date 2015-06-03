@@ -9,6 +9,8 @@ import java.util.List;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.umeng.analytics.AnalyticsConfig;
+import com.umeng.analytics.MobclickAgent;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
@@ -98,6 +100,12 @@ public class WelcomeActivity extends BaseActivity {
         
         ViewUtils.inject(this);
 		EventBus.getDefault().register(this);
+		//注册友盟统计分析工具
+		 //因页面存在activity,fragment,view，需禁止默认的页面统计方式
+		MobclickAgent.openActivityDurationTrack(false);
+		MobclickAgent.updateOnlineConfig(this);
+		AnalyticsConfig.enableEncrypt(false);
+		
 		new Thread(){
 			@Override
 			public void run() {
@@ -110,6 +118,8 @@ public class WelcomeActivity extends BaseActivity {
 				}
 			}
 		}.start();
+		
+		
 	}
 
 	/****
@@ -121,6 +131,20 @@ public class WelcomeActivity extends BaseActivity {
 		// 更新界面信息
 	}
 	
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
+	}
+
 	/****
 	 * 反注册EventBus
 	 */
