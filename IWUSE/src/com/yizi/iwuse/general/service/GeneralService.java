@@ -42,31 +42,20 @@ public class GeneralService implements ICoreService {
 	}
 
 	public void getNetData() {
+		String vdoPath = "android.resource://com.yizi.iwuse/"+R.raw.demo3;
 		themeArray = new ArrayList<ThemeItem>();
-		ThemeItem item0 = new ThemeItem("张一", R.drawable.image1, "分类类型", "图片");
-		ThemeItem item1 = new ThemeItem("李二", R.drawable.image2, "分类类型", "图片");
-		ThemeItem item2 = new ThemeItem("张三", R.drawable.image3, "分类类型", "图片");
-		ThemeItem item3 = new ThemeItem("李四", R.drawable.image4, "分类类型", "图片");
-		ThemeItem item4 = new ThemeItem("张五", R.drawable.image5, "分类类型", "图片");
-		ThemeItem item5 = new ThemeItem("李六", R.drawable.image6, "分类类型", "图片");
-		ThemeItem item7 = new ThemeItem("李八", R.drawable.image1, "分类类型", "图片");
-		ThemeItem item8 = new ThemeItem("张九", R.drawable.image2, "分类类型", "图片");
-		ThemeItem item9 = new ThemeItem("李十", R.drawable.image3, "分类类型", "图片");
-		ThemeItem item10 = new ThemeItem("张十一", R.drawable.image4, "分类类型", "图片");
-		ThemeItem item11 = new ThemeItem("李十二", R.drawable.image5, "分类类型", "图片");
-		ThemeItem item12 = new ThemeItem("张十三", R.drawable.image6, "分类类型", "图片");
+		ThemeItem item0 = new ThemeItem("张一", R.drawable.image1, "分类类型", "图片", null);
+		ThemeItem item1 = new ThemeItem("李二", R.drawable.image2, "分类类型", "视频", vdoPath);
+		ThemeItem item2 = new ThemeItem("张三", R.drawable.image3, "分类类型", "视频", vdoPath);
+		ThemeItem item3 = new ThemeItem("李四", R.drawable.image4, "分类类型", "图片", null);
+		ThemeItem item4 = new ThemeItem("张五", R.drawable.image5, "分类类型", "图片", null);
+		ThemeItem item5 = new ThemeItem("李六", R.drawable.image6, "分类类型", "图片", null);
 		themeArray.add(item0);
 		themeArray.add(item1);
 		themeArray.add(item2);
 		themeArray.add(item3);
 		themeArray.add(item4);
 		themeArray.add(item5);
-		themeArray.add(item7);
-		themeArray.add(item8);
-		themeArray.add(item9);
-		themeArray.add(item10);
-		themeArray.add(item11);
-		themeArray.add(item12);
 	}
 
 	public void getProductNetData() {

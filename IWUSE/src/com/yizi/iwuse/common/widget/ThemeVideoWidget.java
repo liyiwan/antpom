@@ -23,7 +23,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.yizi.iwuse.R;
@@ -50,19 +52,21 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
     
 	private SurfaceHolder holder;    
     
-	private MediaPlayer player;    
+	private static MediaPlayer player;    
     /**最终使用的宽高***/
 	private int vWidth,vHeight;
 	private Activity mContext;
 	private String videoPath;
+	private int maxHeight;
 	
 	
-	public ThemeVideoWidget(final Activity mContext, SurfaceView view, final String videoPath) {
+	public ThemeVideoWidget(final Activity mContext, SurfaceView view, final String videoPath,int maxHeight) {
 		super(mContext);
 		try {    
 			this.mContext = mContext;
 			this.videoPath = videoPath;
 			surfaceView = view;
+			this.maxHeight = maxHeight;
 	        holder = surfaceView.getHolder();
 	        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	        holder.addCallback(this);
@@ -80,8 +84,8 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
         	// 当SurfaceView中的Surface被创建的时候被调用    
         	//在这里我们指定MediaPlayer在当前的Surface中进行播放
         	if(player == null){
-				//然后，我们取得当前Display对象   
-				currDisplay = mContext.getWindowManager().getDefaultDisplay();  
+				//然后，我们取得当前Display对象 
+//				currDisplay = mContext.getWindowManager().getDefaultDisplay();  
 				player = MediaPlayer.create(mContext, Uri.parse(videoPath));
 				player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		        player.setOnCompletionListener(this);    
@@ -92,6 +96,8 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 		        player.setOnVideoSizeChangedListener(this);
 		        player.setDisplay(holder);    
 			}
+        	//设置surfaceView的布局参数
+        	surfaceView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, maxHeight));
         	//在指定了MediaPlayer播放的容器后，我们就可以使用prepare或者prepareAsync来准备播放了    
         	//player.prepareAsync();
 //			player.prepare();
@@ -131,30 +137,30 @@ OnPreparedListener, OnSeekCompleteListener,OnVideoSizeChangedListener,SurfaceHol
 		// 当prepare完成后，该方法触发，在这里我们播放视频    
 
 		//首先取得video的宽和高    
-        vWidth = mp.getVideoWidth();    
-        vHeight = mp.getVideoHeight();    
-        Point size = new Point();
-        currDisplay.getSize(size);   
+//        vWidth = mp.getVideoWidth();    
+//        vHeight = mp.getVideoHeight();    
+//        Point size = new Point();
+//        currDisplay.getSize(size);   
         
-        if(vWidth > size.x || vHeight > size.y){    
+//        if(vWidth > size.x || vHeight > size.y){
             //如果video的宽或者高超出了当前屏幕的大小，则要进行缩放    
-            float wRatio = (float)vWidth/(float)size.x;    
-            float hRatio = (float)vHeight/(float)size.y;    
-            
-            //选择大的一个进行缩放 
-            float ratio = Math.max(wRatio, hRatio);
-            
-            vWidth = (int)Math.ceil((float)vWidth/ratio);    
-            vHeight = (int)Math.ceil((float)vHeight/ratio);    
-                
-        }else{
-        	vWidth = size.x;    
-            vHeight = size.y;   
-        }
-        //设置surfaceView的布局参数    
-        surfaceView.setLayoutParams(new RelativeLayout.LayoutParams(vWidth, vHeight));    
-        //然后开始播放视频    
-        player.start();    
+//            float wRatio = (float)vWidth/(float)size.x;
+//            float hRatio = (float)vHeight/(float)maxHeight;
+//            
+//            //选择大的一个进行缩放 
+//            float ratio = Math.min(wRatio, hRatio);
+//            
+//            vWidth = (int)Math.ceil((float)vWidth/ratio);
+//            vHeight = (int)Math.ceil((float)vHeight/ratio); 
+//            vWidth = (int)Math.ceil((float)vWidth * hRatio);
+//            vHeight = (int)Math.ceil((float)size.y * wRatio);
+//        }else{
+//        	vWidth = size.x;
+//            vHeight = size.y;
+//        }
+        
+        //然后开始播放视频 
+        player.start();
 	}
 
 	@Override

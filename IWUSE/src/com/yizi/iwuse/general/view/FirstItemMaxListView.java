@@ -17,15 +17,24 @@
 package com.yizi.iwuse.general.view;
 
 import com.yizi.iwuse.R;
+import com.yizi.iwuse.common.VideoThread;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
+import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.view.WuseThemeFragment.ViewHolder;
 
+import android.animation.IntEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -46,10 +55,13 @@ public class FirstItemMaxListView extends ListView {
 	
 	private GestureDetector mGestureDetector;
 	private int downVisiblePosition = 0;
+	public static boolean isFingerPress = false;
+	private View downView;
 
 	public FirstItemMaxListView(Context context) {
 		super(context);
 		setLongClickable(true);
+		setDividerHeight(0);
 //		initOld(context);
 		init(context);
 	}
@@ -57,6 +69,7 @@ public class FirstItemMaxListView extends ListView {
 	public FirstItemMaxListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setLongClickable(true);
+		setDividerHeight(0);
 //		initOld(context);
 		init(context);
 	}
@@ -154,6 +167,7 @@ public class FirstItemMaxListView extends ListView {
 		});
 	}
 
+	@SuppressLint("NewApi")
 	private void init(Context context) {
 		
 		mGestureDetector = new GestureDetector(context,
@@ -256,13 +270,16 @@ public class FirstItemMaxListView extends ListView {
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					downVisiblePosition = getFirstVisiblePosition();
+					downView = getChildAt(0);
+					isFingerPress = true;
 					break;
 				case MotionEvent.ACTION_UP:
 					System.out.println("手指离开屏幕");
-					View item0 = getChildAt(0);
+					final View item0 = getChildAt(0);
 					View item1 = getChildAt(1);
 					View item2 = getChildAt(2);
 					View item3 = getChildAt(3);
+					View whichVideo;
 					int height = item0.getHeight();
 					/*if (distanceOneItem > 0) {
 						mLastDistanceOneItem = -1;
@@ -271,14 +288,19 @@ public class FirstItemMaxListView extends ListView {
 					}*/
 					mLastDistanceOneItem = 1;
 					distanceOneItem = 0;
+					int firstVisiblePosition;
 					if(height > mITEM_MAX_HEIGHT/3*2){
-						int firstVisiblePosition = getFirstVisiblePosition() ;
+						whichVideo = item0;
+						firstVisiblePosition = getFirstVisiblePosition() ;
 //						if(firstVisiblePosition != downVisiblePosition){
 //							distanceOneItem = (firstVisiblePosition - downVisiblePosition)*ITEM_HEIGHT;
 //						}
 						setSelection(firstVisiblePosition);
-						mLastFirstVisiblePosition = getFirstVisiblePosition();
+						
 						if(item0 != null){
+//							LargeView largeView = new LargeView(item0);
+//							ObjectAnimator.ofInt(largeView,
+//									"height", mITEM_MAX_HEIGHT).setDuration(500).start();
 							item0.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, mITEM_MAX_HEIGHT));
 						}
@@ -291,12 +313,13 @@ public class FirstItemMaxListView extends ListView {
 								AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
 						}
 					}else{
-						int firstVisiblePosition = getFirstVisiblePosition() + 1;
+						whichVideo = item1;
+						firstVisiblePosition = getFirstVisiblePosition() + 1;
 //						if(firstVisiblePosition != downVisiblePosition){
 //							distanceOneItem = (firstVisiblePosition - downVisiblePosition)*ITEM_HEIGHT;
 //						}
 						setSelection(firstVisiblePosition);
-						mLastFirstVisiblePosition = getFirstVisiblePosition();
+						
 						if(item0 != null){
 							item0.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
@@ -314,6 +337,35 @@ public class FirstItemMaxListView extends ListView {
 								AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
 						}
 					}
+					
+					if(firstVisiblePosition != downVisiblePosition){
+						ViewHolder videoHolder = (ViewHolder) downView.getTag();
+						if(videoHolder != null){
+							if(videoHolder.videoView != null){
+								ThemeVideoWidget videoWidget = (ThemeVideoWidget)videoHolder.videoView;
+								if(videoWidget.getPlayer() != null){
+									videoHolder.surface.setVisibility(View.GONE);
+									videoHolder.cover.setVisibility(View.VISIBLE);
+									videoHolder.videoView = null;
+									videoWidget.getPlayer().stop();
+									videoWidget.getPlayer().release();
+									videoWidget.setPlayer(null);
+								}
+							}
+						}
+					}
+					mLastFirstVisiblePosition = firstVisiblePosition;
+					ViewHolder viewHolder = (ViewHolder)whichVideo.getTag();
+					if(viewHolder != null){
+						ThemeItem themeItem = (ThemeItem)viewHolder.object;
+						viewHolder.tv_grey.getBackground().setAlpha(0);
+						if("视频".equals(themeItem.property)){
+							if(viewHolder.videoView == null){
+								new VideoThread(viewHolder).start();
+							}
+						}
+					}
+					isFingerPress = false;
 					break;
 				}
 				return mGestureDetector.onTouchEvent(event);
@@ -410,14 +462,15 @@ public class FirstItemMaxListView extends ListView {
 	private void changeItemHeightOnScroll() {
 		View item0 = getChildAt(0);
 		View item1 = getChildAt(1);
-
+		View item2 = getChildAt(2);
+		View item3 = getChildAt(3);
 		int changeHeight1;
 		int change;
 		int changeHeight;
 		if (distanceOneItem == 0)
 			return;
-		if (distanceOneItem > 0) {
-			changeHeight1 = distanceOneItem * mITEM_MAX_HEIGHT / ITEM_HEIGHT;// 放大
+		if (distanceOneItem > 0) {// 向上第一个缩小
+			changeHeight1 = distanceOneItem * mITEM_MAX_HEIGHT / ITEM_HEIGHT;
 
 			if (changeHeight1 > mITEM_MAX_HEIGHT) {
 				changeHeight1 = mITEM_MAX_HEIGHT;
@@ -442,6 +495,8 @@ public class FirstItemMaxListView extends ListView {
 					if(videoHolder.videoView != null){
 						ThemeVideoWidget videoWidget = (ThemeVideoWidget)videoHolder.videoView;
 						if(videoWidget.getPlayer() != null){
+							videoHolder.surface.setVisibility(View.GONE);
+							videoHolder.cover.setVisibility(View.VISIBLE);
 							videoHolder.videoView = null;
 							videoWidget.getPlayer().stop();
 							videoWidget.getPlayer().release();
@@ -454,9 +509,21 @@ public class FirstItemMaxListView extends ListView {
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
 			item1.setLayoutParams(new AbsListView.LayoutParams(
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
-		}/* else {
+			ViewHolder videoHolder1 = (ViewHolder) item1.getTag();
+			float fl_ratio = (float)(((float)changeHeight1 - (float)ITEM_HEIGHT)/((float)mITEM_MAX_HEIGHT - (float)ITEM_HEIGHT));
+			int alpha = (int)Math.floor(255*(1-fl_ratio));
+			videoHolder1.tv_grey.getBackground().setAlpha(alpha);
+			if(item2 != null){
+				ViewHolder videoHolder2 = (ViewHolder) item2.getTag();
+				videoHolder2.tv_grey.getBackground().setAlpha(255);
+			}
+			if(item3 != null){
+				ViewHolder videoHolder3 = (ViewHolder) item3.getTag();
+				videoHolder3.tv_grey.getBackground().setAlpha(255);
+			}
+		}else{// 向下第一个放大
 			changeHeight1 = (ITEM_HEIGHT + distanceOneItem) * mITEM_MAX_HEIGHT
-					/ ITEM_HEIGHT;// 缩小
+					/ ITEM_HEIGHT;
 			if (changeHeight1 > mITEM_MAX_HEIGHT) {
 				changeHeight1 = mITEM_MAX_HEIGHT;
 			}
@@ -464,7 +531,7 @@ public class FirstItemMaxListView extends ListView {
 				changeHeight1 = ITEM_HEIGHT;
 			}
 			change = item1.getHeight() - changeHeight1;
-			changeHeight = item0.getHeight() + change;// 放大
+			changeHeight = item0.getHeight() + change;
 			if (changeHeight > mITEM_MAX_HEIGHT) {
 				changeHeight = mITEM_MAX_HEIGHT;
 			}
@@ -478,6 +545,8 @@ public class FirstItemMaxListView extends ListView {
 					if(videoHolder.videoView != null){
 						ThemeVideoWidget videoWidget = (ThemeVideoWidget)videoHolder.videoView;
 						if(videoWidget.getPlayer() != null){
+							videoHolder.surface.setVisibility(View.GONE);
+							videoHolder.cover.setVisibility(View.VISIBLE);
 							videoHolder.videoView = null;
 							videoWidget.getPlayer().stop();
 							videoWidget.getPlayer().release();
@@ -490,46 +559,12 @@ public class FirstItemMaxListView extends ListView {
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
 			item1.setLayoutParams(new AbsListView.LayoutParams(
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
-		}*/else{
-//			View item2 = getChildAt(0);
-//			View item3 = getChildAt(1);
-//			changeHeight1 = mITEM_MAX_HEIGHT + distanceOneItem;
-			changeHeight1 = (ITEM_HEIGHT + distanceOneItem) * mITEM_MAX_HEIGHT
-					/ ITEM_HEIGHT;// 缩小
-			if (changeHeight1 > mITEM_MAX_HEIGHT) {
-				changeHeight1 = mITEM_MAX_HEIGHT;
-			}
-			if (changeHeight1 <= ITEM_HEIGHT) {
-				changeHeight1 = ITEM_HEIGHT;
-			}
-			change = item1.getHeight() - changeHeight1;
-			changeHeight = item0.getHeight() + change;// 放大
-//			changeHeight = ITEM_HEIGHT - distanceOneItem;
-			if (changeHeight > mITEM_MAX_HEIGHT) {
-				changeHeight = mITEM_MAX_HEIGHT;
-			}
-			if (changeHeight <= ITEM_HEIGHT) {
-				changeHeight = ITEM_HEIGHT;
-			}
-			System.out.println("缩小过程changeHeight = " + changeHeight + " change = " + change + " changeHeight1= " + changeHeight1);
-			if (changeHeight == ITEM_HEIGHT) {
-				ViewHolder videoHolder = (ViewHolder) item0.getTag();
-				if(videoHolder != null){
-					if(videoHolder.videoView != null){
-						ThemeVideoWidget videoWidget = (ThemeVideoWidget)videoHolder.videoView;
-						if(videoWidget.getPlayer() != null){
-							videoHolder.videoView = null;
-							videoWidget.getPlayer().stop();
-							videoWidget.getPlayer().release();
-							videoWidget.setPlayer(null);
-						}
-					}
-				}
-			}
-			item0.setLayoutParams(new AbsListView.LayoutParams(
-					AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
-			item1.setLayoutParams(new AbsListView.LayoutParams(
-					AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
+			ViewHolder videoHolder0 = (ViewHolder) item0.getTag();
+			videoHolder0.tv_grey.getBackground().setAlpha(0);
+			ViewHolder videoHolder1 = (ViewHolder) item1.getTag();
+			float fl_ratio = (float)(((float)changeHeight1 - (float)ITEM_HEIGHT)/((float)mITEM_MAX_HEIGHT - (float)ITEM_HEIGHT));
+			int alpha = (int)Math.floor(255*(1-fl_ratio));
+			videoHolder1.tv_grey.getBackground().setAlpha(alpha);
 		}
 	}
 
@@ -570,4 +605,29 @@ public class FirstItemMaxListView extends ListView {
 			return offset < range - 1;
 		}
 	}
+	
+	@SuppressLint("NewApi")
+	private void startPropertyAnimation(final View target, final int startValue, final int endValue){
+		final IntEvaluator intEvaluator=new IntEvaluator();
+		//将动画值限定在(1,100)之间
+		ValueAnimator valueAnimator=ValueAnimator.ofInt(1,100);
+		//动画持续时间
+		valueAnimator.setDuration(5000);
+		//监听动画的执行
+		valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+		@Override
+		public void onAnimationUpdate(ValueAnimator valueAnimator) {
+		//得到当前瞬时的动画值,在(1,100)之间
+		Integer currentAnimatedValue=(Integer) valueAnimator.getAnimatedValue();
+		//计算得到当前系数fraction
+		float fraction=currentAnimatedValue/100f;
+		System.out.println("currentAnimatedValue="+currentAnimatedValue+",fraction="+fraction);
+		//评估出当前的宽度其设置
+		target.getLayoutParams().height=intEvaluator.evaluate(fraction, startValue, endValue);
+		target.requestLayout();
+		}
+		});
+		//开始动画
+		valueAnimator.start();
+		}
 }

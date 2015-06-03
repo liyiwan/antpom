@@ -5,15 +5,18 @@ import java.util.ArrayList;
 
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
+import com.yizi.iwuse.common.VideoThread;
 import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
 import com.yizi.iwuse.common.widget.VideoWidget;
 import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.service.GeneralService;
 import com.yizi.iwuse.general.service.events.ThemeEvent;
+import com.yizi.iwuse.general.service.events.VideoEvent;
 
 import de.greenrobot.event.EventBus;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +48,7 @@ public class WuseThemeFragment extends Fragment {
 	private ViewGroup container;
 	/***主题数据***/
 	private ArrayList<ThemeItem> themeArray;
+	private boolean isVideoShow = false;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -100,7 +105,7 @@ public class WuseThemeFragment extends Fragment {
 		public View getView(int position, View view, ViewGroup viewGroup) {
 			
 			ViewHolder viewHolder;
-			ThemeItem item = themeArray.get(position);
+			ThemeItem themeItem = themeArray.get(position);
 			System.out.println("！！！！！！！！！！position = " +String.valueOf(position));
 			
 			if (view == null) {
@@ -112,35 +117,44 @@ public class WuseThemeFragment extends Fragment {
 				viewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
 				viewHolder.tv_kind = (TextView) view.findViewById(R.id.tv_kind);
 				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
+				viewHolder.fl_insert_large = (FrameLayout) view.findViewById(R.id.fl_insert_large);
+				viewHolder.tv_grey = (TextView) view.findViewById(R.id.tv_grey);
+				viewHolder.object = themeItem;
 				view.setTag(viewHolder);
 			}else{
 				viewHolder = (ViewHolder)view.getTag();
 			}
-			viewHolder.tv_title.setText(item.title);
-			viewHolder.tv_kind.setText(item.kind);
-			viewHolder.tv_property.setText(item.property);
-			if("视频".equals(item.property)){
+			viewHolder.tv_title.setText(themeItem.title);
+			viewHolder.tv_kind.setText(themeItem.kind);
+			viewHolder.tv_property.setText(themeItem.property);
+			viewHolder.fl_insert_large.setLayoutParams(new FrameLayout.LayoutParams(
+								FrameLayout.LayoutParams.MATCH_PARENT, maxHeight));
+			if("视频".equals(themeItem.property) && isVideoShow){
 				viewHolder.surface.setVisibility(View.VISIBLE);
 				viewHolder.cover.setVisibility(View.GONE);
 				if(viewHolder.videoView == null){
-					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo3;
-					viewHolder.videoView = new ThemeVideoWidget(getActivity(),viewHolder.surface, vdoPath);
+//					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo3;
+					viewHolder.videoView = new ThemeVideoWidget(getActivity(),viewHolder.surface, themeItem.videoUrl,maxHeight);
+					isVideoShow = false;
 				}
 				
 			}else{
 				viewHolder.surface.setVisibility(View.GONE);
 				viewHolder.cover.setVisibility(View.VISIBLE);
 				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				viewHolder.cover.setImageResource(item.themeUrl);
+				viewHolder.cover.setImageResource(themeItem.picUrl);
 			}
 			
 			if(isFisrt){
 				if (position == 0) {
 					view.setLayoutParams(new AbsListView.LayoutParams(
 							AbsListView.LayoutParams.MATCH_PARENT, maxHeight));
+					viewHolder.tv_grey.getBackground().setAlpha(0);
+					new VideoThread(viewHolder).start();
 				} else {
 					view.setLayoutParams(new AbsListView.LayoutParams(
 							AbsListView.LayoutParams.MATCH_PARENT, firstHeight));
+//					viewHolder.tv_grey.getBackground().setAlpha(127);
 				}
 				if(position == 3){
 					isFisrt = false;
@@ -152,7 +166,7 @@ public class WuseThemeFragment extends Fragment {
 	}
 	
 	public class ViewHolder {
-		private ImageView cover;
+		public ImageView cover;
 		public SurfaceView surface;
 		private TextView tv_title;
 		private TextView tv_kind;
@@ -160,11 +174,31 @@ public class WuseThemeFragment extends Fragment {
 		private TextView tv_property;
 		public View videoView;
 		public LinearLayout ll_video;
+		private FrameLayout fl_insert_large;
+		public TextView tv_grey;
+		public Object object;
 	}
 	
 	public void onEventMainThread(ThemeEvent event) {
 		themeArray = event.getThemeArray();
 		mAdapter.notifyDataSetChanged();
+	}
+	
+	public void onEventMainThread(ViewHolder viewHolder) {
+		ViewHolder viewHolder2 = (ViewHolder)mListView.getChildAt(0).getTag();
+		ThemeItem themeItem = (ThemeItem)viewHolder2.object;
+		if("视频".equals(themeItem.property)){
+			if(!FirstItemMaxListView.isFingerPress){
+				if(viewHolder2.videoView == null){
+//					String vdoPath = themeItem.videoUrl;
+//					viewHolder2.videoView = new ThemeVideoWidget(getActivity(),viewHolder2.surface, vdoPath);
+//					viewHolder2.surface.setVisibility(View.VISIBLE);
+//					viewHolder2.cover.setVisibility(View.GONE);
+					isVideoShow = true;
+					mAdapter.notifyDataSetChanged();
+				}
+			}
+		}
 	}
 
 	@Override
