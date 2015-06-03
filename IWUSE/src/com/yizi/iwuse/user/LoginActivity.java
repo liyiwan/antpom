@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
 import com.yizi.iwuse.constants.UserConst;
@@ -74,6 +76,9 @@ public class LoginActivity extends BaseActivity {
 	/** 用户ID/手机号 **/
 	@ViewInject(R.id.img_oauth_weibo)
 	private ImageView img_oauth_weibo;
+	@ViewInject(R.id.img_back)
+	private ImageButton img_back;
+	
 
 	/** 友盟授权登录集成 **/
 	private UMSocialService mController = null;
@@ -109,7 +114,7 @@ public class LoginActivity extends BaseActivity {
 	 */
 	@OnClick({ R.id.btn_login, R.id.txt_regist, R.id.txt_forgetuserinfo,
 			R.id.img_oauth_weichat, R.id.img_oauth_qq, R.id.img_oauth_paybao,
-			R.id.img_oauth_weibo })
+			R.id.img_oauth_weibo,R.id.img_back })
 	public void onLoginClickListener(View view) {
 		switch (view.getId()) {
 		case R.id.btn_login:
@@ -133,6 +138,10 @@ public class LoginActivity extends BaseActivity {
 			login_type = LOGINTYPE_WEIBO;
 			onThridLogin(SHARE_MEDIA.SINA);
 			break;
+		case R.id.img_back:
+			
+			this.finish();
+			break;
 		default:
 			break;
 		}
@@ -144,20 +153,18 @@ public class LoginActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (login_type) {
-		case LOGINTYPE_WEIBO: {
-			/** 使用SSO授权必须添加如下代码 */
-			UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(
-					requestCode);
-			if (ssoHandler != null) {
-				ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+			case LOGINTYPE_WEIBO: {
+				/** 使用SSO授权必须添加如下代码 */
+				UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(
+						requestCode);
+				if (ssoHandler != null) {
+					ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+				}
+				break;
 			}
-			break;
-		}
-		case LOGINTYPE_QQ: {
-			// 参数1为当前Activity， 参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
-
-			break;
-		}
+			case LOGINTYPE_QQ: {
+				break;
+			}
 		}
 	}
 
@@ -193,15 +200,12 @@ public class LoginActivity extends BaseActivity {
 
 				@Override
 				public void onStart(SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, "授权开始",
-							Toast.LENGTH_SHORT).show();
+					//Toast.makeText(LoginActivity.this, "授权开始",Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
-				public void onError(SocializeException e,
-						SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, "授权失败",
-							Toast.LENGTH_SHORT).show();
+				public void onError(SocializeException e, SHARE_MEDIA platform) {
+					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
@@ -212,14 +216,14 @@ public class LoginActivity extends BaseActivity {
 						// uid不为空，获取用户信息
 						handleUserInfo(platform);
 					} else {
-						Toast.makeText(LoginActivity.this, "授权失败...",
-								Toast.LENGTH_LONG).show();
+						
+						Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
 					}
 				}
 
 				@Override
 				public void onCancel(SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, "授权取消",
+					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_cancel),
 							Toast.LENGTH_SHORT).show();
 				}
 			});
