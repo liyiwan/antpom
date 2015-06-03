@@ -39,7 +39,9 @@ public class AppParams {
 
 	/** 应用程序上下文 */
 	private Context mContext;
-
+	
+	/**用户是否已登录**/
+	public static volatile boolean isLogin = false;
 	/** sp 句柄 */
 	private SharedPreferences settings;
 

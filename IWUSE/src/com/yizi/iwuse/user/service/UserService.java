@@ -18,10 +18,26 @@ public class UserService implements ICoreService {
 	 * @return
 	 */
 	public CmdResultInfo getCustomerInfo(){
-	    
 		// EventBus.getDefault().post(null);
-		
 		return CmdSendAdapter.sendCmd(CmdInterface.CUSTOMER_DetailInfo, null);
 	}
+	
+	/****
+	 * 登录成功后，更新用户信息
+	 * 
+	 */
+	public void onLoginUpdateUserInfo(){
+		
+	}
+	
+	/***
+	 * 注销用户，更新用户信息
+	 * 
+	 */
+	public void onLogoutUpdateUserInfo(){
+		
+		
+	}
+	
 	
 }

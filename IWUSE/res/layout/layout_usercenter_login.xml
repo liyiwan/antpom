@@ -5,22 +5,30 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
+	<ImageButton
+	    android:layout_width="wrap_content"
+	    android:layout_height="40dp"
+	    android:layout_gravity="left"
+	    android:layout_marginLeft="10dp" />
+	
     <ImageView
         android:id="@+id/log_iwuse"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/usercenter_head" />
+        android:src="@drawable/wusetheme_unselect"
+        android:contentDescription="@string/title_iwusetheme"/>
 
-	<View android:layout_width="wrap_content" />
+	<View android:layout_width="wrap_content" android:layout_height="0dp" />
 
     <EditText
         android:id="@+id/edt_userid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:ems="11"
         android:hint="@string/userid"
-        android:inputType="phone" >
+        android:inputType="phone">
         <requestFocus />
     </EditText>
 
@@ -38,7 +46,8 @@
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/abc_btn_check_to_on_mtrl_015" />
+        android:layout_marginTop="70dp"
+        android:background="@drawable/confirm" />
     
 	<LinearLayout 
 	    android:layout_width="wrap_content"
@@ -65,33 +74,32 @@
 	<LinearLayout
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:gravity="bottom"
 	    android:orientation="horizontal"
-	    android:layout_marginTop="50dp" >
+	    android:layout_marginTop="90dp" >
 
-	    <Button
-	        android:id="@+id/btn_oauth_weichat"
+	    <ImageView
+	        android:id="@+id/img_oauth_weichat"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/oauth_weichat" />
+	        android:src="@drawable/socialize_wechat" />
 
-	    <Button
-	        android:id="@+id/btn_oauth_qq"
+	    <ImageView
+	        android:id="@+id/img_oauth_qq"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/oauth_qq" />
+	        android:src="@drawable/socialize_qq_on"  />
 
-	    <Button
-	        android:id="@+id/btn_oauth_paybao"
+	    <ImageView
+	        android:id="@+id/img_oauth_paybao"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/oauth_paybao" />
+	        android:src="@drawable/sina_weibo_logo"  />
 
-	    <Button
-	        android:id="@+id/btn_oauth_weibo"
+	    <ImageView
+	        android:id="@+id/img_oauth_weibo"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/oauth_weibo" />
+	        android:src="@drawable/socialize_sina_on"  />
 	</LinearLayout>
 
 </LinearLayout>
