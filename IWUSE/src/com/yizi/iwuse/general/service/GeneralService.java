@@ -43,7 +43,7 @@ public class GeneralService implements ICoreService {
 
 	public void getNetData() {
 		themeArray = new ArrayList<ThemeItem>();
-		ThemeItem item0 = new ThemeItem("张一", R.drawable.image1, "分类类型", "视频");
+		ThemeItem item0 = new ThemeItem("张一", R.drawable.image1, "分类类型", "图片");
 		ThemeItem item1 = new ThemeItem("李二", R.drawable.image2, "分类类型", "图片");
 		ThemeItem item2 = new ThemeItem("张三", R.drawable.image3, "分类类型", "图片");
 		ThemeItem item3 = new ThemeItem("李四", R.drawable.image4, "分类类型", "图片");

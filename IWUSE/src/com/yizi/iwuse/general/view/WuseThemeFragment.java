@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.IWuseUtil;
+import com.yizi.iwuse.common.widget.ThemeVideoWidget;
 import com.yizi.iwuse.common.widget.VideoWidget;
 import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.service.GeneralService;
@@ -97,94 +98,68 @@ public class WuseThemeFragment extends Fragment {
 
 		@Override
 		public View getView(int position, View view, ViewGroup viewGroup) {
-			/*if (view == null) {
-				view = LayoutInflater.from(getActivity()).inflate(
-						R.layout.first_item_max_item, null);
-				if(mDataSources.get(position).videoUrl != null && position == 0){
-					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo2;
-					view = new VideoWidget(getActivity(),view, vdoPath);
-				}
-			}*/
 			
-			ViewHolder viewHolder = new ViewHolder();
+			ViewHolder viewHolder;
 			ThemeItem item = themeArray.get(position);
 			System.out.println("！！！！！！！！！！position = " +String.valueOf(position));
 			
-//			if (view == null) {
+			if (view == null) {
 				view = LayoutInflater.from(getActivity()).inflate(
 						R.layout.first_item_max_item, null);
-//			}
-			LinearLayout ll_video = (LinearLayout)view.findViewById(R.id.ll_video);
-			if("视频".equals(item.property)){
-				System.out.println("url不为空");
-			}else{
-				System.out.println("url为空！！！！！");
-			}
-			if("视频".equals(item.property)){
-				if(view.getTag() != null){
-					System.out.println("tag不为空");
-					View videoView = (View)view.getTag();
-					ll_video.removeAllViews();
-					ll_video.addView(videoView);
-					return view;
-				}else{
-					System.out.println("tag为空");
-					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo3;
-					View videoView = new VideoWidget(getActivity(),view, vdoPath);
-					ll_video.removeAllViews();
-					ll_video.addView(videoView);
-					view.setTag(videoView);
-				}
-				viewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
-				viewHolder.tv_title.setText("标题标题标题标题");
-				viewHolder.tv_kind = (TextView) view.findViewById(R.id.tv_kind);
-				viewHolder.tv_kind.setText("分类类型");
-				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
-				viewHolder.tv_property.setText("视频");
-			}else{
-				ll_video.setVisibility(View.GONE);
+				viewHolder = new ViewHolder();
+				viewHolder.surface = (SurfaceView)view.findViewById(R.id.vdovi_videotools);
 				viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
 				viewHolder.tv_title = (TextView) view.findViewById(R.id.tv_title);
-				viewHolder.tv_title.setText("标题标题标题标题");
 				viewHolder.tv_kind = (TextView) view.findViewById(R.id.tv_kind);
-				viewHolder.tv_kind.setText("分类类型");
 				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
-				viewHolder.tv_property.setText("图片");
+				view.setTag(viewHolder);
+			}else{
+				viewHolder = (ViewHolder)view.getTag();
+			}
+			viewHolder.tv_title.setText(item.title);
+			viewHolder.tv_kind.setText(item.kind);
+			viewHolder.tv_property.setText(item.property);
+			if("视频".equals(item.property)){
+				viewHolder.surface.setVisibility(View.VISIBLE);
+				viewHolder.cover.setVisibility(View.GONE);
+				if(viewHolder.videoView == null){
+					String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo3;
+					viewHolder.videoView = new ThemeVideoWidget(getActivity(),viewHolder.surface, vdoPath);
+				}
+				
+			}else{
+				viewHolder.surface.setVisibility(View.GONE);
 				viewHolder.cover.setVisibility(View.VISIBLE);
 				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				viewHolder.cover.setImageResource(item.themeUrl);
 			}
 			
-			if (position == 0 && isFisrt) {
-				isFisrt = false;
-				view.setLayoutParams(new AbsListView.LayoutParams(
-						AbsListView.LayoutParams.MATCH_PARENT, maxHeight));
-			} else {
-				view.setLayoutParams(new AbsListView.LayoutParams(
-						AbsListView.LayoutParams.MATCH_PARENT, firstHeight));
+			if(isFisrt){
+				if (position == 0) {
+					view.setLayoutParams(new AbsListView.LayoutParams(
+							AbsListView.LayoutParams.MATCH_PARENT, maxHeight));
+				} else {
+					view.setLayoutParams(new AbsListView.LayoutParams(
+							AbsListView.LayoutParams.MATCH_PARENT, firstHeight));
+				}
+				if(position == 3){
+					isFisrt = false;
+				}
 			}
-//			if(mDataSources.get(position).videoUrl != null){
-//				String vdoPath = "android.resource://"+getActivity().getPackageName()+"/"+R.raw.demo;
-//				view = new VideoWidget(getActivity(),view, vdoPath);
-//				
-//			}else{
-			/*if(mDataSources.get(position).videoUrl == null){
-				viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
-				viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				viewHolder.cover.setImageResource(mDataSources.get(position).imgId);
-			}*/
-//			}
 			return view;
 		}
 
-		private class ViewHolder {
-			private ImageView cover;
-			private SurfaceView surface;
-			private TextView tv_title;
-			private TextView tv_kind;
-			private TextView tv_favor;
-			private TextView tv_property;
-		}
+	}
+	
+	public class ViewHolder {
+		private ImageView cover;
+		public SurfaceView surface;
+		private TextView tv_title;
+		private TextView tv_kind;
+		private TextView tv_favor;
+		private TextView tv_property;
+		public View videoView;
+		public LinearLayout ll_video;
 	}
 	
 	public void onEventMainThread(ThemeEvent event) {
