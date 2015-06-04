@@ -42,6 +42,9 @@ import android.widget.ImageView.ScaleType;
 public class IWuseUtil {
 	/** The logging tag used by this class with ILog. */
 	protected static final String TAG = "IWuseUtil";
+	
+	/**重复快速点击事件**/
+	private static long lastClickTime;
 
 	/**
 	 * 转换成MD5密码
@@ -1119,5 +1122,20 @@ public class IWuseUtil {
 		}
 		return statusBarHeight;
 	}
+
+	/*****
+	 * 防止快速点击,事件间隔为 500ms
+	 * 
+	 * @return
+	 */
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if ( 0 < timeD && timeD < PublicConst.CLICKINTERVALTIME) {   
+            return true;   
+        }   
+        lastClickTime = time;   
+        return false;   
+    }
 	
 }

@@ -14,7 +14,7 @@
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	 <uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     
@@ -31,8 +31,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yizi.iwuse.general.MainHomeActivity" android:launchMode="singleTask"></activity>
-        <activity android:name="com.yizi.iwuse.user.LoginActivity" android:launchMode="singleTop"></activity>
+        <!-- 订单 -->
+        <activity android:name="com.yizi.iwuse.order.OrderActivity" android:launchMode="singleTask"/>
+         <!-- 公共/综合 -->
+        <activity android:name="com.yizi.iwuse.general.MainHomeActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.general.ShoppingCartActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.general.CallServiceActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.general.SettingActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.general.AboutActivity" android:launchMode="singleTask"/>
+         <!-- 用户 -->
+        <activity android:name="com.yizi.iwuse.user.LoginActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.user.UserActivity" android:launchMode="singleInstance"/>
+        <activity android:name="com.yizi.iwuse.user.UserCollectionActivity" android:launchMode="singleTask" />
+        <activity android:name="com.yizi.iwuse.user.SubmissionActivity" android:launchMode="singleTask"/>
+        <activity android:name="com.yizi.iwuse.user.WalletActivity" android:launchMode="singleTask"></activity>
         
         <!-- 微信登录 -->
         <activity android:name="com.yizi.iwuse.wxapi.WXEntryActivity" android:exported="true"/>

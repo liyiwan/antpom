@@ -12,35 +12,34 @@ import com.umeng.analytics.MobclickAgent;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
+import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.constants.UserConst;
 import com.yizi.iwuse.user.service.events.UserEvents;
 
 import de.greenrobot.event.EventBus;
 
 /***
- * 用户详细信息
+ * 钱包
  * 
  * @author zhangxiying
- *
  */
-public class UserActivity extends BaseActivity {
-
+public class WalletActivity extends BaseActivity{
+	private static final String TAG = "WalletActivity";
 	/**返回*/
 	@ViewInject(R.id.img_back)
 	private ImageView img_back;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.layout_userdetail);
+		this.setContentView(R.layout.layout_wallet);
+		ILog.i(TAG, "onCreate");
 		/** 注册xUtils UI框架 **/
 		ViewUtils.inject(this);
 		/** 注册EventBus **/
 		EventBus.getDefault().register(this);
 	}
-	
-	
+
 	/****
 	 * 点击事件
 	 * 
@@ -50,12 +49,10 @@ public class UserActivity extends BaseActivity {
 	public void handeClickListener(View view){
 		switch(view.getId()){
 			case R.id.img_back:
-				 finish();
+				finish();
 				break;
-		
 		}
 	}
-	
 	
 	/****
 	 * 用户监后台事件
@@ -70,36 +67,31 @@ public class UserActivity extends BaseActivity {
 		}
 	}
 	
+	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
+		ILog.i(TAG, "onResume");
 		MobclickAgent.onResume(this);
 	}
 
-
-
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
+		ILog.i(TAG, "onPause");
 		MobclickAgent.onPause(this);
 	}
 
-
-
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
+		ILog.i(TAG, "onDestroy");
 		EventBus.getDefault().unregister(this);
 	}
-
-
-
+	
 	@Override
 	public void removeAllView() {
-		// TODO Auto-generated method stub
+		
 	}
 
 }

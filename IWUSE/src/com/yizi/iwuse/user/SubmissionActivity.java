@@ -18,45 +18,41 @@ import com.yizi.iwuse.user.service.events.UserEvents;
 import de.greenrobot.event.EventBus;
 
 /***
- * 用户详细信息
+ * 上传稿件
  * 
  * @author zhangxiying
  *
  */
-public class UserActivity extends BaseActivity {
+public class SubmissionActivity extends BaseActivity {
 
-	/**返回*/
+	/** 返回 */
 	@ViewInject(R.id.img_back)
 	private ImageView img_back;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.layout_userdetail);
+		this.setContentView(R.layout.layout_submission);
 		/** 注册xUtils UI框架 **/
 		ViewUtils.inject(this);
 		/** 注册EventBus **/
 		EventBus.getDefault().register(this);
 	}
-	
-	
+
 	/****
 	 * 点击事件
 	 * 
 	 * @param view
 	 */
-	@OnClick({R.id.img_back})
-	public void handeClickListener(View view){
-		switch(view.getId()){
-			case R.id.img_back:
-				 finish();
-				break;
-		
+	@OnClick({ R.id.img_back })
+	public void handeClickListener(View view) {
+		switch (view.getId()) {
+		case R.id.img_back:
+			finish();
+			break;
 		}
 	}
-	
-	
+
 	/****
 	 * 用户监后台事件
 	 * 
@@ -65,19 +61,19 @@ public class UserActivity extends BaseActivity {
 	public void onEventMainThread(UserEvents userEvent) {
 		switch (userEvent.eventtype) {
 		case UserConst.ENVENTTYPE_LOGIN:
-			Toast.makeText(AppContext.instance().globalContext, AppContext.instance().globalContext.getString(R.string.login), Toast.LENGTH_LONG).show();
+			Toast.makeText(AppContext.instance().globalContext,
+					AppContext.instance().globalContext.getString(R.string.login),
+					Toast.LENGTH_LONG).show();
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onResume(this);
 	}
-
-
 
 	@Override
 	protected void onPause() {
@@ -86,8 +82,6 @@ public class UserActivity extends BaseActivity {
 		MobclickAgent.onPause(this);
 	}
 
-
-
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -95,11 +89,10 @@ public class UserActivity extends BaseActivity {
 		EventBus.getDefault().unregister(this);
 	}
 
-
-
 	@Override
 	public void removeAllView() {
 		// TODO Auto-generated method stub
+
 	}
 
 }

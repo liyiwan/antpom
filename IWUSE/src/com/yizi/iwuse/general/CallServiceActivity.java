@@ -1,4 +1,4 @@
-package com.yizi.iwuse.user;
+package com.yizi.iwuse.general;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,13 +17,7 @@ import com.yizi.iwuse.user.service.events.UserEvents;
 
 import de.greenrobot.event.EventBus;
 
-/***
- * 用户详细信息
- * 
- * @author zhangxiying
- *
- */
-public class UserActivity extends BaseActivity {
+public class CallServiceActivity extends BaseActivity {
 
 	/**返回*/
 	@ViewInject(R.id.img_back)
@@ -31,16 +25,15 @@ public class UserActivity extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.layout_userdetail);
+		this.setContentView(R.layout.layout_callservice);
 		/** 注册xUtils UI框架 **/
 		ViewUtils.inject(this);
 		/** 注册EventBus **/
 		EventBus.getDefault().register(this);
 	}
 	
-	
+
 	/****
 	 * 点击事件
 	 * 
@@ -52,10 +45,8 @@ public class UserActivity extends BaseActivity {
 			case R.id.img_back:
 				 finish();
 				break;
-		
 		}
 	}
-	
 	
 	/****
 	 * 用户监后台事件
@@ -70,14 +61,13 @@ public class UserActivity extends BaseActivity {
 		}
 	}
 	
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		MobclickAgent.onResume(this);
 	}
-
-
 
 	@Override
 	protected void onPause() {
@@ -86,20 +76,16 @@ public class UserActivity extends BaseActivity {
 		MobclickAgent.onPause(this);
 	}
 
-
-
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		EventBus.getDefault().unregister(this);
 	}
-
-
-
 	@Override
 	public void removeAllView() {
 		// TODO Auto-generated method stub
+
 	}
 
 }

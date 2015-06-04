@@ -61,4 +61,5 @@ public class PublicConst {
 	/**大版本号***/
 	public static final String VERSION = "V1.0.0";
 
+	public static final int CLICKINTERVALTIME = 500;
 }

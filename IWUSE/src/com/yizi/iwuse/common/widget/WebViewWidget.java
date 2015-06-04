@@ -48,6 +48,10 @@ public class WebViewWidget extends WebView {
 	    this.getSettings().setJavaScriptEnabled(true); 
 	    //4.触摸焦点起作用
 	    requestFocus();
+	    
+	    //5.设置默认
+	    setWebChromeClient(new MyWebChromeClient());
+	    setWebViewClient(new MyWebViewClient());
 	}
 	
 

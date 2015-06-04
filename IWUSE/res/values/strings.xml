@@ -31,6 +31,7 @@
 	<string name="usercenter_totalintegral">积分:200</string>
 	<string name="usercenter_icollection">收藏</string>
 	<string name="usercenter_ishopcart">购物车</string>
+	<string name="submitorder">结算</string>
 	<string name="usercenter_iwallet">钱包</string>
 	<string name="usercenter_iorderlist">我的订单</string>
 	<string name="usercenter_callservice">物色客服</string>
@@ -44,6 +45,7 @@
     <string name="umeng_socialize_text_waitting_qq">跳转QQ中，请稍候...</string>
     <string name="oauth_promt_failed">登录失败</string>
     <string name="oauth_promt_cancel">取消登录</string>
+    <string name="txt_userdetail_title">用户详细信息</string>
 	<!--                用户                                       end-->
 	
 	<!--  				筛选			 begin-->
