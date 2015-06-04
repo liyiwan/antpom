@@ -17,8 +17,8 @@
 package com.yizi.iwuse.general.view;
 
 import com.yizi.iwuse.R;
-import com.yizi.iwuse.common.VideoThread;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
+import com.yizi.iwuse.common.widget.VideoThread;
 import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.view.WuseThemeFragment.ViewHolder;
 
@@ -44,18 +44,21 @@ import android.widget.ListView;
  */
 public class FirstItemMaxListView extends ListView {
 	private Context context;
-	private int ITEM_HEIGHT;// 标准item高,
+	/***item标注高度***/
+	private int ITEM_HEIGHT;
+	/***item最大高度***/
 	private int mITEM_MAX_HEIGHT = 0;
 	private int mLastFirstVisiblePosition = 0;
 	private int distanceOneItem;// 记录滚动距离，向上滚动时-ITEM_HEIGHT到0，向下滚动是0到ITEM_HEIGHT,当listview
 								// FirstVisiblePosition 设置为0
 	private int mLastDistanceOneItem = 1;
-	private int downY = 0;
-	private boolean isUp = false;
 	
 	private GestureDetector mGestureDetector;
+	/***手指接触屏幕时，看到listview的第一个item的位置***/
 	private int downVisiblePosition = 0;
+	/***手指是否有接触屏幕***/
 	public static boolean isFingerPress = false;
+	/***手指接触屏幕时，listview的第一个item视图***/
 	private View downView;
 
 	public FirstItemMaxListView(Context context) {
@@ -74,6 +77,9 @@ public class FirstItemMaxListView extends ListView {
 		init(context);
 	}
 	
+	/**		旧的手势代码
+	 * @param context
+	 */
 	private void initOld(Context context) {
 		
 		mGestureDetector = new GestureDetector(context,
@@ -167,6 +173,9 @@ public class FirstItemMaxListView extends ListView {
 		});
 	}
 
+	/**		新的手势代码
+	 * @param context
+	 */
 	@SuppressLint("NewApi")
 	private void init(Context context) {
 		
@@ -275,7 +284,7 @@ public class FirstItemMaxListView extends ListView {
 					break;
 				case MotionEvent.ACTION_UP:
 					System.out.println("手指离开屏幕");
-					final View item0 = getChildAt(0);
+					View item0 = getChildAt(0);
 					View item1 = getChildAt(1);
 					View item2 = getChildAt(2);
 					View item3 = getChildAt(3);
@@ -303,10 +312,18 @@ public class FirstItemMaxListView extends ListView {
 //									"height", mITEM_MAX_HEIGHT).setDuration(500).start();
 							item0.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, mITEM_MAX_HEIGHT));
+							ViewHolder viewHolder = (ViewHolder)item0.getTag();
+							if(viewHolder != null){
+								viewHolder.tv_grey.getBackground().setAlpha(0);
+							}
 						}
 						if(item1 != null){
 							item1.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
+							ViewHolder viewHolder = (ViewHolder)item1.getTag();
+							if(viewHolder != null){
+								viewHolder.tv_grey.getBackground().setAlpha(255);
+							}
 						}
 						if(item2 != null){
 							item2.setLayoutParams(new AbsListView.LayoutParams(
@@ -327,10 +344,18 @@ public class FirstItemMaxListView extends ListView {
 						if(item1 != null){
 							item1.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, mITEM_MAX_HEIGHT));
+							ViewHolder viewHolder = (ViewHolder)item1.getTag();
+							if(viewHolder != null){
+								viewHolder.tv_grey.getBackground().setAlpha(0);
+							}
 						}
 						if(item2 != null){
 							item2.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
+							ViewHolder viewHolder = (ViewHolder)item2.getTag();
+							if(viewHolder != null){
+								viewHolder.tv_grey.getBackground().setAlpha(255);
+							}
 						}
 						if(item3 != null){
 							item3.setLayoutParams(new AbsListView.LayoutParams(
@@ -358,7 +383,7 @@ public class FirstItemMaxListView extends ListView {
 					ViewHolder viewHolder = (ViewHolder)whichVideo.getTag();
 					if(viewHolder != null){
 						ThemeItem themeItem = (ThemeItem)viewHolder.object;
-						viewHolder.tv_grey.getBackground().setAlpha(0);
+//						viewHolder.tv_grey.getBackground().setAlpha(0);
 						if("视频".equals(themeItem.property)){
 							if(viewHolder.videoView == null){
 								new VideoThread(viewHolder).start();
@@ -373,6 +398,9 @@ public class FirstItemMaxListView extends ListView {
 		});
 	}
 	
+	/**		旧的代码
+	 * 		滚动时item高度变化代码
+	 */
 	private void changeItemHeightOnScrollOld() {
 		View item0 = getChildAt(0);
 		View item1 = getChildAt(1);
@@ -459,6 +487,18 @@ public class FirstItemMaxListView extends ListView {
 		}
 	}
 
+	/**		新的代码
+	 * 		滚动时item高度变化代码
+	 */
+	/**
+	 * 
+	 */
+	/**
+	 * 
+	 */
+	/**
+	 * 
+	 */
 	private void changeItemHeightOnScroll() {
 		View item0 = getChildAt(0);
 		View item1 = getChildAt(1);
@@ -629,5 +669,5 @@ public class FirstItemMaxListView extends ListView {
 		});
 		//开始动画
 		valueAnimator.start();
-		}
+	}
 }

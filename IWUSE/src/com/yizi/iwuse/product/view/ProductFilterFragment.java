@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.MainHomeActivity;
@@ -22,24 +24,9 @@ import com.yizi.iwuse.general.MainHomeActivity;
  * @author zhangxiying
  *
  */
-public class ProductSearchFragment extends Fragment {
+public class ProductFilterFragment extends Fragment {
 
-	private ImageView tv_close;
-	private TextView tv_kitchen;
-	private TextView tv_bathroom;
-	private TextView tv_bedroom;
-	private TextView tv_hall;
-	private TextView tv_outdoor;
-	private TextView tv_accessories;
-	
-	private TextView tv_usa_city;
-	private TextView tv_jap_elegant;
-	private TextView tv_ornate_palace;
-	private TextView tv_nordic_simply;
-	private TextView tv_asia_holiday;
-	private TextView tv_modern_luxury;
-	
-	private NoScrollGridView gv_select;
+	private ListView lv_filter;
 	private ArrayList<String> selectArray;
 	private TextSelectAdapter selectAdapter;
 	
@@ -47,15 +34,6 @@ public class ProductSearchFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		tv_close.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				((MainHomeActivity) getActivity()).closeProductSearch();
-			}
-		});
-
 	}
 
 	@Override
@@ -68,37 +46,11 @@ public class ProductSearchFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		tv_close = (ImageView)view.findViewById(R.id.tv_close);
-		tv_kitchen = (TextView)view.findViewById(R.id.tv_kitchen);
-		tv_kitchen.setOnClickListener(new TextViewClick());
-		tv_bathroom = (TextView)view.findViewById(R.id.tv_bathroom);
-		tv_bathroom.setOnClickListener(new TextViewClick());
-		tv_bedroom = (TextView)view.findViewById(R.id.tv_bedroom);
-		tv_bedroom.setOnClickListener(new TextViewClick());
-		tv_hall = (TextView)view.findViewById(R.id.tv_hall);
-		tv_hall.setOnClickListener(new TextViewClick());
-		tv_outdoor = (TextView)view.findViewById(R.id.tv_outdoor);
-		tv_outdoor.setOnClickListener(new TextViewClick());
-		tv_accessories = (TextView)view.findViewById(R.id.tv_accessories);
-		tv_accessories.setOnClickListener(new TextViewClick());
-		
-		tv_usa_city = (TextView)view.findViewById(R.id.tv_usa_city);
-		tv_usa_city.setOnClickListener(new TextViewClick());
-		tv_jap_elegant = (TextView)view.findViewById(R.id.tv_jap_elegant);
-		tv_jap_elegant.setOnClickListener(new TextViewClick());
-		tv_ornate_palace = (TextView)view.findViewById(R.id.tv_ornate_palace);
-		tv_ornate_palace.setOnClickListener(new TextViewClick());
-		tv_nordic_simply = (TextView)view.findViewById(R.id.tv_nordic_simply);
-		tv_nordic_simply.setOnClickListener(new TextViewClick());
-		tv_asia_holiday = (TextView)view.findViewById(R.id.tv_asia_holiday);
-		tv_asia_holiday.setOnClickListener(new TextViewClick());
-		tv_modern_luxury = (TextView)view.findViewById(R.id.tv_modern_luxury);
-		tv_modern_luxury.setOnClickListener(new TextViewClick());
-		
-		gv_select = (NoScrollGridView)view.findViewById(R.id.gv_select);
+		lv_filter = (ListView)view.findViewById(R.id.lv_filter);
 		selectArray = new ArrayList<String>();
+		selectArray.add("absdfsaf");
 		selectAdapter = new TextSelectAdapter();
-		gv_select.setAdapter(selectAdapter);
+		lv_filter.setAdapter(selectAdapter);
 	}
 
 	private class TextViewClick implements OnClickListener{
@@ -147,6 +99,14 @@ public class ProductSearchFragment extends Fragment {
 			TextView tv_select = (TextView)convertView.findViewById(R.id.tv_select);
 			String text = selectArray.get(position);
 			tv_select.setText(text);
+			tv_select.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Toast.makeText(getActivity(), "sgsdga", Toast.LENGTH_LONG).show();
+				}
+			});
 			return convertView;
 		}
 		

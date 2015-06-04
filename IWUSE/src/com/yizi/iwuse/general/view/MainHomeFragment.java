@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.MainHomeActivity;
+import com.yizi.iwuse.product.view.ProductFilterFragment;
 
 /**		主页
  * @author hehaodong
@@ -29,26 +32,30 @@ public class MainHomeFragment extends Fragment {
 
 	@ViewInject(R.id.view_pager) private ViewPager mViewPager;
 	/***个人中心选择按钮***/
-	@ViewInject(R.id.img_usercenter) private ImageButton img_usercenter;
+	@ViewInject(R.id.tv_usercenter) private TextView tv_usercenter;
 	/***筛选选择按钮***/
-	@ViewInject(R.id.img_productsearch) private ImageButton img_productsearch;
+	@ViewInject(R.id.tv_productsearch) private TextView tv_productsearch;
 	private TabPagerAdapter mPagerAdapter;
 	/***当前页卡编号***/
 	private int currIndex = 0;
 	/***主题选择按钮***/
-	@ViewInject(R.id.txt_mainhome_iwusetheme) private TextView txt_mainhome_iwusetheme;
+	@ViewInject(R.id.tv_mainhome_iwusetheme) private TextView tv_mainhome_iwusetheme;
 	/***单品选择按钮***/
-	@ViewInject(R.id.txt_mainhome_productlist) private TextView txt_mainhome_productlist;
+	@ViewInject(R.id.tv_mainhome_productlist) private TextView tv_mainhome_productlist;
 //	private LinearLayout ll_top_left_menu;
 	@ViewInject(R.id.ll_title) private LinearLayout ll_title;
 	public static int titleHeight = 0;
+	private FragmentManager mFragmentManager;
+	/***筛选页面***/
+	private ProductFilterFragment productFragment;
+	private boolean isFilterOpen = false;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View mView = inflater.inflate(R.layout.frg_mainhome, null);
 		ViewUtils.inject(this,mView);
 //		ll_top_left_menu = (LinearLayout) mView.findViewById(R.id.ll_top_menu);
-		txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
+//		ib_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
 //		txt_mainhome_iwusetheme.setSelected(true);
 		
 		return mView;
@@ -57,6 +64,7 @@ public class MainHomeFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		mFragmentManager = getActivity().getSupportFragmentManager();
 		int w = View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0,
@@ -70,25 +78,44 @@ public class MainHomeFragment extends Fragment {
 		mViewPager.setCurrentItem(currIndex);
 		mPagerAdapter.notifyDataSetChanged();
 		
-		// 点击打开左边菜单
-		img_usercenter.setOnClickListener(new View.OnClickListener() {
+		// 点击打开个人中心
+		tv_usercenter.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				((MainHomeActivity) getActivity()).openUserCenterLayout();
 			}
 		});
-		// 点击打开右边菜单
-		img_productsearch.setOnClickListener(new View.OnClickListener() {
+		
+		// 点击打开过滤菜单
+		tv_productsearch.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				((MainHomeActivity) getActivity()).openProductSearchLayout();
+				FragmentTransaction transaction = mFragmentManager.beginTransaction();
+				transaction.setCustomAnimations(R.anim.push_top_in, R.anim.push_top_out);
+				if(!isFilterOpen){
+					isFilterOpen = true;
+					if (null == productFragment) {
+						productFragment = new ProductFilterFragment();
+						transaction.add(R.id.fl_filter_fragment, productFragment);
+					} else {
+						transaction.show(productFragment);
+					}
+				}else{
+					isFilterOpen = false;
+					if (null != productFragment) {
+						transaction.hide(productFragment);
+					}
+				}
+				transaction.commitAllowingStateLoss();
+//				((MainHomeActivity) getActivity()).openProductSearchLayout();
 			}
 		});
 		
+		
 		/***切换到主题页卡***/
-		txt_mainhome_iwusetheme.setOnClickListener(new View.OnClickListener() {
+		tv_mainhome_iwusetheme.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -110,7 +137,7 @@ public class MainHomeFragment extends Fragment {
 		});
 		
 		/***切换到单品页卡***/
-		txt_mainhome_productlist.setOnClickListener(new View.OnClickListener() {
+		tv_mainhome_productlist.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -179,10 +206,10 @@ public class MainHomeFragment extends Fragment {
 //            int two = one * 2;// 页卡1 -> 页卡3 偏移量
 			switch (position) {
 			case 0:
-				txt_mainhome_iwusetheme.setSelected(true);
-				txt_mainhome_productlist.setSelected(false);
-				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
-				txt_mainhome_productlist.setTextColor(Color.parseColor("#A8A8A8"));
+//				ib_mainhome_iwusetheme.setSelected(true);
+//				txt_mainhome_productlist.setSelected(false);
+//				ib_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
+//				txt_mainhome_productlist.setTextColor(Color.parseColor("#A8A8A8"));
 				mViewPager.setCurrentItem(0);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_color));
@@ -194,10 +221,10 @@ public class MainHomeFragment extends Fragment {
 //                }
 				break;
 			case 1:
-				txt_mainhome_iwusetheme.setSelected(false);
-				txt_mainhome_productlist.setSelected(true);
-				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#A8A8A8"));
-				txt_mainhome_productlist.setTextColor(Color.parseColor("#000000"));
+//				txt_mainhome_iwusetheme.setSelected(false);
+//				txt_mainhome_productlist.setSelected(true);
+//				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#A8A8A8"));
+//				txt_mainhome_productlist.setTextColor(Color.parseColor("#000000"));
 				mViewPager.setCurrentItem(1);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));

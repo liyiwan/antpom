@@ -1,4 +1,4 @@
-package com.yizi.iwuse.common;
+package com.yizi.iwuse.common.widget;
 
 import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.service.events.ThemeEvent;

@@ -13,7 +13,7 @@ import android.widget.ScrollView;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.IActivity;
 import com.yizi.iwuse.general.view.MainHomeFragment;
-import com.yizi.iwuse.product.view.ProductSearchFragment;
+import com.yizi.iwuse.product.view.ProductFilterFragment;
 import com.yizi.iwuse.user.view.UserFragment;
 
 /**		主页activity
@@ -28,7 +28,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	/***用户中心***/
 	private UserFragment userFragment;
 	/***筛选页面***/
-	private ProductSearchFragment productFragment;
+	private ProductFilterFragment productFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,8 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	public void openUserCenterLayout() {
 		
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
-		hideFragments(transaction);
+		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
+//		hideFragments(transaction);
 		if (null == userFragment) {
 			userFragment = new UserFragment();
 			transaction.add(R.id.center_layout, userFragment);
@@ -71,15 +71,15 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 */
 	public void closeUserCenter(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
+		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
 		if (null != userFragment) {
 			transaction.hide(userFragment);
-			if (null == mainHomeFragment) {
+			/*if (null == mainHomeFragment) {
 				mainHomeFragment = new MainHomeFragment();
 				transaction.add(R.id.center_layout, mainHomeFragment);
 			} else {
 				transaction.show(mainHomeFragment);
-			}
+			}*/
 			transaction.commitAllowingStateLoss();
 		}
 	}
@@ -88,9 +88,9 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	 * @param transaction
 	 */
 	private void hideFragments(FragmentTransaction transaction) {
-		if (null != mainHomeFragment) {
+		/*if (null != mainHomeFragment) {
 			transaction.hide(mainHomeFragment);
-		}
+		}*/
 		if (null != userFragment) {
 			transaction.hide(userFragment);
 		}
@@ -99,27 +99,27 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	/***
 	 * 打开产品筛选
 	 */
-	public void openProductSearchLayout() {
+	/*public void openProductSearchLayout() {
 		
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
-		hideFragments(transaction);
+//		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+//		hideFragments(transaction);
 		if (null == productFragment) {
 			productFragment = new ProductSearchFragment();
-			transaction.add(R.id.center_layout, productFragment);
+			transaction.add(R.id.ll_filter_fragment, productFragment);
 		} else {
 			transaction.show(productFragment);
 		}
 		transaction.commitAllowingStateLoss();
 		
-	}
+	}*/
 	
 	/**
 	 * 		关闭产品筛选
 	 */
 	public void closeProductSearch(){
 		FragmentTransaction transaction = mFragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.push_right_in, R.anim.push_right_out);
+		transaction.setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out);
 		if (null != productFragment) {
 			transaction.hide(productFragment);
 			if (null == mainHomeFragment) {

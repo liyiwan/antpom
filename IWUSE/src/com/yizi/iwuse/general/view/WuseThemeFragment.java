@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
-import com.yizi.iwuse.common.VideoThread;
 import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
+import com.yizi.iwuse.common.widget.VideoThread;
 import com.yizi.iwuse.common.widget.VideoWidget;
 import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.service.GeneralService;
@@ -119,11 +119,12 @@ public class WuseThemeFragment extends Fragment {
 				viewHolder.tv_property = (TextView) view.findViewById(R.id.tv_property);
 				viewHolder.fl_insert_large = (FrameLayout) view.findViewById(R.id.fl_insert_large);
 				viewHolder.tv_grey = (TextView) view.findViewById(R.id.tv_grey);
-				viewHolder.object = themeItem;
 				view.setTag(viewHolder);
 			}else{
 				viewHolder = (ViewHolder)view.getTag();
 			}
+			
+			viewHolder.object = themeItem;
 			viewHolder.tv_title.setText(themeItem.title);
 			viewHolder.tv_kind.setText(themeItem.kind);
 			viewHolder.tv_property.setText(themeItem.property);
