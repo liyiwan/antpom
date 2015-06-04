@@ -47,7 +47,7 @@ public class AppContext {
 	 **/
 
 	/** 用户信息服务 **/
-	public UserService customerService;
+	public UserService userService;
 	/** 订单Service **/
 	public OrderService orderService;
 	/** 产品Service **/
@@ -132,8 +132,8 @@ public class AppContext {
 	 */
 	private void registService() {
 		// 用户管理类
-		customerService = new UserService();
-		serviceList.add(customerService);
+		userService = new UserService();
+		serviceList.add(userService);
 
 		// 订单管理
 		orderService = new OrderService();

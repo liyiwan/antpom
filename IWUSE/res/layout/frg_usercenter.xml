@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/img_usercenter_headimg"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_marginBottom="5dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/big_userhead_light" />
@@ -36,6 +36,7 @@
                 android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:layout_below="@+id/img_usercenter_headimg"
                 android:orientation="vertical" >
 	            <TextView
@@ -44,6 +45,7 @@
 	                android:layout_height="wrap_content"
 	                android:layout_marginBottom="2dp"
 	                android:layout_marginTop="4dp"
+	                
 	                android:text="@string/usercenter_username"
 	                android:textSize="15sp" />
 	
@@ -75,9 +77,9 @@
 		    	android:orientation="vertical" >
                 <ImageView 
 			        android:id="@+id/img_usercenter_icollection"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:background="@drawable/btn_like"/>
+	                android:layout_width="45dp"
+	                android:layout_height="40dp"
+	                android:background="@drawable/collections"/>
                 <TextView android:id="@+id/txt_usercenter_icollection" 
 	          		android:layout_width="wrap_content"
                		android:layout_height="30dp"
@@ -92,9 +94,9 @@
 		    	android:orientation="vertical" >
                 <ImageView 
 			        android:id="@+id/img_usercenter_ishopcart"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:background="@drawable/btn_shoppingcart"/>
+	                android:layout_width="45dp"
+	                android:layout_height="40dp"
+	                android:background="@drawable/shoppingbag"/>
                 <TextView android:id="@+id/txt_usercenter_ishopcart" 
 	          		android:layout_width="wrap_content"
                		android:layout_height="30dp"
@@ -109,9 +111,9 @@
 		    	android:orientation="vertical" >
                 <ImageView 
 			        android:id="@+id/img_usercenter_iwallet"
-	                android:layout_width="30dp"
-	                android:layout_height="30dp"
-	                android:background="@drawable/btn_wallet"/>
+	                android:layout_width="45dp"
+	                android:layout_height="40dp"
+	                android:background="@drawable/coupons"/>
                 <TextView 
                     android:id="@+id/txt_usercenter_iwallet" 
 	          		android:layout_width="wrap_content"
@@ -131,8 +133,9 @@
             android:text="@string/usercenter_iorderlist" />
 
         <include
-            android:layout_width="fill_parent"
-            android:layout_height="2px"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
             layout="@layout/widget_linedeliver" >
         </include>
 
@@ -146,8 +149,9 @@
             android:text="@string/usercenter_callservice" />
 
         <include
-            android:layout_width="fill_parent"
-            android:layout_height="2px"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
             layout="@layout/widget_linedeliver" >
         </include>
 
@@ -161,8 +165,9 @@
             android:text="@string/usercenter_isubmission" />
 
         <include
-            android:layout_width="fill_parent"
-            android:layout_height="2px"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
             layout="@layout/widget_linedeliver" >
         </include>
 
@@ -176,8 +181,9 @@
             android:text="@string/usercenter_setting" />
 
         <include
-            android:layout_width="fill_parent"
-            android:layout_height="2px"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
             layout="@layout/widget_linedeliver" >
         </include>
 

@@ -101,19 +101,41 @@ public class UserFragment extends Fragment {
 		});
 	}
 	
-	@OnClick({R.id.lay_userinfo,R.id.lay_usercollection,R.id.lay_shopcart,R.id.lay_iwallet})
+	/****
+	 * 与用户登录强相关的操作按钮事件
+	 * 
+	 * @param view
+	 */
+	@OnClick({R.id.img_usercenter_headimg,R.id.lay_usercollection,R.id.lay_shopcart,R.id.lay_iwallet,
+		R.id.txt_usercenter_iorderlist,R.id.txt_usercenter_callservice,R.id.txt_usercenter_isubmission})
 	public void onUserCenterClick(View view){
 		ILog.i(TAG, "check login ");
 		if(!AppParams.isLogin){
 			Intent mIntent = new Intent(AppContext.instance().globalContext,LoginActivity.class);
 			this.startActivity(mIntent);
 		}
-		
 		switch(view.getId()){
-			case R.id.lay_userinfo:
-				
-			break;
-			
+			//用户信息
+			case R.id.img_usercenter_headimg:
+				break;
+			//我的收藏
+			case R.id.lay_usercollection:
+				break;
+			//我的购物车
+			case R.id.lay_shopcart:
+				break;
+			//我的钱包
+			case R.id.lay_iwallet:
+				break;
+			//我的订单
+			case R.id.txt_usercenter_iorderlist:
+				break;
+			//物色客服
+			case R.id.txt_usercenter_callservice:
+				break;
+			//上传投稿
+			case R.id.txt_usercenter_isubmission:
+				break;
 		}
 	}
 

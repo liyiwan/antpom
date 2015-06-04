@@ -19,3 +19,4 @@
 #   public *;
 #}
 -keep class * extends java.lang.annotation.Annotation { *; }
+-keep class com.tencent.mm.sdk.** { *;	}

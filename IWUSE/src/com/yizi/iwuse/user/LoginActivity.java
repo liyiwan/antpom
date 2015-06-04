@@ -15,12 +15,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.auth.QQAuth;
+import com.tencent.tauth.Tencent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -32,6 +36,7 @@ import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.yizi.iwuse.AppContext;
+import com.yizi.iwuse.AppParams;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
 import com.yizi.iwuse.constants.UserConst;
@@ -52,34 +57,51 @@ public class LoginActivity extends BaseActivity {
 	/** 用户ID/手机号 **/
 	@ViewInject(R.id.edt_userid)
 	private EditText edt_userid;
-	/** 用户ID/手机号 **/
+	/** 密码 **/
 	@ViewInject(R.id.edt_password)
 	private EditText edt_password;
-	/** 用户ID/手机号 **/
+	/** 登录 **/
 	@ViewInject(R.id.btn_login)
 	private Button btn_login;
-	/** 用户ID/手机号 **/
-	@ViewInject(R.id.txt_regist)
-	private TextView txt_regist;
-	/** 用户ID/手机号 **/
+	/** 忘记密码 **/
 	@ViewInject(R.id.txt_forgetuserinfo)
 	private TextView txt_forgetuserinfo;
-	/** 用户ID/手机号 **/
+	/** 微信授权登录 **/
 	@ViewInject(R.id.img_oauth_weichat)
 	private ImageView img_oauth_weichat;
-	/** 用户ID/手机号 **/
+	/** QQ授权登录 **/
 	@ViewInject(R.id.img_oauth_qq)
 	private ImageView img_oauth_qq;
-	/** 用户ID/手机号 **/
+	/** 支付宝授权登录 **/
 	@ViewInject(R.id.img_oauth_paybao)
 	private ImageView img_oauth_paybao;
-	/** 用户ID/手机号 **/
+	/** 微博授权登录 **/
 	@ViewInject(R.id.img_oauth_weibo)
 	private ImageView img_oauth_weibo;
-	@ViewInject(R.id.img_back)
-	private ImageButton img_back;
+	/**返回**/
+	@ViewInject(R.id.img_userlogin_back)
+	private ImageView img_back;
+	/**登录切换按钮**/
+	@ViewInject(R.id.btn_switch_login)
+	private Button btn_switch_login;
+	/**注册切换按钮**/
+	@ViewInject(R.id.btn_switch_regist)
+	private Button btn_switch_regist;
+	/**登录层**/
+	@ViewInject(R.id.lay_switch_login)
+	private LinearLayout lay_switch_login;
+	/**注册层**/
+	@ViewInject(R.id.lay_switch_regist)
+    private LinearLayout lay_switch_regist;
+	/**注册用户名**/
+	@ViewInject(R.id.edt_regist_userid)
+	private EditText edt_regist_userid;
+	/**注册密码**/
+	@ViewInject(R.id.edt_regist_password)
+	private EditText edt_regist_password;
+	@ViewInject(R.id.btn_regist_connfirm)
+	private Button btn_regist_connfirm;
 	
-
 	/** 友盟授权登录集成 **/
 	private UMSocialService mController = null;
 	
@@ -90,7 +112,10 @@ public class LoginActivity extends BaseActivity {
 	private static final int LOGINTYPE_PAYBAO = 0x9003;
 	private static final int LOGINTYPE_WEIBO = 0x9004;
 
-
+	public static QQAuth mQQAuth;
+	private Tencent mTencent;
+	private UserInfo mInfo;
+	
 	private Context mContext;
 
 	@Override
@@ -112,46 +137,51 @@ public class LoginActivity extends BaseActivity {
 	 * 
 	 * @param view
 	 */
-	@OnClick({ R.id.btn_login, R.id.txt_regist, R.id.txt_forgetuserinfo,
+	@OnClick({ R.id.btn_switch_login,R.id.btn_switch_regist, R.id.btn_login, R.id.txt_forgetuserinfo,
 			R.id.img_oauth_weichat, R.id.img_oauth_qq, R.id.img_oauth_paybao,
-			R.id.img_oauth_weibo,R.id.img_back })
+			R.id.img_oauth_weibo,R.id.img_userlogin_back,R.id.btn_regist_connfirm })
 	public void onLoginClickListener(View view) {
 		switch (view.getId()) {
-		case R.id.btn_login:
-			break;
-		case R.id.txt_regist:
-			break;
-		case R.id.txt_forgetuserinfo:
-			break;
-		case R.id.img_oauth_weichat:
-			login_type = LOGINTYPE_WEICHAT;
-			onThridLogin(SHARE_MEDIA.WEIXIN);
-			break;
-		case R.id.img_oauth_qq:
-			login_type = LOGINTYPE_QQ;
-			onThridLogin(SHARE_MEDIA.QQ);
-			break;
-		case R.id.img_oauth_paybao:
-			login_type = LOGINTYPE_PAYBAO;
-			break;
-		case R.id.img_oauth_weibo:
-			login_type = LOGINTYPE_WEIBO;
-			onThridLogin(SHARE_MEDIA.SINA);
-			break;
-		case R.id.img_back:
-			
-			this.finish();
-			break;
-		default:
-			break;
+			case R.id.btn_switch_login:
+				lay_switch_login.setVisibility(View.VISIBLE);
+				lay_switch_regist.setVisibility(View.GONE);
+				break;
+			case R.id.btn_switch_regist:
+				lay_switch_login.setVisibility(View.GONE);
+				lay_switch_regist.setVisibility(View.VISIBLE);
+				break;
+			case R.id.btn_login:
+				break;
+			case R.id.txt_forgetuserinfo:
+				break;
+			case R.id.img_oauth_weichat:
+				login_type = LOGINTYPE_WEICHAT;
+				onThridLogin(SHARE_MEDIA.WEIXIN);
+				break;
+			case R.id.img_oauth_qq:
+				login_type = LOGINTYPE_QQ;
+				onThridLogin(SHARE_MEDIA.QQ);
+				break;
+			case R.id.img_oauth_paybao:
+				login_type = LOGINTYPE_PAYBAO;
+				break;
+			case R.id.img_oauth_weibo:
+				login_type = LOGINTYPE_WEIBO;
+				onThridLogin(SHARE_MEDIA.SINA);
+				break;
+			case R.id.btn_regist_connfirm:
+				break;
+			case R.id.img_userlogin_back:
+				finish();
+				break;
+			default:
+				break;
 		}
-
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
 		switch (login_type) {
 			case LOGINTYPE_WEIBO: {
 				/** 使用SSO授权必须添加如下代码 */
@@ -168,6 +198,11 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 
+	private void onLoginWithWeichat(){
+		
+		
+	}
+	
 	/****
 	 * 注册授权登录的监听
 	 * 
@@ -200,7 +235,7 @@ public class LoginActivity extends BaseActivity {
 
 				@Override
 				public void onStart(SHARE_MEDIA platform) {
-					//Toast.makeText(LoginActivity.this, "授权开始",Toast.LENGTH_SHORT).show();
+					Toast.makeText(LoginActivity.this, "授权开始",Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
@@ -210,6 +245,9 @@ public class LoginActivity extends BaseActivity {
 
 				@Override
 				public void onComplete(Bundle value, SHARE_MEDIA platform) {
+					Toast.makeText(LoginActivity.this, "授权完成",Toast.LENGTH_SHORT).show();
+					//标记为已登录状态
+					AppParams.isLogin = true;
 					// 获取uid
 					String uid = value.getString("uid");
 					if (!TextUtils.isEmpty(uid)) {
@@ -234,7 +272,7 @@ public class LoginActivity extends BaseActivity {
 	 * 
 	 * @param platform
 	 */
-	private void handleUserInfo(SHARE_MEDIA platform) {
+	private void handleUserInfo(final SHARE_MEDIA platform) {
 		mController.getPlatformInfo(LoginActivity.this, platform,
 			new UMDataListener() {
 
@@ -247,18 +285,7 @@ public class LoginActivity extends BaseActivity {
 				public void onComplete(int status, Map<String, Object> info) {
 					if (info != null) {
 						// 根据平台类型，解析用户信息
-						switch(login_type){
-							case LOGINTYPE_WEICHAT:
-								break;
-							case LOGINTYPE_QQ:
-								break;
-							case LOGINTYPE_PAYBAO:
-								break;
-							case LOGINTYPE_WEIBO:
-								break;
-							default:
-								break;
-						}
+						AppContext.instance().userService.onLoginUpdateUserInfo(platform, info); 
 					}
 				}
 			});
@@ -272,7 +299,7 @@ public class LoginActivity extends BaseActivity {
 	public void onEventMainThread(UserEvents userEvent) {
 		switch (userEvent.eventtype) {
 		case UserConst.ENVENTTYPE_LOGIN:
-
+			Toast.makeText(mContext, mContext.getString(R.string.login), Toast.LENGTH_LONG).show();
 			break;
 		}
 	}
