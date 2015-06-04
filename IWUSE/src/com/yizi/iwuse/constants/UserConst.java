@@ -11,6 +11,8 @@ public class UserConst {
 	/**用户事件类型-登录**/
 	public static final int ENVENTTYPE_LOGIN = 0x500001;
 	
+	
+	
 	 public static final String LOGIN_YOUMENG = "com.umeng.login";
 	
 	/**~~~~~~~~~~~~~~授权登录~~~~~~~~~~~~~~~**/

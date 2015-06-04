@@ -4,4 +4,5 @@ public class UserEvents {
 	
 	public int eventtype = 1; 
 	
+	public Object customObj;
 }

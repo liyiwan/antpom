@@ -182,7 +182,6 @@ public class WelcomeActivity extends BaseActivity {
 			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_1));
 			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_2));
 			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_3));
-			viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_4));
 			
 			viewPagerAdapter = new ViewPagerAdapter(this, viewList);
 			
@@ -206,7 +205,7 @@ public class WelcomeActivity extends BaseActivity {
 				VideoWidget wideoWidget = new VideoWidget(this,mView, vdoPath);
 				viewList.clear();
 				viewList.add(wideoWidget);
-				viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_4));
+				viewList.add(IWuseUtil.getImageView(this,R.drawable.firstguide_3));
 				
 				viewPagerAdapter = new ViewPagerAdapter(this, viewList);
 				vPager_firstguide.setAdapter(viewPagerAdapter);
