@@ -1,4 +1,4 @@
-package com.yizi.iwuse.general.model;
+package com.yizi.iwuse.product.model;
 
 /**		主题对象
  * @author hehaodong

@@ -12,8 +12,8 @@ import android.widget.ScrollView;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.IActivity;
+import com.yizi.iwuse.filter.view.ProductFilterFragment;
 import com.yizi.iwuse.general.view.MainHomeFragment;
-import com.yizi.iwuse.product.view.ProductFilterFragment;
 import com.yizi.iwuse.user.view.UserFragment;
 
 /**		主页activity

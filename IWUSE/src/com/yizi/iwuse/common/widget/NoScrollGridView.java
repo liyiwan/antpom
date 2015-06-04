@@ -1,4 +1,4 @@
-package com.yizi.iwuse.product.view;
+package com.yizi.iwuse.common.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

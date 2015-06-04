@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.yizi.iwuse.general.view;
+package com.yizi.iwuse.product.view;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
 import com.yizi.iwuse.common.widget.VideoThread;
-import com.yizi.iwuse.general.model.ThemeItem;
-import com.yizi.iwuse.general.view.WuseThemeFragment.ViewHolder;
+import com.yizi.iwuse.product.model.ThemeItem;
+import com.yizi.iwuse.product.view.WuseThemeFragment.ViewHolder;
 
 import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;

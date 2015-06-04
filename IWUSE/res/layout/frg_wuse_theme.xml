@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.yizi.iwuse.general.view.FirstItemMaxListView
+    <com.yizi.iwuse.product.view.FirstItemMaxListView
             android:id="@+id/firstItemMaxListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

@@ -1,8 +1,8 @@
-package com.yizi.iwuse.general.service.events;
+package com.yizi.iwuse.product.service.events;
 
 import java.util.ArrayList;
 
-import com.yizi.iwuse.general.model.ThemeItem;
+import com.yizi.iwuse.product.model.ThemeItem;
 
 /**		主题事件类
  * @author hehaodong

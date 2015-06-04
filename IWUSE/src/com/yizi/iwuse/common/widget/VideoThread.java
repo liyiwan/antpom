@@ -1,9 +1,9 @@
 package com.yizi.iwuse.common.widget;
 
-import com.yizi.iwuse.general.model.ThemeItem;
-import com.yizi.iwuse.general.service.events.ThemeEvent;
-import com.yizi.iwuse.general.service.events.VideoEvent;
-import com.yizi.iwuse.general.view.WuseThemeFragment.ViewHolder;
+import com.yizi.iwuse.product.model.ThemeItem;
+import com.yizi.iwuse.product.service.events.ThemeEvent;
+import com.yizi.iwuse.product.service.events.VideoEvent;
+import com.yizi.iwuse.product.view.WuseThemeFragment.ViewHolder;
 
 import de.greenrobot.event.EventBus;
 import android.view.View;

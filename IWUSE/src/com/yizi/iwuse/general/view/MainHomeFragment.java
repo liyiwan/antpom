@@ -21,8 +21,10 @@ import android.widget.TextView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.yizi.iwuse.R;
+import com.yizi.iwuse.filter.view.ProductFilterFragment;
 import com.yizi.iwuse.general.MainHomeActivity;
-import com.yizi.iwuse.product.view.ProductFilterFragment;
+import com.yizi.iwuse.product.view.ProductListFragment;
+import com.yizi.iwuse.product.view.WuseThemeFragment;
 
 /**		主页
  * @author hehaodong
@@ -64,6 +66,7 @@ public class MainHomeFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		tv_mainhome_iwusetheme.setSelected(true);
 		mFragmentManager = getActivity().getSupportFragmentManager();
 		int w = View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED);
@@ -120,18 +123,8 @@ public class MainHomeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				if(txt_mainhome_iwusetheme.isSelected()){
-//					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
-//						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#00000000"));
-//						ll_top_left_menu.setVisibility(View.GONE);
-//					}else{
-//						txt_mainhome_iwusetheme.setBackgroundColor(Color.parseColor("#C0C0C0"));;
-//						ll_top_left_menu.setVisibility(View.VISIBLE);
-//					}
-//				}else{
-//					ll_top_left_menu.setVisibility(View.GONE);
-					mViewPager.setCurrentItem(0);
-//				}
+				closeProductFilter();
+				mViewPager.setCurrentItem(0);
 			}
 		
 		});
@@ -142,21 +135,24 @@ public class MainHomeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				if(txt_mainhome_productlist.isSelected()){
-//					if(ll_top_left_menu.getVisibility() == View.VISIBLE){
-//						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#00000000"));
-//						ll_top_left_menu.setVisibility(View.GONE);
-//					}else{
-//						txt_mainhome_productlist.setBackgroundColor(Color.parseColor("#C0C0C0"));
-//						ll_top_left_menu.setVisibility(View.VISIBLE);
-//					}
-//				}else{
-//					ll_top_left_menu.setVisibility(View.GONE);
-					mViewPager.setCurrentItem(1);
-//				}
+				closeProductFilter();
+				mViewPager.setCurrentItem(1);
 			}
 		
 		});
+	}
+	
+	/**
+	 * 		关闭产品过滤页面
+	 */
+	public void closeProductFilter(){
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.push_top_in, R.anim.push_top_out);
+		isFilterOpen = false;
+		if (null != productFragment) {
+			transaction.hide(productFragment);
+		}
+		transaction.commitAllowingStateLoss();
 	}
 	
 	/**		主页切换适配器
@@ -210,6 +206,8 @@ public class MainHomeFragment extends Fragment {
 //				txt_mainhome_productlist.setSelected(false);
 //				ib_mainhome_iwusetheme.setTextColor(Color.parseColor("#000000"));
 //				txt_mainhome_productlist.setTextColor(Color.parseColor("#A8A8A8"));
+				tv_mainhome_iwusetheme.setSelected(true);
+				tv_mainhome_productlist.setSelected(false);
 				mViewPager.setCurrentItem(0);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_color));
@@ -225,6 +223,8 @@ public class MainHomeFragment extends Fragment {
 //				txt_mainhome_productlist.setSelected(true);
 //				txt_mainhome_iwusetheme.setTextColor(Color.parseColor("#A8A8A8"));
 //				txt_mainhome_productlist.setTextColor(Color.parseColor("#000000"));
+				tv_mainhome_iwusetheme.setSelected(false);
+				tv_mainhome_productlist.setSelected(true);
 				mViewPager.setCurrentItem(1);
 //				tvHomeTab1.setTextColor(mActivity.getResources().getColor(R.color.text_color));
 //				tvHomeTab2.setTextColor(mActivity.getResources().getColor(R.color.text_selected_color));

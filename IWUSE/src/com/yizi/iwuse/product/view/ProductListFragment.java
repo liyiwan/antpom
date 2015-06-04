@@ -1,4 +1,4 @@
-package com.yizi.iwuse.general.view;
+package com.yizi.iwuse.product.view;
 
 import java.util.ArrayList;
 
@@ -16,10 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yizi.iwuse.R;
-import com.yizi.iwuse.general.model.ProductItem;
 import com.yizi.iwuse.general.service.GeneralService;
-import com.yizi.iwuse.general.service.events.ProductEvent;
-import com.yizi.iwuse.general.service.events.ThemeEvent;
+import com.yizi.iwuse.product.model.ProductItem;
+import com.yizi.iwuse.product.service.ProductService;
+import com.yizi.iwuse.product.service.events.ProductEvent;
+import com.yizi.iwuse.product.service.events.ThemeEvent;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,7 +65,7 @@ public class ProductListFragment extends Fragment {
 		adapter = new FirstItemMaxAdapter();
 		gv_product.setAdapter(adapter);
 		
-		GeneralService server = new GeneralService();
+		ProductService server = new ProductService();
 		server.doProductNetWork();
 	}
 	

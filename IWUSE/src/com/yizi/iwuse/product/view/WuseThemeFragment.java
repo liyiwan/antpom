@@ -1,4 +1,4 @@
-package com.yizi.iwuse.general.view;
+package com.yizi.iwuse.product.view;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,10 +9,12 @@ import com.yizi.iwuse.common.utils.IWuseUtil;
 import com.yizi.iwuse.common.widget.ThemeVideoWidget;
 import com.yizi.iwuse.common.widget.VideoThread;
 import com.yizi.iwuse.common.widget.VideoWidget;
-import com.yizi.iwuse.general.model.ThemeItem;
 import com.yizi.iwuse.general.service.GeneralService;
-import com.yizi.iwuse.general.service.events.ThemeEvent;
-import com.yizi.iwuse.general.service.events.VideoEvent;
+import com.yizi.iwuse.general.view.MainHomeFragment;
+import com.yizi.iwuse.product.model.ThemeItem;
+import com.yizi.iwuse.product.service.ProductService;
+import com.yizi.iwuse.product.service.events.ThemeEvent;
+import com.yizi.iwuse.product.service.events.VideoEvent;
 
 import de.greenrobot.event.EventBus;
 import android.content.Context;
@@ -80,7 +82,7 @@ public class WuseThemeFragment extends Fragment {
 		mListView.setAdapter(mAdapter);
 		mListView.setItemHeight(firstHeight);
 		mListView.setItemMaxHeight(maxHeight);
-		GeneralService server = new GeneralService();
+		ProductService server = new ProductService();
 		server.doNetWork();
 	}
 

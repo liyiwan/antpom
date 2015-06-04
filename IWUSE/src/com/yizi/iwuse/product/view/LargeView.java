@@ -1,4 +1,4 @@
-package com.yizi.iwuse.general.view;
+package com.yizi.iwuse.product.view;
 
 import android.view.View;
 

@@ -1,6 +1,6 @@
-package com.yizi.iwuse.general.service.events;
+package com.yizi.iwuse.product.service.events;
 
-import com.yizi.iwuse.general.view.WuseThemeFragment.ViewHolder;
+import com.yizi.iwuse.product.view.WuseThemeFragment.ViewHolder;
 
 public class VideoEvent {
 
