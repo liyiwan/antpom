@@ -9,12 +9,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.IActivity;
+import com.yizi.iwuse.common.utils.ILog;
+import com.yizi.iwuse.constants.UserConst;
 import com.yizi.iwuse.filter.view.ProductFilterFragment;
 import com.yizi.iwuse.general.view.MainHomeFragment;
+import com.yizi.iwuse.user.service.events.UserEvents;
 import com.yizi.iwuse.user.view.UserFragment;
+
+import de.greenrobot.event.EventBus;
 
 /**		主页activity
  * @author hehaodong
@@ -22,6 +28,7 @@ import com.yizi.iwuse.user.view.UserFragment;
  */
 public class MainHomeActivity extends FragmentActivity implements IActivity {
 	
+	private static final String TAG = "MainHomeActivity";
 	private ActionBarDrawerToggle drawerbar;
 	private MainHomeFragment mainHomeFragment;
 	private FragmentManager mFragmentManager;
@@ -35,6 +42,7 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.layout_mainhome);
 		initView();
+		EventBus.getDefault().register(this);
 	}
 	
 	/***
@@ -135,11 +143,22 @@ public class MainHomeActivity extends FragmentActivity implements IActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		EventBus.getDefault().unregister(this);
 	}
 
 	@Override
 	public void removeAllView() {
 
+	}
+	
+	/****
+	 * 用户监后台事件
+	 * 
+	 * @param userEvent
+	 */
+	public void onEventMainThread(UserEvents userEvent) {
+		ILog.i(TAG, "onEventMainThread");
+		userFragment.onEvent(userEvent);
 	}
 
 }
