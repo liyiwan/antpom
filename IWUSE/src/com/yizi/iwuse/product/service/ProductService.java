@@ -43,10 +43,10 @@ public class ProductService implements ICoreService{
 		themeArray = new ArrayList<ThemeItem>();
 		ThemeItem item0 = new ThemeItem("张一", R.drawable.image1, "分类类型", "图片", null);
 		ThemeItem item1 = new ThemeItem("李二", R.drawable.image2, "分类类型", "视频", vdoPath);
-		ThemeItem item2 = new ThemeItem("张三", R.drawable.image3, "分类类型", "视频", vdoPath);
-		ThemeItem item3 = new ThemeItem("李四", R.drawable.image4, "分类类型", "图片", null);
-		ThemeItem item4 = new ThemeItem("张五", R.drawable.image5, "分类类型", "图片", null);
-		ThemeItem item5 = new ThemeItem("李六", R.drawable.image6, "分类类型", "图片", null);
+		ThemeItem item2 = new ThemeItem("张三", R.drawable.image1, "分类类型", "视频", vdoPath);
+		ThemeItem item3 = new ThemeItem("李四", R.drawable.image3, "分类类型", "图片", null);
+		ThemeItem item4 = new ThemeItem("张五", R.drawable.image1, "分类类型", "图片", null);
+		ThemeItem item5 = new ThemeItem("李六", R.drawable.image2, "分类类型", "图片", null);
 		themeArray.add(item0);
 		themeArray.add(item1);
 		themeArray.add(item2);

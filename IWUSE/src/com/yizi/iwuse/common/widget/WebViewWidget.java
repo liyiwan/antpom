@@ -2,6 +2,7 @@ package com.yizi.iwuse.common.widget;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.JsResult;
@@ -23,6 +24,13 @@ public class WebViewWidget extends WebView {
 		mContext = context;
 		init();
 	}
+	
+	public WebViewWidget(Context context,AttributeSet attrs) {
+        super(context,attrs);
+        // TODO Auto-generated constructor stub
+        mContext = context;
+		init();
+    }
 	
 	/****
 	 * 对webView做一些特殊的处理

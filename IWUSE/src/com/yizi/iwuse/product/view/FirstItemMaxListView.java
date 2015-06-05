@@ -369,12 +369,12 @@ public class FirstItemMaxListView extends ListView {
 							if(videoHolder.videoView != null){
 								ThemeVideoWidget videoWidget = (ThemeVideoWidget)videoHolder.videoView;
 								if(videoWidget.getPlayer() != null){
-									videoHolder.surface.setVisibility(View.GONE);
-									videoHolder.cover.setVisibility(View.VISIBLE);
-									videoHolder.videoView = null;
 									videoWidget.getPlayer().stop();
 									videoWidget.getPlayer().release();
+									videoHolder.surface.setVisibility(View.GONE);
+									videoHolder.cover.setVisibility(View.VISIBLE);
 									videoWidget.setPlayer(null);
+									videoHolder.videoView = null;
 								}
 							}
 						}

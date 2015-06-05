@@ -3,13 +3,17 @@ package com.yizi.iwuse.product.view;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.service.GeneralService;
+import com.yizi.iwuse.product.ProductDetailActivity;
 import com.yizi.iwuse.product.model.ProductItem;
 import com.yizi.iwuse.product.service.ProductService;
 import com.yizi.iwuse.product.service.events.ProductEvent;
@@ -28,7 +33,7 @@ import de.greenrobot.event.EventBus;
  * @author hehaodong
  *
  */
-public class ProductListFragment extends Fragment {
+public class ProductListFragment extends Fragment implements OnItemClickListener {
 
 	private GridView gv_product;
 	/***单品宽度***/
@@ -64,6 +69,7 @@ public class ProductListFragment extends Fragment {
         
 		adapter = new FirstItemMaxAdapter();
 		gv_product.setAdapter(adapter);
+		gv_product.setOnItemClickListener(this);
 		
 		ProductService server = new ProductService();
 		server.doProductNetWork();
@@ -89,21 +95,36 @@ public class ProductListFragment extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
-            view = LayoutInflater.from(getActivity()).inflate(R.layout.single_img, null);
-            viewHolder = new ViewHolder();
-            viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
+            if(view == null){
+            	viewHolder = new ViewHolder();
+            	view = LayoutInflater.from(getActivity()).inflate(R.layout.single_img, null);
+            	viewHolder.cover = (ImageView) view.findViewById(R.id.cover);
+            	view.setTag(viewHolder);
+            }else{
+            	viewHolder = (ViewHolder)view.getTag();
+            }
             
             view.setLayoutParams(new AbsListView.LayoutParams(gridWidth, gridWidth));
-            
             viewHolder.cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
             viewHolder.cover.setImageResource(productArray.get(position).themeUrl);
+//            view.setOnClickListener(new ProductClick());
             return view;
         }
 
         class ViewHolder {
-            TextView name;
             ImageView cover;
         }
+        
+        /*private class ProductClick implements OnClickListener{
+
+			@Override
+			public void onClick(View view) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getActivity(),ProductDetailActivity.class);
+        		startActivity(intent);
+			}
+			
+		}*/
     }
 
 	public void onEventMainThread(ProductEvent event) {
@@ -116,6 +137,14 @@ public class ProductListFragment extends Fragment {
 		// TODO Auto-generated method stub
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(getActivity(),ProductDetailActivity.class);
+		startActivity(intent);
 	}
 	
 }

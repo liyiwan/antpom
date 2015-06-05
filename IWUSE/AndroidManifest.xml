@@ -45,7 +45,8 @@
         <activity android:name="com.yizi.iwuse.user.UserCollectionActivity" android:launchMode="singleTask" />
         <activity android:name="com.yizi.iwuse.user.SubmissionActivity" android:launchMode="singleTask"/>
         <activity android:name="com.yizi.iwuse.user.WalletActivity" android:launchMode="singleTask"></activity>
-        
+        <!-- 产品  -->
+        <activity android:name="com.yizi.iwuse.product.ProductDetailActivity" android:launchMode="singleTask"></activity>
         <!-- 微信登录 -->
         <activity android:name="com.yizi.iwuse.wxapi.WXEntryActivity" android:exported="true"/>
         <!--  QQ登录    -->

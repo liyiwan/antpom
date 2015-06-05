@@ -6,13 +6,16 @@ import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.ICoreService;
 import com.yizi.iwuse.filter.model.ProductFilterItem;
 import com.yizi.iwuse.filter.service.events.ProductFilterEvent;
+import com.yizi.iwuse.filter.service.events.ThemeFilterEvent;
 import com.yizi.iwuse.product.service.events.ThemeEvent;
 
 import de.greenrobot.event.EventBus;
 
 public class FilterService implements ICoreService {
 
-	/***主题数据***/
+	/***主题过滤数据***/
+	private ArrayList<String> themeArray;
+	/***单品过滤数据***/
 	private ArrayList<ProductFilterItem> filterArray;
 	
 	@Override
@@ -60,6 +63,21 @@ public class FilterService implements ICoreService {
 		ProductFilterEvent productFilterEvent = new ProductFilterEvent();
 		productFilterEvent.setFilterArray(filterArray);
 		EventBus.getDefault().post(productFilterEvent);
+	}
+	
+	public void getThemeFilterData() {
+		themeArray = new ArrayList<String>();
+		themeArray.add("All is iwuse");
+		themeArray.add("Life is iwuse");
+		themeArray.add("Video as iwuse");
+		themeArray.add("User as iwuse");
+	}
+	
+	public void doThemeFilterWork() {
+		getThemeFilterData();
+		ThemeFilterEvent themeFilterEvent = new ThemeFilterEvent();
+		themeFilterEvent.setFilterArray(themeArray);
+		EventBus.getDefault().post(themeFilterEvent);
 	}
 
 }

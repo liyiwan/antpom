@@ -26,7 +26,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:src="@drawable/image2"
-	        android:scaleType="fitCenter"
+	        android:scaleType="center"
 	        android:visibility="gone" />
 	    <TextView
 	        android:layout_width="match_parent"

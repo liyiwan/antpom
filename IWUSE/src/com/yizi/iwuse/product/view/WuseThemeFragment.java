@@ -1,5 +1,6 @@
 package com.yizi.iwuse.product.view;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import com.yizi.iwuse.common.widget.VideoThread;
 import com.yizi.iwuse.common.widget.VideoWidget;
 import com.yizi.iwuse.general.service.GeneralService;
 import com.yizi.iwuse.general.view.MainHomeFragment;
+import com.yizi.iwuse.product.ProductDetailActivity;
 import com.yizi.iwuse.product.model.ThemeItem;
 import com.yizi.iwuse.product.service.ProductService;
 import com.yizi.iwuse.product.service.events.ThemeEvent;
@@ -18,6 +20,7 @@ import com.yizi.iwuse.product.service.events.VideoEvent;
 
 import de.greenrobot.event.EventBus;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +30,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -40,7 +45,7 @@ import android.widget.TextView;
  * @author hehaodong
  *
  */
-public class WuseThemeFragment extends Fragment {
+public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 
 	private FirstItemMaxListView mListView;
 	private FirstItemMaxAdapter mAdapter;
@@ -82,6 +87,7 @@ public class WuseThemeFragment extends Fragment {
 		mListView.setAdapter(mAdapter);
 		mListView.setItemHeight(firstHeight);
 		mListView.setItemMaxHeight(maxHeight);
+		mListView.setOnItemClickListener(this);
 		ProductService server = new ProductService();
 		server.doNetWork();
 	}
@@ -204,11 +210,60 @@ public class WuseThemeFragment extends Fragment {
 		}
 	}
 
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		View view = mListView.getChildAt(0);
+		if(view != null){
+			ViewHolder viewHolder = (ViewHolder)view.getTag();
+			ThemeItem themeItem = (ThemeItem)viewHolder.object;
+			if("视频".equals(themeItem.property)){
+				if(viewHolder.videoView == null){
+					new VideoThread(viewHolder).start();
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		View view = mListView.getChildAt(0);
+		if(view != null){
+			ViewHolder viewHolder = (ViewHolder)view.getTag();
+			ThemeItem themeItem = (ThemeItem)viewHolder.object;
+			if("视频".equals(themeItem.property)){
+				ThemeVideoWidget videoWidget = (ThemeVideoWidget)viewHolder.videoView;
+				if(videoWidget.getPlayer() != null){
+					videoWidget.getPlayer().release();
+					viewHolder.surface.setVisibility(View.GONE);
+					viewHolder.cover.setVisibility(View.VISIBLE);
+					videoWidget.setPlayer(null);
+					viewHolder.videoView = null;
+				}
+			}
+		}
+	}
+
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		EventBus.getDefault().unregister(this);
 		super.onDestroy();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(getActivity(),ProductDetailActivity.class);
+		startActivity(intent);
 	}
 
 }
