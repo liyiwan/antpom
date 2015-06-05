@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -21,6 +23,7 @@ import com.yizi.iwuse.AppParams;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.common.utils.IWuseUtil;
+import com.yizi.iwuse.constants.UserConst;
 import com.yizi.iwuse.general.AboutActivity;
 import com.yizi.iwuse.general.CallServiceActivity;
 import com.yizi.iwuse.general.MainHomeActivity;
@@ -32,6 +35,10 @@ import com.yizi.iwuse.user.SubmissionActivity;
 import com.yizi.iwuse.user.UserActivity;
 import com.yizi.iwuse.user.UserCollectionActivity;
 import com.yizi.iwuse.user.WalletActivity;
+import com.yizi.iwuse.user.model.ThridUserInfo;
+import com.yizi.iwuse.user.service.events.UserEvents;
+
+import de.greenrobot.event.EventBus;
 
 /****
  * 用户管理中心
@@ -82,13 +89,14 @@ public class UserFragment extends Fragment {
 	@ViewInject(R.id.txt_usercenter_about)
 	private TextView txt_usercenter_about;
 	
+	BitmapUtils bitmapUtils = null;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_usercenter, null);
 		ILog.i(TAG, "init onCreateView ");
 		ViewUtils.inject(UserFragment.this, view);
-		
+		bitmapUtils = new BitmapUtils(getActivity());
 		return view;
 	}
 
@@ -109,7 +117,7 @@ public class UserFragment extends Fragment {
 			}
 		});
 	}
-	
+
 	/****
 	 * 与用户登录强相关的操作按钮事件
 	 * 
@@ -197,6 +205,23 @@ public class UserFragment extends Fragment {
 		}
 	}
 	
+	
+	/****
+	 * 用户监后台事件
+	 * 
+	 * @param userEvent
+	 */
+	public void onEvent(UserEvents userEvent) {
+		switch (userEvent.eventtype) {
+			case UserConst.ENVENTTYPE_LOGIN:
+				//Toast.makeText(mContext, mContext.getString(R.string.login), Toast.LENGTH_LONG).show();
+				ThridUserInfo userInfo = (ThridUserInfo)userEvent.customObj;
+				ILog.i(TAG, "userInfo.nickName==="+userInfo.headUrl);
+				txt_usercenter_username.setText(userInfo.nickName);
+				bitmapUtils.display(img_usercenter_headimg, userInfo.headUrl);
+			break;
+		}
+	}
 
 	@Override
 	public void onPause() {
@@ -209,5 +234,5 @@ public class UserFragment extends Fragment {
 		super.onResume();
 		MobclickAgent.onPageEnd(TAG); 
 	}
-
+	
 }

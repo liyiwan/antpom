@@ -5,10 +5,14 @@ import java.util.Map;
 
 
 import java.util.Set;
-
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -18,30 +22,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQAuth;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.controller.UMServiceFactory;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
-import com.umeng.socialize.controller.listener.SocializeListeners.UMDataListener;
-import com.umeng.socialize.exception.SocializeException;
-import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.sso.UMQQSsoHandler;
-import com.umeng.socialize.sso.UMSsoHandler;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.tencent.tauth.UiError;
 import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.AppParams;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.common.base.BaseActivity;
+import com.yizi.iwuse.common.utils.ILog;
 import com.yizi.iwuse.constants.UserConst;
 import com.yizi.iwuse.user.service.events.UserEvents;
-
 import de.greenrobot.event.EventBus;
 
 /****
@@ -50,6 +53,7 @@ import de.greenrobot.event.EventBus;
  * @author zhangxiying
  *
  */
+@SuppressLint("NewApi")
 public class LoginActivity extends BaseActivity {
 
 	private static final String TAG = "LoginActivity";
@@ -103,19 +107,24 @@ public class LoginActivity extends BaseActivity {
 	private Button btn_regist_connfirm;
 	
 	/** 友盟授权登录集成 **/
-	private UMSocialService mController = null;
+//	private UMSocialService mController = null;
 	
 	/**登录方式**/
-	private int login_type = LOGINTYPE_WEICHAT;
-	private static final int LOGINTYPE_WEICHAT = 0x9001;
-	private static final int LOGINTYPE_QQ = 0x9002;
-	private static final int LOGINTYPE_PAYBAO = 0x9003;
-	private static final int LOGINTYPE_WEIBO = 0x9004;
+	private int login_type = UserConst.LOGINTYPE_WEICHAT;
 
-	public static QQAuth mQQAuth;
-	private Tencent mTencent;
-	private UserInfo mInfo;
+	/**微信授权登录*/
+	public static IWXAPI weichatApi;
+	private String weixinCode;
+	private final static int LOGIN_WHAT_INIT = 1;
+	private static String get_access_token = "";
 	
+	/**QQ授权登录**/
+	public static QQAuth mQQAuth;
+	private static Tencent mTencent;
+	private UserInfo mInfo;
+	/**新浪微博**/
+	private AuthInfo mAuthInfo = null;
+	private SsoHandler mSsoHandler = null;
 	private Context mContext;
 
 	@Override
@@ -127,9 +136,16 @@ public class LoginActivity extends BaseActivity {
 		ViewUtils.inject(this);
 		/** 注册EventBus **/
 		EventBus.getDefault().register(this);
+		//微信授权
+		weichatApi = WXAPIFactory.createWXAPI(this, UserConst.OAUTH_WEICHAT_APPID, true);
+		weichatApi.registerApp(UserConst.OAUTH_WEICHAT_APPID);
+		//QQ授权
+		//mQQAuth = QQAuth.createInstance(UserConst.OAUTH_QQ_APPID, mContext);
+		mTencent = Tencent.createInstance(UserConst.OAUTH_QQ_APPID, mContext);
 		
-		mController = UMServiceFactory.getUMSocialService(UserConst.LOGIN_YOUMENG);
-		registLoginHandler();
+		mAuthInfo = new AuthInfo(this, UserConst.OAUTH_WEIBO_APPID, UserConst.OAUTH_WEIBO_REDIRECT_URL, UserConst.OAUTH_WEIBO_SCOPE);
+		//mController = UMServiceFactory.getUMSocialService(UserConst.LOGIN_YOUMENG);
+		//registLoginHandler();
 	}
 
 	/****
@@ -155,19 +171,22 @@ public class LoginActivity extends BaseActivity {
 			case R.id.txt_forgetuserinfo:
 				break;
 			case R.id.img_oauth_weichat:
-				login_type = LOGINTYPE_WEICHAT;
-				onThridLogin(SHARE_MEDIA.WEIXIN);
+				login_type = UserConst.LOGINTYPE_WEICHAT;
+				onLoginWithWeichat();
+				//onThridLogin(SHARE_MEDIA.WEIXIN);
 				break;
 			case R.id.img_oauth_qq:
-				login_type = LOGINTYPE_QQ;
-				onThridLogin(SHARE_MEDIA.QQ);
+				login_type = UserConst.LOGINTYPE_QQ;
+				//onThridLogin(SHARE_MEDIA.QQ);
+				onLoginWithQQ();
 				break;
 			case R.id.img_oauth_paybao:
-				login_type = LOGINTYPE_PAYBAO;
+				login_type = UserConst.LOGINTYPE_PAYBAO;
 				break;
 			case R.id.img_oauth_weibo:
-				login_type = LOGINTYPE_WEIBO;
-				onThridLogin(SHARE_MEDIA.SINA);
+				login_type = UserConst.LOGINTYPE_WEIBO;
+				//onThridLogin(SHARE_MEDIA.SINA);
+				onLoginWithWeibo();
 				break;
 			case R.id.btn_regist_connfirm:
 				break;
@@ -183,44 +202,110 @@ public class LoginActivity extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (login_type) {
-			case LOGINTYPE_WEIBO: {
+			case UserConst.LOGINTYPE_WEIBO: {
 				/** 使用SSO授权必须添加如下代码 */
-				UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(
-						requestCode);
-				if (ssoHandler != null) {
-					ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-				}
+//				UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(
+//						requestCode);
+//				if (ssoHandler != null) {
+//					ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+//				}
+				if (mSsoHandler != null) {
+			        mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+			    }
 				break;
 			}
-			case LOGINTYPE_QQ: {
+			case UserConst.LOGINTYPE_QQ: {
+				mTencent.onActivityResult(requestCode, resultCode, data);
 				break;
 			}
 		}
 	}
 
+	/***
+	 * 发起微信授权登录
+	 * 
+	 */
 	private void onLoginWithWeichat(){
-		
-		
+	    SendAuth.Req req = new SendAuth.Req();
+	    req.scope = "snsapi_userinfo";
+	    req.state = "wechat_sdk_demo_test";
+	    weichatApi.sendReq(req);
 	}
+	
+	/***
+	 * 发起QQ登录
+	 * 
+	 */
+	private void onLoginWithQQ(){
+		if (!mTencent.isSessionValid()) {
+			IUiListener listener = new BaseUiListener() {
+				@Override
+				protected void doComplete(JSONObject values) {
+					ILog.i(TAG, "login doComplete");
+					updateUserInfo();
+				}
+			};
+			//mQQAuth.login(this, "all", listener);
+			mTencent.login(this, "all", listener);
+		} else {
+			//mQQAuth.logout(this);
+		}
+	}
+	
+	
+	private void updateUserInfo() {
+		if (mTencent != null && mTencent.isSessionValid()) {
+			IUiListener listener = new IUiListener() {
+
+				@Override
+				public void onError(UiError e) {
+				}
+
+				@Override
+				public void onComplete(final Object response) {
+					ILog.i(TAG, "get user info sucess!");
+					AppContext.instance().userService.onLoginUpdateUserInfo(login_type, response);
+				}
+
+				@Override
+				public void onCancel() {
+				}
+			};
+			mInfo = new UserInfo(this, mTencent.getQQToken());
+			mInfo.getUserInfo(listener);
+
+		} else {
+			 ILog.i(TAG, "get userinfo failed");
+		}
+	}
+	
+	/***
+	 * 发起新浪微博授权
+	 */
+	public void onLoginWithWeibo(){
+		mSsoHandler = new SsoHandler(this, mAuthInfo);
+		mSsoHandler. authorize(new AuthListener());
+	}
+	
 	
 	/****
 	 * 注册授权登录的监听
 	 * 
 	 */
 	private void registLoginHandler() {
-		// 微信
-		UMWXHandler wxHandler = new UMWXHandler(LoginActivity.this,
-				UserConst.OAUTH_WEICHAT_APPID, UserConst.OAUTH_WEICHAT_SECRET);
-		wxHandler.mShareContent  = UserConst.OAUTH_WEICHAT_SCOPE;
-		wxHandler.addToSocialSDK();
-		// QQ
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(LoginActivity.this,
-				UserConst.OAUTH_QQ_APPID, UserConst.OAUTH_QQ_APPKEY);
-		qqSsoHandler.addToSocialSDK();
-		// 新浪微博
-		SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
-
-		mController.getConfig().setSsoHandler(sinaSsoHandler);
+//		// 微信
+//		UMWXHandler wxHandler = new UMWXHandler(LoginActivity.this,
+//				UserConst.OAUTH_WEICHAT_APPID, UserConst.OAUTH_WEICHAT_SECRET);
+//		//wxHandler.mShareContent  = UserConst.OAUTH_WEICHAT_SCOPE;
+//		wxHandler.addToSocialSDK();
+//		// QQ
+//		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(LoginActivity.this,
+//				UserConst.OAUTH_QQ_APPID, UserConst.OAUTH_QQ_APPKEY);
+//		qqSsoHandler.addToSocialSDK();
+//		// 新浪微博
+//		SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
+//
+//		mController.getConfig().setSsoHandler(sinaSsoHandler);
 	}
 
 	/**
@@ -229,67 +314,67 @@ public class LoginActivity extends BaseActivity {
 	 * 
 	 * @param platform
 	 */
-	private void onThridLogin(final SHARE_MEDIA platform) {
-		mController.doOauthVerify(LoginActivity.this, platform,
-			new UMAuthListener() {
-
-				@Override
-				public void onStart(SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, "授权开始",Toast.LENGTH_SHORT).show();
-				}
-
-				@Override
-				public void onError(SocializeException e, SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
-				}
-
-				@Override
-				public void onComplete(Bundle value, SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, "授权完成",Toast.LENGTH_SHORT).show();
-					//标记为已登录状态
-					AppParams.isLogin = true;
-					// 获取uid
-					String uid = value.getString("uid");
-					if (!TextUtils.isEmpty(uid)) {
-						// uid不为空，获取用户信息
-						handleUserInfo(platform);
-					} else {
-						
-						Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
-					}
-				}
-
-				@Override
-				public void onCancel(SHARE_MEDIA platform) {
-					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_cancel),
-							Toast.LENGTH_SHORT).show();
-				}
-			});
-	}
+//	private void onThridLogin(final SHARE_MEDIA platform) {
+//		mController.doOauthVerify(LoginActivity.this, platform,
+//			new UMAuthListener() {
+//
+//				@Override
+//				public void onStart(SHARE_MEDIA platform) {
+//					Toast.makeText(LoginActivity.this, "授权开始",Toast.LENGTH_SHORT).show();
+//				}
+//
+//				@Override
+//				public void onError(SocializeException e, SHARE_MEDIA platform) {
+//					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
+//				}
+//
+//				@Override
+//				public void onComplete(Bundle value, SHARE_MEDIA platform) {
+//					Toast.makeText(LoginActivity.this, "授权完成",Toast.LENGTH_SHORT).show();
+//					//标记为已登录状态
+//					AppParams.isLogin = true;
+//					// 获取uid
+//					String uid = value.getString("uid");
+//					if (!TextUtils.isEmpty(uid)) {
+//						// uid不为空，获取用户信息
+//						handleUserInfo(platform);
+//					} else {
+//						
+//						Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_failed),Toast.LENGTH_SHORT).show();
+//					}
+//				}
+//
+//				@Override
+//				public void onCancel(SHARE_MEDIA platform) {
+//					Toast.makeText(LoginActivity.this, AppContext.instance().globalContext.getString(R.string.oauth_promt_cancel),
+//							Toast.LENGTH_SHORT).show();
+//				}
+//			});
+//	}
 
 	/**
 	 * 获取用户信息
 	 * 
 	 * @param platform
 	 */
-	private void handleUserInfo(final SHARE_MEDIA platform) {
-		mController.getPlatformInfo(LoginActivity.this, platform,
-			new UMDataListener() {
-
-				@Override
-				public void onStart() {
-
-				}
-
-				@Override
-				public void onComplete(int status, Map<String, Object> info) {
-					if (info != null) {
-						// 根据平台类型，解析用户信息
-						AppContext.instance().userService.onLoginUpdateUserInfo(platform, info); 
-					}
-				}
-			});
-	}
+//	private void handleUserInfo(final SHARE_MEDIA platform) {
+//		mController.getPlatformInfo(LoginActivity.this, platform,
+//			new UMDataListener() {
+//
+//				@Override
+//				public void onStart() {
+//
+//				}
+//
+//				@Override
+//				public void onComplete(int status, Map<String, Object> info) {
+//					if (info != null) {
+//						// 根据平台类型，解析用户信息
+//						AppContext.instance().userService.onLoginUpdateUserInfo(platform, info); 
+//					}
+//				}
+//			});
+//	}
 
 	/****
 	 * 用户监后台事件
@@ -300,8 +385,24 @@ public class LoginActivity extends BaseActivity {
 		switch (userEvent.eventtype) {
 		case UserConst.ENVENTTYPE_LOGIN:
 			Toast.makeText(mContext, mContext.getString(R.string.login), Toast.LENGTH_LONG).show();
+			finish();
 			break;
 		}
+	}
+	
+	
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		ILog.i(TAG, "onResume");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		ILog.i(TAG, "onPause");
 	}
 
 	@Override
@@ -314,5 +415,66 @@ public class LoginActivity extends BaseActivity {
 	public void removeAllView() {
 
 	}
+	
+	public static boolean ready(Context context) {
+		if (mTencent == null) {
+			return false;
+		}
+		boolean ready = mTencent.isSessionValid()
+				&& mTencent.getQQToken().getOpenId() != null;
+		if (!ready)
+			Toast.makeText(context, "login and get openId first, please!",
+					Toast.LENGTH_SHORT).show();
+		return ready;
+	}
+	
+	
+	private class BaseUiListener implements IUiListener {
 
+		@Override
+		public void onComplete(Object response) {
+			Toast.makeText(mContext, "Login success", Toast.LENGTH_LONG).show();
+			doComplete((JSONObject) response);
+		}
+
+		protected void doComplete(JSONObject values) {
+			
+		}
+
+		@Override
+		public void onError(UiError e) {
+			Toast.makeText(mContext, "Login failed", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onCancel() {
+			Toast.makeText(mContext, "Login cancel", Toast.LENGTH_LONG).show();
+		}
+	}
+	private Oauth2AccessToken mAccessToken;
+	
+	class AuthListener  implements WeiboAuthListener {
+	    
+	    @Override
+	    public void onComplete(Bundle values) {
+	    	ILog.i(TAG, "sina weibo auth sucess!");
+	        // 从 Bundle 中解析 Token
+	        mAccessToken = Oauth2AccessToken.parseAccessToken(values);
+	        if (mAccessToken.isSessionValid()) {
+	            // 保存 Token 到 SharedPreferences
+	           // AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
+	        } else {
+	        // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
+	            String code = values.getString("code", "");
+	        }
+	    }
+
+	    @Override
+	    public void onCancel() {
+	    }
+
+	    @Override
+	    public void onWeiboException(WeiboException e) {
+	    }
+	}
 }
