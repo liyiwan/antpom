@@ -19,6 +19,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yizi.iwuse.AppContext;
 import com.yizi.iwuse.R;
 import com.yizi.iwuse.general.service.GeneralService;
 import com.yizi.iwuse.product.ProductDetailActivity;
@@ -71,7 +72,7 @@ public class ProductListFragment extends Fragment implements OnItemClickListener
 		gv_product.setAdapter(adapter);
 		gv_product.setOnItemClickListener(this);
 		
-		ProductService server = new ProductService();
+		ProductService server = AppContext.instance().productService;
 		server.doProductNetWork();
 	}
 	

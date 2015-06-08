@@ -49,12 +49,16 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 
 	private FirstItemMaxListView mListView;
 	private FirstItemMaxAdapter mAdapter;
+	/***列表项最大高度***/
 	private int maxHeight = 0;
+	/***列表项标准高度***/
 	private int firstHeight = 0;
+	/***是否是第一次加载listview***/
 	private boolean isFisrt = true;
 	private ViewGroup container;
 	/***主题数据***/
 	private ArrayList<ThemeItem> themeArray;
+	/***是否有在播放视频***/
 	private boolean isVideoShow = false;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,9 +79,9 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 		EventBus.getDefault().register(this);
 		WindowManager wm = (WindowManager) getActivity().getSystemService(
 				Context.WINDOW_SERVICE);
+		/***屏幕高度***/
 		int mScreenHeight = wm.getDefaultDisplay().getHeight();
-		System.out.println("MainHomeFragment.titleHeight"
-				+ String.valueOf(MainHomeFragment.titleHeight));
+		/***状态栏高度***/
 		int statusHeight = IWuseUtil.getStatusBarHeight(getActivity());
 		
 		maxHeight = (mScreenHeight - MainHomeFragment.titleHeight - statusHeight) / 5 * 3;//列表项最大高度
@@ -88,7 +92,7 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 		mListView.setItemHeight(firstHeight);
 		mListView.setItemMaxHeight(maxHeight);
 		mListView.setOnItemClickListener(this);
-		ProductService server = new ProductService();
+		ProductService server = AppContext.instance().productService;
 		server.doNetWork();
 	}
 
@@ -114,7 +118,6 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 			
 			ViewHolder viewHolder;
 			ThemeItem themeItem = themeArray.get(position);
-			System.out.println("！！！！！！！！！！position = " +String.valueOf(position));
 			
 			if (view == null) {
 				view = LayoutInflater.from(getActivity()).inflate(
@@ -194,17 +197,18 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 	}
 	
 	public void onEventMainThread(ViewHolder viewHolder) {
-		ViewHolder viewHolder2 = (ViewHolder)mListView.getChildAt(0).getTag();
-		ThemeItem themeItem = (ThemeItem)viewHolder2.object;
-		if("视频".equals(themeItem.property)){
-			if(!FirstItemMaxListView.isFingerPress){
-				if(viewHolder2.videoView == null){
-//					String vdoPath = themeItem.videoUrl;
-//					viewHolder2.videoView = new ThemeVideoWidget(getActivity(),viewHolder2.surface, vdoPath);
-//					viewHolder2.surface.setVisibility(View.VISIBLE);
-//					viewHolder2.cover.setVisibility(View.GONE);
-					isVideoShow = true;
-					mAdapter.notifyDataSetChanged();
+		View view = mListView.getChildAt(0);
+		if(view != null){
+			ViewHolder viewHolder2 = (ViewHolder)view.getTag();
+			if(viewHolder2 != null){
+				ThemeItem themeItem = (ThemeItem)viewHolder2.object;
+				if("视频".equals(themeItem.property)){
+					if(!FirstItemMaxListView.isFingerPress){
+						if(viewHolder2.videoView == null){
+							isVideoShow = true;
+							mAdapter.notifyDataSetChanged();
+						}
+					}
 				}
 			}
 		}
@@ -229,9 +233,9 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 	}
 	
 	@Override
-	public void onPause() {
+	public void onStop() {
 		// TODO Auto-generated method stub
-		super.onPause();
+		super.onStop();
 		
 		View view = mListView.getChildAt(0);
 		if(view != null){
@@ -239,12 +243,14 @@ public class WuseThemeFragment extends Fragment implements OnItemClickListener {
 			ThemeItem themeItem = (ThemeItem)viewHolder.object;
 			if("视频".equals(themeItem.property)){
 				ThemeVideoWidget videoWidget = (ThemeVideoWidget)viewHolder.videoView;
-				if(videoWidget.getPlayer() != null){
-					videoWidget.getPlayer().release();
-					viewHolder.surface.setVisibility(View.GONE);
-					viewHolder.cover.setVisibility(View.VISIBLE);
-					videoWidget.setPlayer(null);
-					viewHolder.videoView = null;
+				if(videoWidget != null){
+					if(videoWidget.getPlayer() != null){
+						videoWidget.getPlayer().release();
+						viewHolder.surface.setVisibility(View.GONE);
+						viewHolder.cover.setVisibility(View.VISIBLE);
+						videoWidget.setPlayer(null);
+						viewHolder.videoView = null;
+					}
 				}
 			}
 		}

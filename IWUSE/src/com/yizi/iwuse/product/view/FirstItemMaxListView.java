@@ -48,9 +48,12 @@ public class FirstItemMaxListView extends ListView {
 	private int ITEM_HEIGHT;
 	/***item最大高度***/
 	private int mITEM_MAX_HEIGHT = 0;
+	/***手机离开屏幕后，看到listview的第一个item的位置***/
 	private int mLastFirstVisiblePosition = 0;
-	private int distanceOneItem;// 记录滚动距离，向上滚动时-ITEM_HEIGHT到0，向下滚动是0到ITEM_HEIGHT,当listview
-								// FirstVisiblePosition 设置为0
+	/***记录滚动距离，向上滚动时-ITEM_HEIGHT到0，向下滚动是0到ITEM_HEIGHT,当listview***/
+	/***FirstVisiblePosition 设置为0***/
+	private int distanceOneItem;
+	/***滑动距离不断累加，累加后的滑动距离总数***/
 	private int mLastDistanceOneItem = 1;
 	
 	private GestureDetector mGestureDetector;
@@ -202,7 +205,8 @@ public class FirstItemMaxListView extends ListView {
 						@Override
 						public boolean onScroll(MotionEvent e1, MotionEvent e2,
 								float distanceX, float distanceY) {
-//							smoothScrollBy(Math.round(distanceY), 0);
+							/***非常重要一句，防止顶部和底部视图跳跃***/
+							smoothScrollBy(Math.round(distanceY), 0);
 
 							//在distanceY这个距离，通过  canScrollVertically 判断是否能滚动
 							if (canScrollVertically(Math.round(distanceY))) {
@@ -219,17 +223,6 @@ public class FirstItemMaxListView extends ListView {
 									 + " mLastDistanceOneItem = " + mLastDistanceOneItem
 									 + " mLastFirstVisiblePosition = " + mLastFirstVisiblePosition);
 
-							/*if(distanceY < 0){
-								if(getFirstVisiblePosition() == mLastFirstVisiblePosition){
-										return false;
-								}
-							}
-							if(distanceY > 0){
-								if(getFirstVisiblePosition() != mLastFirstVisiblePosition){
-									distanceOneItem = 0;
-									mLastFirstVisiblePosition = getFirstVisiblePosition();
-								}
-							}*/
 							//getFirstVisiblePosition()获取可见的第一个item的位置
 							if (getFirstVisiblePosition() == mLastFirstVisiblePosition) {
 								System.out.println("他们相等");
@@ -283,27 +276,22 @@ public class FirstItemMaxListView extends ListView {
 					isFingerPress = true;
 					break;
 				case MotionEvent.ACTION_UP:
-					System.out.println("手指离开屏幕");
+					/***获取可见的4个view***/
 					View item0 = getChildAt(0);
 					View item1 = getChildAt(1);
 					View item2 = getChildAt(2);
 					View item3 = getChildAt(3);
+					/***最后在listview可见位置最上面的是哪个view***/
 					View whichVideo;
+					/***判断第一个可见view的高度，然后对视图进行调整***/
 					int height = item0.getHeight();
-					/*if (distanceOneItem > 0) {
-						mLastDistanceOneItem = -1;
-					} else {
-						mLastDistanceOneItem = 1;
-					}*/
 					mLastDistanceOneItem = 1;
 					distanceOneItem = 0;
+					/***判断高度之后，让listview滑动到的位置***/
 					int firstVisiblePosition;
 					if(height > mITEM_MAX_HEIGHT/3*2){
 						whichVideo = item0;
 						firstVisiblePosition = getFirstVisiblePosition() ;
-//						if(firstVisiblePosition != downVisiblePosition){
-//							distanceOneItem = (firstVisiblePosition - downVisiblePosition)*ITEM_HEIGHT;
-//						}
 						setSelection(firstVisiblePosition);
 						
 						if(item0 != null){
@@ -312,6 +300,7 @@ public class FirstItemMaxListView extends ListView {
 //									"height", mITEM_MAX_HEIGHT).setDuration(500).start();
 							item0.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, mITEM_MAX_HEIGHT));
+							/***去除阴影***/
 							ViewHolder viewHolder = (ViewHolder)item0.getTag();
 							if(viewHolder != null){
 								viewHolder.tv_grey.getBackground().setAlpha(0);
@@ -332,9 +321,6 @@ public class FirstItemMaxListView extends ListView {
 					}else{
 						whichVideo = item1;
 						firstVisiblePosition = getFirstVisiblePosition() + 1;
-//						if(firstVisiblePosition != downVisiblePosition){
-//							distanceOneItem = (firstVisiblePosition - downVisiblePosition)*ITEM_HEIGHT;
-//						}
 						setSelection(firstVisiblePosition);
 						
 						if(item0 != null){
@@ -344,6 +330,7 @@ public class FirstItemMaxListView extends ListView {
 						if(item1 != null){
 							item1.setLayoutParams(new AbsListView.LayoutParams(
 								AbsListView.LayoutParams.MATCH_PARENT, mITEM_MAX_HEIGHT));
+							/***去除阴影***/
 							ViewHolder viewHolder = (ViewHolder)item1.getTag();
 							if(viewHolder != null){
 								viewHolder.tv_grey.getBackground().setAlpha(0);
@@ -363,6 +350,7 @@ public class FirstItemMaxListView extends ListView {
 						}
 					}
 					
+					/***手指离开屏幕后，视图位置产生变化，如果之前有在播放视频，则关闭视频***/
 					if(firstVisiblePosition != downVisiblePosition){
 						ViewHolder videoHolder = (ViewHolder) downView.getTag();
 						if(videoHolder != null){
@@ -381,9 +369,9 @@ public class FirstItemMaxListView extends ListView {
 					}
 					mLastFirstVisiblePosition = firstVisiblePosition;
 					ViewHolder viewHolder = (ViewHolder)whichVideo.getTag();
+					/***如果最后停留在第一位置的是视频，则通过EventBus发送消息进行视频播放***/
 					if(viewHolder != null){
 						ThemeItem themeItem = (ThemeItem)viewHolder.object;
-//						viewHolder.tv_grey.getBackground().setAlpha(0);
 						if("视频".equals(themeItem.property)){
 							if(viewHolder.videoView == null){
 								new VideoThread(viewHolder).start();
@@ -490,15 +478,6 @@ public class FirstItemMaxListView extends ListView {
 	/**		新的代码
 	 * 		滚动时item高度变化代码
 	 */
-	/**
-	 * 
-	 */
-	/**
-	 * 
-	 */
-	/**
-	 * 
-	 */
 	private void changeItemHeightOnScroll() {
 		View item0 = getChildAt(0);
 		View item1 = getChildAt(1);
@@ -509,7 +488,8 @@ public class FirstItemMaxListView extends ListView {
 		int changeHeight;
 		if (distanceOneItem == 0)
 			return;
-		if (distanceOneItem > 0) {// 向上第一个缩小
+		/***向上第一个缩小***/
+		if (distanceOneItem > 0) {
 			changeHeight1 = distanceOneItem * mITEM_MAX_HEIGHT / ITEM_HEIGHT;
 
 			if (changeHeight1 > mITEM_MAX_HEIGHT) {
@@ -529,6 +509,7 @@ public class FirstItemMaxListView extends ListView {
 			System.out.println("放大过程changeHeight = " + changeHeight 
 					+ " change = " + change + " changeHeight1= " + changeHeight1 
 					+ " distanceOneItem = " + distanceOneItem);
+			/***当滚动过程，可见位置第一个视图变化过程中，如果它缩小到最小，也就是标准高度，并且正在播放视频，则关闭视频***/
 			if (changeHeight == ITEM_HEIGHT) {
 				ViewHolder videoHolder = (ViewHolder) item0.getTag();
 				if(videoHolder != null){
@@ -549,6 +530,7 @@ public class FirstItemMaxListView extends ListView {
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
 			item1.setLayoutParams(new AbsListView.LayoutParams(
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
+			/***阴影变化算法***/
 			ViewHolder videoHolder1 = (ViewHolder) item1.getTag();
 			float fl_ratio = (float)(((float)changeHeight1 - (float)ITEM_HEIGHT)/((float)mITEM_MAX_HEIGHT - (float)ITEM_HEIGHT));
 			int alpha = (int)Math.floor(255*(1-fl_ratio));
@@ -561,7 +543,8 @@ public class FirstItemMaxListView extends ListView {
 				ViewHolder videoHolder3 = (ViewHolder) item3.getTag();
 				videoHolder3.tv_grey.getBackground().setAlpha(255);
 			}
-		}else{// 向下第一个放大
+		/***向下第一个放大***/
+		}else{
 			changeHeight1 = (ITEM_HEIGHT + distanceOneItem) * mITEM_MAX_HEIGHT
 					/ ITEM_HEIGHT;
 			if (changeHeight1 > mITEM_MAX_HEIGHT) {
@@ -579,6 +562,7 @@ public class FirstItemMaxListView extends ListView {
 				changeHeight = ITEM_HEIGHT;
 			}
 			System.out.println("缩小过程changeHeight = " + changeHeight + " change = " + change + " changeHeight1= " + changeHeight1);
+			/***当滚动过程，可见位置第一个视图变化过程中，如果它缩小到最小，也就是标准高度，并且正在播放视频，则关闭视频***/
 			if (changeHeight == ITEM_HEIGHT) {
 				ViewHolder videoHolder = (ViewHolder) item0.getTag();
 				if(videoHolder != null){
@@ -599,12 +583,21 @@ public class FirstItemMaxListView extends ListView {
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight));
 			item1.setLayoutParams(new AbsListView.LayoutParams(
 					AbsListView.LayoutParams.MATCH_PARENT, changeHeight1));
+			/***阴影变化算法***/
 			ViewHolder videoHolder0 = (ViewHolder) item0.getTag();
 			videoHolder0.tv_grey.getBackground().setAlpha(0);
 			ViewHolder videoHolder1 = (ViewHolder) item1.getTag();
 			float fl_ratio = (float)(((float)changeHeight1 - (float)ITEM_HEIGHT)/((float)mITEM_MAX_HEIGHT - (float)ITEM_HEIGHT));
 			int alpha = (int)Math.floor(255*(1-fl_ratio));
 			videoHolder1.tv_grey.getBackground().setAlpha(alpha);
+			if(item2 != null){
+				ViewHolder videoHolder2 = (ViewHolder) item2.getTag();
+				videoHolder2.tv_grey.getBackground().setAlpha(255);
+			}
+			if(item3 != null){
+				ViewHolder videoHolder3 = (ViewHolder) item3.getTag();
+				videoHolder3.tv_grey.getBackground().setAlpha(255);
+			}
 		}
 	}
 
